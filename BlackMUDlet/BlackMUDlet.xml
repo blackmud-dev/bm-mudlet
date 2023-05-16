@@ -654,6 +654,28 @@ BlackMUDlet.GUI.Group.update()</script>
 				</Trigger>
 			</TriggerGroup>
 		</TriggerGroup>
+		<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+			<name>Enter the game</name>
+			<script>raiseEvent("onEnterGame")</script>
+			<triggerType>0</triggerType>
+			<conditonLineDelta>0</conditonLineDelta>
+			<mStayOpen>0</mStayOpen>
+			<mCommand></mCommand>
+			<packageName></packageName>
+			<mFgColor>#ff0000</mFgColor>
+			<mBgColor>#ffff00</mBgColor>
+			<mSoundFile></mSoundFile>
+			<colorTriggerFgColor>#000000</colorTriggerFgColor>
+			<colorTriggerBgColor>#000000</colorTriggerBgColor>
+			<regexCodeList>
+				<string>Welcome to BlackMUD.  Enjoy the darkness...</string>
+				<string>Reconnecting.</string>
+			</regexCodeList>
+			<regexCodePropertyList>
+				<integer>3</integer>
+				<integer>3</integer>
+			</regexCodePropertyList>
+		</Trigger>
 	</TriggerPackage>
 	<TimerPackage />
 	<AliasPackage>
@@ -1133,6 +1155,57 @@ end</script>
 				<packageName></packageName>
 				<script>local GUI = BlackMUDlet.GUI
 
+
+
+function BlackMUDlet.GUI.initialize(config)
+  
+  GUI.Config = table.update(GUI.Defaults, config or {})
+  
+  -- build the UI
+  -- Adjustable.Container windows save their position across restarts
+  -- EMCO panel settings are loaded in builders as needed
+  GUI.buildUI()
+  
+  -- run once code goes here
+  -- TODO: Any reason for distinct "run once" and "at install"?
+  -- TODO: Perhaps hide status bar and character info until you enter game?
+  -- TODO: If so, need to handle install while logged in
+  if not GUI.Config.initialized then
+    GUI.resetLayout()
+    GUI.buildUI() -- rebuild now that windows are correctly sized
+    GUI.WorldInfo.emco:switchTab("Help") -- show the help window on init
+    GUI.Config.initialized = true
+  end
+  
+  -- In Mudlet 4.16 this isn't safe to call multiple times
+  -- https://github.com/Mudlet/Mudlet/issues/6318
+  -- Adds the "connect" menu to all adjustable containers
+  -- This modifies all Adjustable.Container windows, not just this package
+  Adjustable.Container:doAll(function(self) self:addConnectMenu() end)
+  
+end
+
+
+
+function BlackMUDlet.GUI.onEnterGame()
+  tempTimer(1, GUI.showWelcome)
+end
+
+
+
+function BlackMUDlet.GUI.shutdown()
+  GUI.Communication.emco:save()
+  GUI.WorldInfo.emco:save()
+end
+
+
+
+function BlackMUDlet.GUI.uninstall()
+  GUI.hideUI()
+end
+
+
+--[[
 -- Load config and display ui
 function GUI.onStartup()
   
@@ -1182,7 +1255,7 @@ end
 registerAnonymousEventHandler("sysLoadEvent", GUI.onStartup, true)
 registerAnonymousEventHandler("sysInstallPackage", GUI.onStartup, true)
 registerAnonymousEventHandler("sysExitEvent", GUI.onExit, true)
-
+]]--
 </script>
 				<eventHandlerList />
 			</Script>
@@ -3821,7 +3894,9 @@ end
 		<ScriptGroup isActive="yes" isFolder="yes">
 			<name>Mapper</name>
 			<packageName></packageName>
-			<script></script>
+			<script>BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}</script>
 			<eventHandlerList />
 			<Script isActive="yes" isFolder="no">
 				<name>GMCP Mapper</name>
@@ -3894,10 +3969,15 @@ end
   -- get path?
   -- color tools? Color by zone, environment, room name, user defined, etc.
 
+BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
+
+local Mapper = BlackMUDlet.Mapper
 
 
 -- TODO: Incorporate this with BlackMUDlet config, add actual interface for setting
-local config = config or {}
+local config = Mapper.config or {}
 
 
 
@@ -3973,8 +4053,8 @@ envColors["Underwater"]    = color_table.blue
 envColors["Water NoSwim"]  = color_table.steel_blue
 envColors["Water Swim"]    = color_table.deep_sky_blue
 
--- set the reserved IDs to the above colors
--- TODO: Need a startup/init function
+-- TODO Move this to initialize()
+-- set custom environment colors
 for area, id in pairs(envIds) do
   local r, g, b = unpack(envColors[area])
   setCustomEnvColor(id, r, g, b, 255)
@@ -4600,6 +4680,59 @@ end
 </script>
 				<eventHandlerList />
 			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Submodule Management</name>
+				<packageName></packageName>
+				<script>
+BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
+
+local Mapper = BlackMUDlet.Mapper
+
+Mapper.Config = Mapper.Config or {}
+
+Mapper.Defaults = {
+  mapmode    = "follow",
+  createmode = "warn",
+  exitmode   = "rooms"
+}
+
+
+
+function BlackMUDlet.Mapper.initialize(config)
+
+  if isActive("generic_mapper", "trigger") then
+    disableTrigger("generic_mapper")
+    BlackMUDlet.GUI.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
+    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
+  end
+
+  -- load config, fall back on defaults
+  Mapper.Config = table.update(Mapper.Defaults, config or {})
+  
+end
+
+
+ -- onEnterGame
+function BlackMUDlet.Mapper.onEnterGame()
+  -- do nothing 
+end
+
+
+
+function BlackMUDlet.Mapper.shutdown()
+  -- do nothing
+end
+
+
+
+function BlackMUDlet.Mapper.uninstall()
+  -- we shut these off at init, so assume they should be turned back on
+  enableTrigger("generic_mapper")
+end
+
+</script>
+				<eventHandlerList />
+			</Script>
 		</ScriptGroup>
 		<Script isActive="yes" isFolder="no">
 			<name>Package Manager</name>
@@ -4611,62 +4744,94 @@ BlackMUDlet.version = 1
 BlackMUDlet.packageName = "BlackMUDlet"
 BlackMUDlet.packagePath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
 BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
-BlackMUDlet.configFile = "BlackMUDlet_config.lua"
+BlackMUDlet.packageFile = BlackMUDlet.packageName .. ".mpackage"
+BlackMUDlet.versionFile = BlackMUDlet.packageName .. ".version"
+BlackMUDlet.configFile = BlackMUDlet.packageName .. "_config.lua"
 
--- TODO: Should these be configs so they can be modified and persisted?
-  -- Or should they stay owned by the script itself?
 BlackMUDlet.remoteUrl = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
-BlackMUDlet.packageFile = "BlackMUDlet.mpackage"
-BlackMUDlet.versionFile = "BlackMUDlet.version"
 
 
-BlackMUDlet.config = BlackMUDlet.Config or {}
-BlackMUDlet.defaults = {}
 
+BlackMUDlet.Config = BlackMUDlet.Config or {}
+
+BlackMUDlet.Defaults = {
+  GUI = {},
+  Mapper = {}
+}
+
+
+
+-- track status to avoid double init on module install+load
+local initialized = false
 
 -- sysLoadEvent
 -- sysInstall
-local function initialize()
+function BlackMUDlet.initialize(event)
 
-  -- load config data
-  local config = {}
-  if io.exists(BlackMUDlet.packagePath .. BlackMUDlet.configFile) then
-    table.load(BlackMUDlet.packagePath .. BlackMUDlet.configFile, config)
-  end
-  BlackMUDlet.config = table.update(BlackMUDlet.defaults, config)
+  if initialized == false then
   
+     -- load config data
+    local config = {}
+    if io.exists(BlackMUDlet.packagePath .. BlackMUDlet.configFile) then
+      table.load(BlackMUDlet.packagePath .. BlackMUDlet.configFile, config)
+    end
+    BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, config)
   
-  -- TODO: Disable generic_mapper english exits triggers in Mapper init, not here
-  if isActive("generic_mapper", "trigger") then
-    disableTrigger("generic_mapper")
-    BlackMUDlet.GUI.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
-    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
+    BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
+    BlackMUDlet.Mapper.initialize(BlackMUDlet.Config.Mapper)
+        
+    -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
+    if gmcp and gmcp.Room then
+      onEnterGame()
+    end
+  
+    initialized = true
+  
   end
+  
+end
+
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysLoadEvent", "sysLoadEvent", BlackMUDlet.initialize)
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysInstall", "sysInstall", BlackMUDlet.initialize)
+
+
+
+ -- onEnterGame
+function BlackMUDlet.onEnterGame()
+
+  BlackMUDlet.GUI.onEnterGame()
+  BlackMUDlet.Mapper.onEnterGame()
 
 end
 
-
--- TODO: Make an event for this
-local function onEnterGame()
-
-  -- TODO: When should this actually be called?
-  -- If we install while in game, we want to run this
-  -- If we install before loading character we don't
-  -- Maybe gmcp.Char being set is a good hint?
-
-end
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.onEnterGame", "onEnterGame", BlackMUDlet.onEnterGame)
 
 
 -- sysExitEvent
-local function shutDown()
+function BlackMUDlet.shutdown()
+  
+  BlackMUDlet.Config.GUI = BlackMUDlet.GUI.Config
+  BlackMUDlet.Config.Mapper = BlackMUDlet.Mapper.Config
+  
+  table.save(BlackMUDlet.packagePath .. BlackMUDlet.configFile, BlackMUDlet.Config)
+  
+  
+  BlackMUDlet.GUI.shutdown()
+  BlackMUDlet.Mapper.shutdown()
 
 end
+
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEvent", BlackMUDlet.shutdown)
+
 
 
 -- sysUninstallPackage
-local function uninitialize()
-
+function BlackMUDlet.uninstall()
+  BlackMUDlet.GUI.uninstall()
+  BlackMUDlet.Mapper.uninstall()
 end
+
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninstall", BlackMUDlet.uninstall)
 
 
 
