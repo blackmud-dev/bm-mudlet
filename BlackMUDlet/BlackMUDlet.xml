@@ -1,0 +1,4920 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.001">
+	<TriggerPackage>
+		<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+			<name>GUI</name>
+			<script></script>
+			<triggerType>0</triggerType>
+			<conditonLineDelta>0</conditonLineDelta>
+			<mStayOpen>0</mStayOpen>
+			<mCommand></mCommand>
+			<packageName></packageName>
+			<mFgColor>#ff0000</mFgColor>
+			<mBgColor>#ffff00</mBgColor>
+			<mSoundFile></mSoundFile>
+			<colorTriggerFgColor>#000000</colorTriggerFgColor>
+			<colorTriggerBgColor>#000000</colorTriggerBgColor>
+			<regexCodeList />
+			<regexCodePropertyList />
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Event Log</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Log Kills</name>
+					<script>BlackMUDlet.GUI.EventLog.echo("&lt;red&gt;" .. matches[1])</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) is dead! R.I.P.$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Communication</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Say Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightBlue:&gt;You say \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You say in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Say Received</name>
+					<script>-- EMCO provides a nicer way to handle this
+-- TODO: switch to EMCO
+
+local ignoreList = [[
+"Nice afternoon to go for a walk, good master."
+"Up for a nighttime stroll, good master?"
+"Good evening."
+"May the gods smile upon you."
+"Good health to, m'lord!"
+"Good health to, m'lady!"
+]]
+
+--if string.find(ignoreList, multimatches[2][1]) == nil then
+  BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." says \""..multimatches[2][2].."\"\n")
+--end</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) says in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>OOC Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("OOC", "&lt;LightBlue:&gt;"..multimatches[1][1].." \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You say OOC:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>OOC Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("OOC", "&lt;LightGrey:&gt;"..multimatches[1][1].." \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) says OOC:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Shout Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightBlue:&gt;You shout \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You shout in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Shout Received</name>
+					<script>-- TODO: Switch to EMCO
+local ignoreList = [[
+"Guards! Help me! Please!"
+"To me, my fellows! I am in need of thy aid!"
+]]
+
+--if string.find(ignoreList, multimatches[2][1]) == nil then
+  BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." shouts \""..multimatches[2][2].."\"\n")
+--end</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(?:From nearby )?(.+) shouts in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Group Tell Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You tell your group, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Group Tell Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;GreenYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) tells the group, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Whisper Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You whisper to (.+), "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Whisper Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;ansiLightYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) whispers to you, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Gossip Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You gossip, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Gossip Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;ansiYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) gossips, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Tell Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You tell (\w+) "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Tell Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;ansiLightYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) tells you,? "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Pray Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You offer this prayer: "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>System</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white&gt;" .. matches[1] .. "\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^::Syslog:: (.+)$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Wiz</name>
+					<script>
+if matches[2] ~= "Syslog" then
+  BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;green&gt;" .. matches[1] .. "\n")
+end
+  </script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^::(\w+)::.+$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Buffs</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Affecting Spell List</name>
+					<script>-- TODO: Replace this with gmcp when available
+
+BlackMUDlet.GUI.Buffs.affecting[matches[2]] = true
+BlackMUDlet.GUI.Buffs.update()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^Spell : '(.+)'$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Clear Spell Window</name>
+					<script>-- TODO: Replace this with gmcp when available
+
+BlackMUDlet.GUI.Buffs.affecting = {}
+BlackMUDlet.GUI.Buffs.update()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>Affecting Spells:</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Group</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Group Member</name>
+					<script>
+BlackMUDlet.GUI.Group.addMember(matches.name, matches.hp, matches.mv)
+BlackMUDlet.GUI.Group.update()
+</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^\s+(?&lt;name&gt;\w+)\s+[\(\w+\)]* HP:(?&lt;hp&gt;\d+)% MV:(?&lt;mv&gt;\d+)%$</string>
+						<string>^\s+- (?&lt;name&gt;(?:\w+ )+)\s+[\(\w+\)]* HP:(?&lt;hp&gt;\d+)% MV:(?&lt;mv&gt;\d+)%$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Clear Group Info</name>
+					<script>
+BlackMUDlet.GUI.Group.clearMembers()
+BlackMUDlet.GUI.Group.update()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>Your group consists of:</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>No Group</name>
+					<script>-- TODO: Replace this with gmcp when available
+
+BlackMUDlet.GUI.Group.clearMembers()
+BlackMUDlet.GUI.Group.update()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>But you are a member of no group?!</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Status bar</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Mana Bar On</name>
+					<script> BlackMUDlet.GUI.Vitals.drawManaBar()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>You will now get all stats in the prompt.</string>
+						<string>Mana added in prompt.</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Mana Bar Off</name>
+					<script> BlackMUDlet.GUI.Vitals.hideManaBar()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>Mana removed from prompt.</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+		</TriggerGroup>
+	</TriggerPackage>
+	<TimerPackage />
+	<AliasPackage>
+		<AliasGroup isActive="yes" isFolder="yes">
+			<name>GUI</name>
+			<script></script>
+			<command></command>
+			<packageName></packageName>
+			<regex></regex>
+			<Alias isActive="yes" isFolder="no">
+				<name>Reset UI</name>
+				<script>BlackMUDlet.GUI.cecho("Resetting layout to default\n")
+
+BlackMUDlet.GUI.resetLayout()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui reset$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Rebuild UI</name>
+				<script>BlackMUDlet.GUI.cecho("Reinitializing UI components from scripts")
+BlackMUDlet.GUI.cecho("Use &lt;white&gt;ui reset&lt;LightBlue&gt; to reset layout\n")
+
+BlackMUDlet.GUI.buildUI()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui build$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Show UI Help</name>
+				<script>BlackMUDlet.GUI.showHelp()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui help$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Toggle Wimpy Bar</name>
+				<script>
+if matches[2] == "on" then 
+  BlackMUDlet.GUI.Config.showWimpyBar = true
+  BlackMUDlet.GUI.cecho("Wimpy bar will be shown\n")  
+elseif matches[2] == "off" then
+  BlackMUDlet.GUI.Config.showWimpyBar = false
+  BlackMUDlet.GUI.cecho("Wimpy bar will be hidden\n")
+else
+  BlackMUDlet.GUI.cecho("Enables/disables visible wimpy bar in UI")
+  BlackMUDlet.GUI.cecho("    Usage: &lt;white&gt;ui wimpy &lt;i&gt;on|off\n")
+end</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui wimpy ?(\w+)?$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Toggle Mana Bar</name>
+				<script>
+if matches[2] == "on" then 
+  BlackMUDlet.GUI.Vitals.drawManaBar()
+elseif matches[2] == "off" then
+  BlackMUDlet.GUI.Vitals.hideManaBar()
+else
+  BlackMUDlet.GUI.cecho("Enables/disables mana bar in UI")
+  BlackMUDlet.GUI.cecho("    Usage: &lt;white&gt;ui mana &lt;i&gt;on|off\n")
+end</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui mana ?(\w+)?$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Toggle Tick Notice</name>
+				<script>
+if matches[2] == "on" then
+  BlackMUDlet.GUI.Config.showTickNotice = true
+  BlackMUDlet.GUI.echo("Tick notice enabled; clock will flash prior to tick.")
+elseif matches[2] == "off" then
+  BlackMUDlet.GUI.Config.showTickNotice = false
+  BlackMUDlet.GUI.echo("Tick notice disabled.")
+else
+  BlackMUDlet.GUI.cecho("Enables/disables the flashing clock before new tick")
+  BlackMUDlet.GUI.cecho("    Usage: &lt;white&gt;ui ticknotice &lt;i&gt;on|off\n")
+end</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui ticknotice ?(\w+)?</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Hide UI</name>
+				<script>BlackMUDlet.GUI.cecho("Hiding all UI panels\n")
+
+BlackMUDlet.GUI.hideUI()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui hide$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Show UI</name>
+				<script>BlackMUDlet.GUI.cecho("Enabling UI\n")
+
+BlackMUDlet.GUI.showUI()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui show$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>About UI</name>
+				<script>BlackMUDlet.GUI.showAbout()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui about$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Add Tracked Spell</name>
+				<script>BlackMUDlet.GUI.Buffs.updateSpellWatch(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui spellwatch (.+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Set Group Click Action</name>
+				<script>
+if matches[2] then
+  BlackMUDlet.GUI.Config.groupAction = matches[2]
+  BlackMUDlet.GUI.cecho("Group action set to:&lt;white&gt;&lt;i&gt; " .. matches[2] .. " &lt;i&gt;&lt;group member&gt;\n")
+  send("group", false)
+else
+  BlackMUDlet.GUI.cecho("Current group action on click is: &lt;white&gt;" .. BlackMUDlet.GUI.Config.groupAction)
+  BlackMUDlet.GUI.cecho("Use &lt;white&gt;ui groupaction &lt;i&gt;&lt;action&gt;&lt;LightBlue&gt; to set new action\n")
+end</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui groupaction\s*(.+)?$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Status Bar Format</name>
+				<script>BlackMUDlet.GUI.setStatusBarFormat(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui statusbar (\w+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Show Gag List</name>
+				<script>BlackMUDlet.GUI.Communication.showGags()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui gaglist$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Clear Gag List</name>
+				<script>BlackMUDlet.GUI.Communication.clearGags()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui gaglist clear$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Gag String</name>
+				<script>BlackMUDlet.GUI.Communication.toggleGag(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui gag (.+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>ItemDB Search</name>
+				<script>
+BlackMUDlet.GUI.WorldInfo.emco:switchTab("Item Database")
+
+-- TODO: This should work, but it doesn't
+--BlackMUDlet.GUI.ItemDB.console.printCmd(matches[2])
+-- So, workaround:
+printCmdLine("BlackMUDlet.GUI.ItemDB.console", matches[2] or "")
+
+BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
+</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>\/(?:id|item) ?(.+)?</regex>
+			</Alias>
+		</AliasGroup>
+		<AliasGroup isActive="yes" isFolder="yes">
+			<name>Mapper</name>
+			<script></script>
+			<command></command>
+			<packageName></packageName>
+			<regex></regex>
+			<Alias isActive="yes" isFolder="no">
+				<name>Set mapmode</name>
+				<script>setMapMode(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui mapmode (\w+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Set createmode</name>
+				<script>setCreateMode(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui createmode (\w+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Set exitmode</name>
+				<script>setExitMode(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui exitmode (\w+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Map help</name>
+				<script>BlackMUDlet.GUI.showHelp()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui map help$</regex>
+			</Alias>
+		</AliasGroup>
+	</AliasPackage>
+	<ActionPackage />
+	<ScriptPackage>
+		<ScriptGroup isActive="yes" isFolder="yes">
+			<name>GUI</name>
+			<packageName></packageName>
+			<script>BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.GUI = BlackMUDlet.GUI or {}
+
+</script>
+			<eventHandlerList />
+			<Script isActive="yes" isFolder="no">
+				<name>Config</name>
+				<packageName></packageName>
+				<script>
+local GUI = BlackMUDlet.GUI
+
+GUI.version = 1
+
+GUI.Utils = GUI.Utils or {}
+GUI.Colors = GUI.Colors or {}
+GUI.Config = GUI.Config or {}
+
+GUI.packageName = "BlackMUDlet"
+GUI.packagePath = getMudletHomeDir() .. "/" .. GUI.packageName .. "/"
+
+-- GUI.Config takes precedence
+-- Below are used at sysLoadEvent to populate any missing values
+-- EMCO tabbed windows use EMCO save/load functionality
+GUI.Defaults = {
+  initialized     = false,
+  statusBarFormat = "compact",          
+  groupAction     = "glance",
+  showManaBar     = "true",
+  showWimpyBar    = "false",
+  showTickNotice  = "true",
+  spellWatch      = {sanctuary = true,},
+  itemdb          = GUI.packagePath .. "resources/itemdb.txt"
+}
+
+-- TODO: font face isn't actually used anywhere
+-- TODO: should use main window font size where possible
+GUI.Utils.font = "Bitstream Vera Sans Mono"
+GUI.Utils.uiFontSize = 10
+GUI.Utils.gaugeFontSize = 10
+GUI.Utils.commsFontSize = 10
+
+
+-- Some default colors, mainly for gauges
+-- Using "700" shades and their light/dark variants from https://material.io/resources/color/
+-- archive: https://web.archive.org/web/20221003121236/https://material.io/resources/color/#!/?view.left=0&amp;view.right=0&amp;primary.color=7B1FA2
+GUI.Colors.red             = "#d32f2f"
+GUI.Colors.darkRed         = "#450003"
+GUI.Colors.lightRed        = "#ff6659"
+GUI.Colors.blue            = "#1976d2"
+GUI.Colors.darkBlue        = "#002550"
+GUI.Colors.lightBlue       = "#63a4ff"
+GUI.Colors.green           = "#388e3c"
+GUI.Colors.darkGreen       = "#003007"
+GUI.Colors.lightGreen      = "#6abf69"
+GUI.Colors.deepPurple      = "#512da8"
+GUI.Colors.darkDeepPurple  = "#070039"
+GUI.Colors.lightDeepPurple = "#8559da"
+
+-- These colors pulled from blackmud.com
+GUI.Colors.darkGrey        = "#212121"
+GUI.Colors.grey            = "#808080"
+GUI.Colors.lightGrey       = "#d2d2d2"
+GUI.Colors.gold            = "#cc9900"
+-- highlight #d75701
+
+
+
+-- Translation table to convert long gmcp strings to shorter strings
+GUI.Utils.translate = {}
+
+-- Alignment
+GUI.Utils.translate["Your deeds are legendary, even in hell!"]   = "&lt;red&gt;Evilest&lt;reset&gt;"
+GUI.Utils.translate["Rape and murder are a way of life to you!"] = "&lt;red&gt;Eviler&lt;reset&gt;"
+GUI.Utils.translate["You are truly evil!"]                       = "&lt;red&gt;Evil&lt;reset&gt;"
+GUI.Utils.translate["You are tending toward evil."]              = "&lt;salmon&gt;Tending Evil&lt;reset&gt;"
+GUI.Utils.translate["You feel balanced."]                        = "Balanced"
+GUI.Utils.translate["You are tending toward goodness."]          = "&lt;LightBlue&gt;Tending Good&lt;reset&gt;"
+GUI.Utils.translate["You are sweet, caring, all that crapola!"]  = "&lt;DeepSkyBlue&gt;Good&lt;reset&gt;"
+GUI.Utils.translate["You are a real goody-goody!"]               = "&lt;DeepSkyBlue&gt;Goody-Goody&lt;reset&gt;"
+GUI.Utils.translate["You are the epitome of righteousness!"]     = "&lt;DeepSkyBlue&gt;Righteous&lt;reset&gt;"
+
+-- Entropy
+GUI.Utils.translate["The Lord of Chaos has touched your soul.  You seek only The Unmaking."] = "Unmaker"
+GUI.Utils.translate["You have no understanding of the concepts of law and order."]           = "Chaotic"
+GUI.Utils.translate["You casually disregard law and order."]                                 = "Somewhat Chaotic"
+GUI.Utils.translate["You are tending toward chaos."]                                         = "Tending Chaotic"
+GUI.Utils.translate["You feel entrophatically balanced."]                                    = "Balanced"
+GUI.Utils.translate["You are tending toward order."]                                         = "Tending Ordered"
+GUI.Utils.translate["You feel a strong need for order in the world."]                        = "Somewhat Ordered"
+GUI.Utils.translate["You feel the need to enforce law and order."]                           = "Ordered"
+GUI.Utils.translate["Phaet has touched your soul.  You seek only to prevent The Unmaking."]  = "Maker"
+
+-- Position
+GUI.Utils.translate["You are DEAD!"]                             = "DEAD!"
+GUI.Utils.translate["You are mortally wounded!"]                 = "Mortally wounded"
+GUI.Utils.translate["You are incapacitated, slowly fading away"] = "Incapacitated"
+GUI.Utils.translate["You are stunned! You can't move"]           = "Stunned"
+GUI.Utils.translate["You are sleeping."]                         = "Sleeping"
+GUI.Utils.translate["You are resting."]                          = "Resting"
+GUI.Utils.translate["You are sitting."]                          = "Sitting"
+GUI.Utils.translate["You are fighting."]                         = "Fighting"
+GUI.Utils.translate["You are standing."]                         = "Standing"
+GUI.Utils.translate["You are riding."]                           = "Riding"
+GUI.Utils.translate["You are floating."]                         = "Floating"
+
+
+-- TODO: Geyser.StyleSheet would allow inheritance, should pivot to that
+
+-- For Adjustable windows (the main panels)
+GUI.defaultWindowStyle = [[
+    font-family: ]] .. GUI.Utils.font .. [[;
+    font-size: ]] .. GUI.Utils.uiFontSize .. [[px;
+    background-color: ]] .. GUI.Colors.darkGrey .. [[;
+    border: 3px solid ]] .. GUI.Colors.lightGrey .. [[;
+    border-radius: 4px;
+]]
+
+
+GUI.defaultLabelStyle = [[
+    qproperty-alignment: 'AlignTop';
+    font-family: ]] .. GUI.Utils.font .. [[;
+    font-size: ]] .. GUI.Utils.uiFontSize .. [[pt;
+    background-color: ]] .. GUI.Colors.darkGrey .. [[;
+]]
+
+ 
+-- For EMCO tab controls
+GUI.inactiveTabCSS = [[
+    background-color: ]] .. GUI.Colors.darkGrey .. [[;
+    border: 1px solid ]] .. GUI.Colors.lightGrey .. [[;
+]]
+
+GUI.activeTabCSS = [[
+    background-color: ]] .. GUI.Colors.gold .. [[;
+    border: 1px solid ]] .. GUI.Colors.lightGrey .. [[;
+    color: ]] .. GUI.Colors.darkGrey .. [[;
+    font-size: 14;
+]]
+
+
+-- Gauge front 
+function GUI.Utils.getGaugeFgCSS(fg)
+  return [[
+    background-color: ]] .. fg .. [[;
+    border-width: 1px;
+    border-color: ]] .. GUI.Colors.grey .. [[;
+    border-style: solid;
+    border-radius: 2;
+    padding: 2px;
+  ]]
+  
+end
+
+
+-- Gauge back
+function GUI.Utils.getGaugeBgCSS(bg)
+  return [[
+    background-color: ]] .. bg .. [[;
+    border-width: 1px;
+    border-color: ]] .. GUI.Colors.grey .. [[;
+    border-style: solid;
+    border-radius: 2;
+    padding: 2px;
+  ]]
+end
+
+
+-- Gauge text
+-- This one is also a function for consistency with the other two gauge CSS functions 
+function GUI.Utils.getGaugeTextCSS()
+  return [[
+    padding: 2px;
+    color: ]] .. GUI.Colors.grey .. [[;
+  ]]
+end
+
+
+
+
+
+</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Utils</name>
+				<packageName></packageName>
+				<script>
+local GUI = BlackMUDlet.GUI
+
+
+-- Convenience functions for echoing UI-related messages
+
+function GUI.cecho(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;UI&lt;LightBlue&gt;]: " .. m)
+end
+
+GUI.echo = GUI.cecho
+GUI.info = GUI.cecho
+
+function GUI.warn(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;UI&lt;LightBlue&gt;]: &lt;yellow&gt;Warning: " .. m)
+end
+
+function GUI.error(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;UI&lt;LightBlue&gt;]: &lt;red&gt;Error: " .. m)
+end
+
+
+-- Simple utility function to shorten a number using k, m, or b suffix
+function GUI.Utils.shortenNum(n)
+  if math.abs(n) &gt;= 10^9 then
+    return string.format("%.1fb", n / 10^9)
+  elseif math.abs(n) &gt;= 10^6 then
+    return string.format("%.1fm", n / 10^6)
+  elseif math.abs(n) &gt;= 10^3 then
+    return string.format("%.1fk", n / 10^3)
+  else 
+    return tostring(n) 
+  end
+end
+
+
+-- Add commas to a long number
+-- http://lua-users.org/wiki/FormattingNumbers
+function GUI.Utils.commaNum(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
+
+-- modified from https://gist.github.com/demonnic/bf50cd8c80a0d96766478143251561b2
+-- returns a &lt;r,g,b&gt; tag for decho representing a danger level
+function GUI.Utils.getBadnessLevel(num, max)
+  local halfWay = (max+1) / 2
+  local stepSize = 255 / (halfWay - 1)
+  local r,g,b = 0,255,0
+  if num &lt;= 1 then
+    r,g,b =  r,g,b
+  elseif num &gt; max then
+    r,g,b = 255,0,0
+  elseif num &lt; halfWay then
+    r = math.floor((num - 1) * stepSize)
+  else
+    r = 255
+    g = 255 - math.floor((num - halfWay) * stepSize)
+  end
+  return "&lt;"..r..","..g..","..b.."&gt;"
+end</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Startup / Exit</name>
+				<packageName></packageName>
+				<script>local GUI = BlackMUDlet.GUI
+
+-- Load config and display ui
+function GUI.onStartup()
+  
+  -- load config data
+  local config = {}
+  if io.exists(GUI.packagePath .. "ui_config.lua") then
+    table.load(GUI.packagePath .. "ui_config.lua", config)
+  end
+  GUI.Config = table.update(GUI.Defaults, config)
+  
+  -- build the UI
+  -- Adjustable.Container windows save their position across restarts
+  -- EMCO panel settings are loaded in builders as needed
+  GUI.buildUI()
+  
+  -- run once code goes here
+  -- TODO: Any reason for distinct "run once" and "at install"?
+  -- TODO: Perhaps hide status bar and character info until you enter game?
+  -- TODO: If so, need to handle install while logged in
+  if not GUI.Config.initialized then
+    GUI.resetLayout()
+    GUI.buildUI() -- rebuild now that windows are correctly sized
+    GUI.WorldInfo.emco:switchTab("Help") -- show the help window on init
+    GUI.Config.initialized = true
+  end
+  
+  -- Delay welcome message so it appears after the profile loading info
+  tempTimer(1, GUI.showWelcome)
+  
+  -- In Mudlet 4.16 this isn't safe to call multiple times
+  -- https://github.com/Mudlet/Mudlet/issues/6318
+  -- Adds the "connect" menu to all adjustable containers
+  -- This modifies all Adjustable.Container windows, not just this package
+  Adjustable.Container:doAll(function(self) self:addConnectMenu() end)
+  
+end
+
+
+-- Save config on exit
+function GUI.onExit()
+  table.save(GUI.packagePath .. "ui_config.lua", GUI.Config)
+  GUI.Communication.emco:save()
+  GUI.WorldInfo.emco:save()
+end
+
+-- TODO: Switched these to named to avoid duplication
+registerAnonymousEventHandler("sysLoadEvent", GUI.onStartup, true)
+registerAnonymousEventHandler("sysInstallPackage", GUI.onStartup, true)
+registerAnonymousEventHandler("sysExitEvent", GUI.onExit, true)
+
+</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Help</name>
+				<packageName></packageName>
+				<script>local GUI = BlackMUDlet.GUI
+
+GUI.Help = GUI.Help or {}
+
+-- TODO: Modularize this. Each component should handle its own help.
+
+GUI.Help.welcome = [[&lt;LightBlue&gt;
+********************************************************************************
+BlackMUDlet UI is installed:
+  Type &lt;white&gt;ui help &lt;LightBlue&gt;and &lt;white&gt;ui about &lt;LightBlue&gt;for more information
+  Type &lt;white&gt;ui reset &lt;LightBlue&gt;to reset the layout if things look weird
+  Type &lt;white&gt;ui hide &lt;LightBlue&gt;to hide the UI (&lt;white&gt;ui show &lt;LightBlue&gt;to bring it back)
+********************************************************************************
+]]
+
+
+GUI.Help.help = [[&lt;LightBlue&gt;
+********************************************************************************
+BlackMUDlet UI
+
+This UI is a work in progress and will probably malfunction in many scenarios. 
+Feel free to report bugs or feedback to yetanotherkevin on the BlackMUD Discord.
+
+All panels are anchored to the Communication window by default and may be resized 
+using the mouse. Right click on the border of a window for more options. Windows 
+may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui reset&lt;reset&gt;
+
+  &lt;LightBlue&gt;UI Management:
+    &lt;white&gt;ui help&lt;reset&gt;:  show this screen
+    &lt;white&gt;ui about&lt;reset&gt;: information about this package
+    &lt;white&gt;ui hide&lt;reset&gt;:  hide all UI panels
+    &lt;white&gt;ui show&lt;reset&gt;:  rebuild, reset, and show all UI panels
+    &lt;white&gt;ui reset&lt;reset&gt;: reset the layout to default
+    &lt;white&gt;ui build&lt;reset&gt;: rebuild the UI from source after script changes
+  
+  &lt;LightBlue&gt;Communication:
+    &lt;white&gt;ui gag &lt;i&gt;&lt;text&gt;&lt;reset&gt;: gags (or un-gags) messages containing the specified text
+    &lt;white&gt;ui gaglist&lt;reset&gt;: shows the current gag list
+    &lt;white&gt;ui gaglist clear&lt;reset&gt;: clear the gag list
+  
+  &lt;LightBlue&gt;Status Bar:
+    &lt;white&gt;ui statusbar &lt;i&gt;full | compact | minimal&lt;reset&gt;: change the status bar format
+    &lt;white&gt;ui mana &lt;i&gt;on | off&lt;reset&gt;: toggle the mana bar
+    &lt;white&gt;ui wimpy &lt;i&gt;on | off&lt;reset&gt;: toggle the wimpy bar &lt;LightBlue&gt;
+    &lt;white&gt;ui ticknotice &lt;i&gt;on | off&lt;reset&gt;: toggle clock flashing before new tick
+  
+  &lt;LightBlue&gt;Affecting Spells:
+    &lt;white&gt;ui spellwatch &lt;i&gt;&lt;spell name&gt;&lt;reset&gt;: toggle a spell on the watch list
+    &lt;white&gt;ui spellwatch clear&lt;reset&gt;: clear the spell watch list
+    
+  &lt;LightBlue&gt;Group:
+    &lt;white&gt;ui groupaction &lt;i&gt;&lt;action&gt;&lt;reset&gt;: set action when clicking on group member
+    
+  &lt;LightBlue&gt;Mapper:
+    &lt;white&gt; ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;: Map creation mode
+    &lt;white&gt; ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;: How to handle overlapping rooms
+    &lt;white&gt; ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;: Create placeholder rooms or exit stubs in new rooms
+&lt;LightBlue&gt;    
+********************************************************************************
+]]
+
+
+GUI.Help.about = [[&lt;LightBlue&gt;
+********************************************************************************
+BlackMUDlet UI
+
+  Author: yetanotherkevin (aka Donal)
+  
+  Acknowledgements:
+  
+    This package uses demonnic's MDK and the Embeddable Multi-Console Object 
+        https://github.com/demonnic/MDK
+    
+********************************************************************************
+]]
+
+
+function GUI.showWelcome()
+  cecho(GUI.Help.welcome)
+end
+
+
+function GUI.showHelp()
+  cecho(GUI.Help.help)
+end
+
+
+function GUI.showAbout()
+  cecho(GUI.Help.about)
+end
+</script>
+				<eventHandlerList />
+			</Script>
+			<ScriptGroup isActive="yes" isFolder="yes">
+				<name>Status Bar</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.GUI.StatusBar = BlackMUDlet.GUI.StatusBar or {}</script>
+				<eventHandlerList />
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Time Panel</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Time = BlackMUDlet.GUI.Time or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Time Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Time = GUI.Time
+
+Time.width = 80
+
+-- A larger clock panel intended to show time and date
+function Time.buildPanel(parent)
+
+  Time.width = 80
+
+  -- The main container for this object
+  Time.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Time.panel",
+      x = 0, y = 0, width = GUI.Time.width, height = "100%",
+      h_policy = Geyser.Fixed,
+    },
+    parent
+  )
+  
+  Time.label = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Time.label", x = 0, y = 0, width = "100%",  height = "100%", 
+    }, 
+    Time.panel)
+  
+  -- This is overridden during updates, so only used until gmcp events arrive
+  Time.label:setFontSize(14)
+  
+  -- force update on creation
+  Time.update()
+  
+  Time.label:setClickCallback(Time.onClick)
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Time", "gmcp.General.Time", GUI.Time.update)
+  
+end
+
+
+
+-- A compact clock panel intended to show only the current time
+function Time.buildCompactPanel(parent)
+
+  Time.width = 60
+  
+  -- The main container for this object
+  Time.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Time.panel",
+      x = 0, y = 0, width = GUI.Time.width, height = "100%",
+      h_policy = Geyser.Fixed,
+    },
+    parent
+  )
+  
+  Time.label = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Time.label", x = 0, y = 0, width = "100%",  height = "100%", 
+    }, 
+    Time.panel)
+  
+  Time.label:setFontSize(10)
+  
+  -- force update on creation
+  Time.updateCompact()
+  
+  Time.label:setClickCallback(Time.onClick)
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Time", "gmcp.General.Time", GUI.Time.updateCompact)
+  
+end
+
+
+function Time.onClick()
+
+  send("time", false)
+
+end</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Time Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Time = GUI.Time
+
+-- track these outside of GMCP so we can update more frequently
+Time.tick = Time.tick or 0
+Time.hour = Time.hour or 0
+
+
+
+function Time.update(eventName)
+
+  if gmcp and gmcp.General and gmcp.General.Time then
+  
+    local time = gmcp.General.Time
+  
+    -- if we enter via a gmcp event, use the gmcp data
+    if eventName == "gmcp.General.Time" then
+      Time.tick = 60 - time.tick
+      Time.hour = time.hour
+    else -- else update the cached data
+      Time.tick = (Time.tick + 1) % 60
+    end
+    
+    -- if we rolled over the hour, update it
+    -- gmcp hour doesn't roll over when tick==0, only at tick==59
+    if Time.tick == 0 then 
+      Time.hour = (Time.hour + 1) % 36 
+    end
+      
+    Time.label:echo("&lt;center&gt;&lt;font size=6&gt;"
+      ..string.format("%02d:%02d", Time.hour, Time.tick)
+      .."&lt;font&gt;&lt;br&gt;&lt;font size=3&gt;"
+      ..string.format("%02d/%02d/%02d", time.day+1, time.month+1, time.year)
+      .."&lt;/font&gt;&lt;/center&gt;"
+    )
+    
+    -- flash the container if we're close to tick
+    -- TODO: this could be made prettier, just using the Geyser visual aide
+    if GUI.Config.showTickNotice and (Time.tick == 55 or Time.tick == 57 or Time.tick == 59) then
+      Time.panel:flash()
+    end
+  
+    -- Update the background with a clock-like gradient fill
+    local ratio = (60 - Time.tick) / 60
+    setLabelStyleSheet("BlackMUDlet.GUI.Time.label", [[
+      background: qconicalgradient(cx:0.5, cy:0.5, angle: 90, stop:0 black, stop:]]..ratio..[[ black stop:]]..ratio+0.001 .. [[ #333333)
+    ]])
+    
+    -- kick off a timer to call update again in 1 second
+    registerNamedTimer("BlackMUDlet", "GUI.Time.tick", 1, Time.update)
+  
+  else -- gmcp.General.Time == nil
+    Time.label:echo("&lt;center&gt;00:00")
+  end
+  
+end
+
+
+
+-- updateCompact only shows the time of day, not full date
+function Time.updateCompact(event)
+
+  if gmcp and gmcp.General and gmcp.General.Time then
+  
+    local time = gmcp.General.Time
+  
+    -- if we enter via a gmcp event, use the gmcp data
+    if eventName == "gmcp.General.Time" then
+      Time.tick = 60 - time.tick
+      Time.hour = time.hour
+    else -- else use the cached data
+      Time.tick = (Time.tick + 1) % 60
+    end
+    
+    -- if we rolled over the hour, update it
+    -- gmcp hour doesn't roll over when tick==0, only at tick==59
+    if Time.tick == 0 then Time.hour = Time.hour + 1 end
+  
+    Time.label:echo("&lt;center&gt;" .. string.format("%02d:%02d", Time.hour, Time.tick))
+    
+    -- flash the container if we're close to tick
+    -- this could be made prettier, just using the Geyser visual aide
+    if GUI.Config.showTickNotice and (Time.tick == 55 or Time.tick == 57 or Time.tick == 59) then
+      Time.panel:flash()
+    end
+  
+    -- Update the background with a clock-like gradient fill
+    local ratio = (60 - Time.tick) / 60
+    setLabelStyleSheet("BlackMUDlet.GUI.Time.label", [[
+      background: qconicalgradient(cx:0.5, cy:0.5, angle: 90, stop:0 black, stop:]]..ratio..[[ black stop:]]..ratio+0.001 .. [[ #333333)
+    ]])
+    
+    registerNamedTimer("BlackMUDlet", "GUI.Time.tick", 1, Time.updateCompact)
+  
+  else -- gmcp.General.Time == nil
+    Time.label:echo("&lt;center&gt;00:00")
+  end
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Vitals Panel</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Vitals = BlackMUDlet.GUI.Vitals or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Vitals Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Vitals = GUI.Vitals
+
+local gaugePadding = 2           -- Add some padding inside of boxes so gauges don't touch
+local gaugeLabelWidth = 30       -- Width of the text label beside each gauge (e.g "HP:")
+
+local hpBarFg = GUI.Colors.red
+local hpBarBg = GUI.Colors.darkRed
+local mpBarFg = GUI.Colors.blue
+local mpBarBg = GUI.Colors.darkBlue
+local mvBarFg = GUI.Colors.green
+local mvBarBg = GUI.Colors.darkGreen
+local xpBarFg = GUI.Colors.deepPurple
+local xpBarBg = GUI.Colors.darkDeepPurple
+
+
+-- Helper to construct a gauge
+local function makeGauge(gaugeName, fgColor, bgColor, parent)
+  
+  local gauge = Geyser.Gauge:new(
+    {
+      name = gaugeName,
+      x = gaugeLabelWidth, y = gaugePadding, width = -gaugePadding, height = -gaugePadding,
+    },
+    parent)
+
+  gauge:setFontSize(GUI.Utils.gaugeFontSize)
+  
+  gauge.front:setStyleSheet(GUI.Utils.getGaugeFgCSS(fgColor))
+  gauge.back:setStyleSheet(GUI.Utils.getGaugeBgCSS(bgColor))
+  gauge.text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
+  
+  return gauge  
+
+end
+
+
+-- Helper to construct a container with "Label |Gauge|"
+-- Returns the resulting container and gauge
+local function makeLabeledGauge(gaugeName, gaugeLabel, fgColor, bgColor, parent)
+
+  local container = Geyser.Container:new({name = gaugeName.."Container"}, parent)
+  
+  local label = Geyser.Label:new(
+    {
+      name = gaugeName.."Label",
+      x = 0, y = 0, width = gaugeLabelWidth, height = "100%",
+    },
+    container)
+  
+  -- Dumb workaround to detect emoji labels
+  -- #"HP:" = 3, #"💗" &gt; 4 due to unicode silliness
+  if #gaugeLabel &lt; 4 then
+    label:setFontSize(GUI.Utils.gaugeFontSize)
+  else
+    label:setFontSize(GUI.Utils.gaugeFontSize + 3)
+  end
+  
+  label:setAlignment('c')
+  label:echo(gaugeLabel)
+  
+  local gauge = makeGauge(gaugeName, fgColor, bgColor, container)
+  
+  return container, gauge  
+
+end
+
+
+function Vitals.buildPanel2x2(parent)
+
+  gaugePadding = 2   
+  gaugeLabelWidth = 30
+
+  -- The main container for this object
+  Vitals.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.panel", 
+      x = 0, y = 0, width = "100%", height = "100%"},
+    parent)
+  
+  -- VBox for 2 rows of gauges
+  Vitals.vbox = Geyser.VBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.vbox", 
+      x = 0, y = 0, width = "100%", height = "100%"
+    }, 
+    Vitals.panel)
+  
+  --top row
+  Vitals.top = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.top", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Vitals.vbox)
+    
+  -- bottom row
+  Vitals.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.bot", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Vitals.vbox)
+  
+  -- Create the 4 gauges
+  Vitals.hpContainer, Vitals.hpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.hp", "💗", hpBarFg, hpBarBg, Vitals.top)
+  Vitals.mvContainer, Vitals.mvGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mv", "🥾", mvBarFg, mvBarBg, Vitals.top)
+  Vitals.mpContainer, Vitals.mpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mp", "💫", mpBarFg, mpBarBg, Vitals.bottom)
+  Vitals.xpContainer, Vitals.xpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.xp", "📜", xpBarFg, xpBarBg, Vitals.bottom)
+
+  if GUI.Config.showManaBar == false then
+    GUI.Vitals.hideManaBar(true)
+  end
+
+  -- Create the wimpy bar
+  Vitals.wimpyBar = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.wimpyBar",
+      x = 0, y = 0, width = 1, height = "100%",
+    },
+    Vitals.hpGauge.back)
+    Vitals.wimpyBar:setStyleSheet("background-color: yellow;")
+    Vitals.wimpyBar:hide()
+  
+  -- force update on creation
+  Vitals.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Vitals", "gmcp.Char.Vitals", GUI.Vitals.update)
+
+end 
+
+
+function Vitals.buildMinimalPanel(parent)
+
+  gaugePadding = 1   
+  gaugeLabelWidth = 0
+
+  -- The main container for this object
+  Vitals.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.panel", 
+      x = 0, y = 0, width = "100%", height = "100%"},
+    parent)
+  
+  -- VBox for 2 rows of gauges
+  Vitals.vbox = Geyser.VBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.vbox", 
+      x = 0, y = 0, width = "100%", height = "100%"
+    }, 
+    Vitals.panel)
+  
+  --top row
+  Vitals.top = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.top", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Vitals.vbox)
+    
+  -- bottom row
+  Vitals.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.bot", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Vitals.vbox)
+  
+  -- Create the 4 gauges
+  Vitals.hpContainer, Vitals.hpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.hp", "💗", hpBarFg, hpBarBg, Vitals.top)
+  Vitals.mvContainer, Vitals.mvGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mv", "🥾", mvBarFg, mvBarBg, Vitals.top)
+  Vitals.mpContainer, Vitals.mpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mp", "💫", mpBarFg, mpBarBg, Vitals.bottom)
+  Vitals.xpContainer, Vitals.xpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.xp", "📜", xpBarFg, xpBarBg, Vitals.bottom)
+  
+  if GUI.Config.showManaBar == false then
+    GUI.Vitals.hideManaBar(true)
+  end
+
+  -- Create the wimpy bar
+  Vitals.wimpyBar = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.wimpyBar",
+      x = 0, y = 0, width = 1, height = "100%",
+    },
+    Vitals.hpGauge.back)
+    Vitals.wimpyBar:setStyleSheet("background-color: yellow;")
+    Vitals.wimpyBar:hide()
+  
+  -- force update on creation
+  Vitals.updateMinimal()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Vitals", "gmcp.Char.Vitals", GUI.Vitals.updateMinimal)
+
+end
+
+-- 4x1 gauge layout
+function Vitals.buildPanel4x1(parent)
+
+  gaugePadding = 2   
+  gaugeLabelWidth = 30
+
+  -- The main container for this object
+  Vitals.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.panel", 
+      x = 0, y = 0, width = "100%", height = "100%"},
+    parent)
+  
+    
+  Vitals.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Vitals.bottom", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Vitals.panel)
+    
+  -- Create the 4 gauges
+  Vitals.hpContainer, Vitals.hpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.hp", "💗", hpBarFg, hpBarBg, Vitals.bottom)
+  Vitals.mpContainer, Vitals.mpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mp", "💫", mpBarFg, mpBarBg, Vitals.bottom)
+  Vitals.mvContainer, Vitals.mvGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.mv", "🥾", mvBarFg, mvBarBg, Vitals.bottom)
+  Vitals.xpContainer, Vitals.xpGauge = makeLabeledGauge("BlackMUDlet.GUI.Vitals.xp", "📜", xpBarFg, xpBarBg, Vitals.bottom)
+  
+  if GUI.Config.showManaBar == false then
+    GUI.Vitals.hideManaBar(true)
+  end
+  
+  -- Create the wimpy bar
+  Vitals.wimpyBar = Geyser.Label:new(
+    {
+      name = "BlackMUDLet.GUI.Vitals.wimpyBar",
+      x = 0, y = 0, width = 1, height = "100%",
+    },
+    Vitals.hpGauge.back)
+    Vitals.wimpyBar:setStyleSheet("background-color: yellow;")
+    Vitals.wimpyBar:hide()
+  
+  -- force update on creation
+  Vitals.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Vitals", "gmcp.Char.Vitals", GUI.Vitals.update)
+
+end
+
+
+-- Show the mana bar
+function Vitals.drawManaBar(gag)
+  Vitals.mpContainer.h_stretch_factor = 1
+  GUI.Config.showManaBar = true
+  Vitals.bottom:organize() -- force the box to redraw
+  
+  if gag ~= true then
+    GUI.cecho("Mana bar will be shown\n")
+  end
+  
+end
+
+
+-- Hide the mana bar
+function GUI.Vitals.hideManaBar(gag)
+  Vitals.mpContainer.h_stretch_factor = 0
+  GUI.Config.showManaBar = false
+  Vitals.bottom:organize() -- force the box to redraw
+  
+  if gag ~= true then
+    BlackMUDlet.GUI.cecho("Mana bar will be hidden\n")
+  end
+  
+end
+
+
+-- Toggle mana bar on/off
+function Vitals.toggleManaBar(gag)
+ 
+  if GUI.Config.showManaBar then
+    GUI.Vitals.hideManaBar(gag)
+  else 
+    Vitals.drawManaBar(gag)
+  end
+  
+end
+
+</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Vitals Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+
+
+-- Utility function to return the text string for hp/mp/mv gauges
+local function getGaugeText(a, b)
+  return string.format("%d/%d (%.1f%%)", a, b, 100*a / b)
+end
+
+
+-- TODO: Might add an "overlevel" bar or styling
+-- TODO: TBD: Click handlers on gauges to toggle numbers, percents, etc.
+function GUI.Vitals.update()
+
+  if gmcp and gmcp.Char and gmcp.Char.Vitals then
+  
+    local vitals = gmcp.Char.Vitals
+    
+    -- update hp bar
+    GUI.Vitals.hpGauge:setValue(vitals.hp, vitals.maxhp, getGaugeText(vitals.hp, vitals.maxhp))
+
+    -- update wimpy marker
+    if GUI.Config.showWimpyBar and gmcp.Char and gmcp.Char.Stats and gmcp.Char.Stats.wimpy ~= 0 then
+      local wimpy = gmcp.Char.Stats.wimpy
+      GUI.Vitals.wimpyBar:move(wimpy.."%", nil)
+      GUI.Vitals.wimpyBar:show()
+    else 
+      GUI.Vitals.wimpyBar:hide()
+    end
+
+    -- update mp bar
+    GUI.Vitals.mpGauge:setValue(vitals.mana, vitals.maxmana, getGaugeText(vitals.mana, vitals.maxmana))
+    
+    -- update mv bar  
+    GUI.Vitals.mvGauge:setValue(vitals.move, vitals.maxmove, getGaugeText(vitals.move, vitals.maxmove))
+  
+  else -- gmcp.Char.Vitals == nil
+    GUI.Vitals.hpGauge:setValue(0, 1, "")
+    GUI.Vitals.mpGauge:setValue(0, 1, "")
+    GUI.Vitals.mvGauge:setValue(0, 1, "")
+  end
+  
+  
+  if gmcp and gmcp.Char and gmcp.Char.Worth then
+    
+    -- shorter variable names for convenience
+    local xp = gmcp.Char.Worth.xp
+    local xptnl = gmcp.Char.Worth.xptnl
+    local lvl_floor = gmcp.Char.Worth.lvl_floor
+    local lvl_top = gmcp.Char.Worth.lvl_top
+    local lvl = gmcp.Char.Base.level
+    
+    if lvl &lt; 50 then 
+      GUI.Vitals.xpGauge:setValue(xp - lvl_floor, lvl_top - lvl_floor, ""..GUI.Utils.shortenNum(gmcp.Char.Worth.xptnl).." to level")
+    elseif lvl == 50 then
+      GUI.Vitals.xpGauge:setValue(xp - lvl_floor, lvl_top - lvl_floor, ""..GUI.Utils.shortenNum(gmcp.Char.Worth.xptnl).." to max")
+    else
+      GUI.Vitals.xpGauge:setValue(100, 100, "Immortal")
+    end
+  
+  else -- gmcp.Char.Worth == nil
+    GUI.Vitals.xpGauge:setValue(0, 1, "")
+  end
+  
+end
+
+
+function GUI.Vitals.updateMinimal()
+
+  if gmcp and gmcp.Char and gmcp.Char.Vitals then
+  
+    local vitals = gmcp.Char.Vitals
+    
+    -- update hp bar
+    GUI.Vitals.hpGauge:setValue(vitals.hp, vitals.maxhp, "")
+
+    -- update wimpy marker
+    if GUI.Vitals.showWimpyBar and gmcp.Char and gmcp.Char.Stats and gmcp.Char.Stats.wimpy ~= 0 then
+      local wimpy = gmcp.Char.Stats.wimpy
+      GUI.Vitals.wimpyBar:move(wimpy.."%", nil)
+      GUI.Vitals.wimpyBar:show()
+    else 
+      GUI.Vitals.wimpyBar:hide()
+    end
+
+    -- update mp bar
+    GUI.Vitals.mpGauge:setValue(vitals.mana, vitals.maxmana, "")
+    
+    -- update mv bar  
+    GUI.Vitals.mvGauge:setValue(vitals.move, vitals.maxmove,"")
+  
+  else -- gmcp.Char.Vitals == nil
+    GUI.Vitals.hpGauge:setValue(0, 1, "")
+    GUI.Vitals.mpGauge:setValue(0, 1, "")
+    GUI.Vitals.mvGauge:setValue(0, 1, "")
+  end
+  
+  if gmcp and gmcp.Char and gmcp.Char.Worth then
+    
+    -- shorter variable names for convenience
+    local xp = gmcp.Char.Worth.xp
+    local xptnl = gmcp.Char.Worth.xptnl
+    local lvl_floor = gmcp.Char.Worth.lvl_floor
+    local lvl_top = gmcp.Char.Worth.lvl_top
+    local lvl = gmcp.Char.Base.level
+    
+    if lvl &lt;= 50 then 
+      GUI.Vitals.xpGauge:setValue(xp - lvl_floor, lvl_top - lvl_floor, "")
+    else
+      GUI.Vitals.xpGauge:setValue(0, 1, "")
+    end
+  
+  else -- gmcp.Char.Worth == nil
+    GUI.Vitals.xpGauge:setValue(0, 1, "")
+  end
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Target Panel</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Target = BlackMUDlet.GUI.Target or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Target Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Target = GUI.Target
+
+
+-- This function builds a larger 2 row target box with Target on top, gauge on bottom
+-- Intended to sit on the bottom row of the status bar
+function Target.buildPanel(parent)
+  
+  -- Container for this panel
+  Target.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Target.panel", 
+      x = 0, y = 0, width = "100%", height = "100%", 
+    },
+    parent)
+  
+  -- Split container into two rows
+  Target.vbox = Geyser.VBox:new(
+    {
+      name = "BlackMUDlet.GUI.Target.vbox", 
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    Target.panel)
+  
+  -- Label for target name
+  Target.targetLabel = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Target.label",
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, Target.vbox)
+  
+  -- Gauge for target health
+  Target.targetGauge = Geyser.Gauge:new(
+    {
+      name = "BlackMUDlet.GUI.Target.gauge",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Target.vbox)
+  
+  Target.targetGauge:setFontSize(GUI.Utils.gaugeFontSize)
+  
+  Target.targetGauge.front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
+  Target.targetGauge.back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
+  Target.targetGauge.text:setStyleSheet([[
+    padding: 2px;
+    color: grey;
+    text-align: center;
+  ]])
+  
+  -- force update on creation
+  Target.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Target", "gmcp.Char.Enemies", GUI.Target.update)
+  
+end
+
+
+-- This function builds a compact target panel with target name inside gauge
+-- Intended to sit on the top row of status bar
+function Target.buildCompactPanel(parent)
+  
+  -- Container for this panel
+  Target.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Target.panel", 
+      x = 0, y = 0, width = "100%", height = "100%", 
+    },
+    parent)
+  
+  -- Gauge for target health
+  Target.targetGauge = Geyser.Gauge:new(
+    {
+      name = "BlackMUDlet.GUI.Target.gauge",
+      --x = 2, y = 2, width = -2, height = -2,
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+   Target.panel)
+  
+  Target.targetGauge:setFontSize(GUI.Utils.gaugeFontSize)
+  
+  Target.targetGauge.front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
+  Target.targetGauge.back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
+  Target.targetGauge.text:setStyleSheet([[
+    padding: 2px;
+    color: grey;
+    text-align: center;
+  ]])
+  
+  -- force update on creation
+  Target.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Target", "gmcp.Char.Enemies", GUI.Target.update)
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Target Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Target = GUI.Target
+
+-- Precise translations
+--[[
+local condition = {}
+condition["excellent"] = 100
+condition["few scratches"] = 95
+condition["good"] = 85
+condition["minor injuries"] = 75
+condition["small wounds and bruises"] = 65
+condition["quite a few wounds"] = 55
+condition["large wounds"] = 45
+condition["big nasty wounds"] = 35
+condition["pretty hurt"] = 25
+condition["bad condition"] = 15
+condition["awful condition"] = 5
+condition["nearly dead"] = 1
+condition["bleeding awfully from big wounds"] = 0
+]]--
+
+-- Averages
+local condition = {}
+condition["excellent"] = 100
+condition["few scratches"] = 97.5
+condition["good"] = 90
+condition["minor injuries"] = 80
+condition["small wounds and bruises"] = 70
+condition["quite a few wounds"] = 60
+condition["large wounds"] = 50
+condition["big nasty wounds"] = 40
+condition["pretty hurt"] = 30
+condition["bad condition"] = 20
+condition["awful condition"] = 10
+condition["nearly dead"] = 2.5
+condition["bleeding from awfully big wounds"] = 0
+
+
+function GUI.Target.update()
+
+  -- Enemies[i].target is set for current combat target name
+  -- Enemies[i].name is set for other Enemies not targeted
+  -- Note that Enemies can be nil, empty, or not contain a target  
+  if gmcp and gmcp.Char and gmcp.Char.Enemies then
+    
+    for k,v in pairs(gmcp.Char.Enemies) do
+      if v.target then
+        local s = "Target: " .. v.desc
+        if table.size(gmcp.Char.Enemies) &gt; 2 then
+          s = s .. " (+" .. (table.size(gmcp.Char.Enemies)-1) .. " adds)"
+        elseif table.size(gmcp.Char.Enemies) &gt; 1 then 
+          s = s .. " (+" .. (table.size(gmcp.Char.Enemies)-1) .. " add)"
+        end
+        GUI.Target.targetGauge:setValue(v.health, 100, s)
+        return
+      end
+    end
+  end
+
+  -- No target info available
+  --GUI.Target.targetLabel:echo("Target: None")
+  GUI.Target.targetGauge:setValue(0, 1, "Target: None")
+
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Misc Info Panel</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.MiscInfo = BlackMUDlet.GUI.MiscInfo or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Misc Info Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local MiscInfo = GUI.MiscInfo
+
+
+function MiscInfo.buildPanel(parent)
+  
+  -- Container for this panel
+  MiscInfo.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.panel", 
+      x = 0, y = 0, width = "100%", height = "100%", 
+    },
+    parent
+  )
+  
+  MiscInfo.label = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.MiscInfo.label",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    MiscInfo.panel
+  )
+  
+  MiscInfo.label:setFontSize(GUI.Utils.uiFontSize)
+  
+  MiscInfo.update()
+  
+  MiscInfo.label:setClickCallback(MiscInfo.onClick)
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.MiscInfo", "gmcp.Char", GUI.MiscInfo.update)
+  
+end
+
+
+function MiscInfo.onClick()
+
+  send("score", false)
+
+end</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Misc Info Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+
+
+-- Update this panel/window
+-- Two line output
+function GUI.MiscInfo.update()
+
+  if gmcp and gmcp.Char and gmcp.Char.Worth then
+    
+    local worth = gmcp.Char.Worth
+    
+    local output = string.format(" 💰: %s &lt;br&gt; ⚖️: %s ",
+      GUI.Utils.commaNum(worth.gold),
+       GUI.Utils.translate[worth.alignment] and GUI.Utils.translate[worth.alignment] or worth.alignment
+    )
+    
+    GUI.MiscInfo.label:echo(output)
+    
+  else -- gmcp.Char == nil
+    GUI.MiscInfo.label:echo("...")
+  end
+   
+end
+
+
+-- Update this panel/window
+-- one line output
+function GUI.MiscInfo.updateCompact()
+
+  if gmcp and gmcp.Char and gmcp.Char.Worth then
+    
+    local worth = gmcp.Char.Worth
+    
+    local output = string.format("💰: %s &amp;nbsp; ⚖️: %s",
+      GUI.Utils.commaNum(worth.gold),
+       GUI.Utils.translate[worth.alignment] and GUI.Utils.translate[worth.alignment] or worth.alignment
+    )
+    
+    GUI.MiscInfo.label:echo(output)
+    
+  else -- gmcp.Char == nil
+    GUI.MiscInfo.label:echo("...")
+  end
+  
+end
+
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<Script isActive="yes" isFolder="no">
+					<name>Build Status Bar Panel</name>
+					<packageName></packageName>
+					<script>  
+local GUI = BlackMUDlet.GUI
+local StatusBar = GUI.StatusBar
+
+StatusBar.defaultHeight = StatusBar.defaultHeight or {}
+StatusBar.defaultHeight["full"] = 90
+StatusBar.defaultHeight["compact"] = 70
+StatusBar.defaultHeight["minimal"] = 40
+
+
+function StatusBar.buildPanel(parent, format)
+
+  if format == "full" then
+    StatusBar.buildPanelFull(parent)
+  elseif format == "compact" then
+    StatusBar.buildPanelCompact(parent)
+  elseif format == "minimal" then 
+    StatusBar.buildPanelMinimal(parent)
+  else
+    GUI.cecho("Error: Valid status bar formats are \"full\", \"compact\", or \"minimal\"")
+    GUI.cecho("Defaulting to compact\n")
+    StatusBar.buildPanelCompact(parent)
+  end
+
+end
+
+
+-- This function manually lays out some of the panels instead of using boxes
+-- The Geyser.Fixed property incurs a ton of lag and this avoids triggering that
+function StatusBar.buildPanelFull(parent)  
+
+  local topBarHeight = 30 -- percent
+
+  -- A container for the status bar
+  StatusBar.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.panel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+    
+  -- Top panel layout
+  
+  -- HBox for the top row
+  StatusBar.top = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.top",
+      x = 0, y = 0, width = "100%", height = topBarHeight.."%",
+    },
+    StatusBar.panel)
+  
+  
+  -- Label for the top portion of status bar
+  StatusBar.topLabel = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.topLabel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    StatusBar.top)
+  StatusBar.topLabel:setFontSize(GUI.Utils.uiFontSize)
+  
+  -- Add a Target gauge to the top panel
+  GUI.Target.buildCompactPanel(GUI.StatusBar.top)
+  GUI.Target.panel.h_stretch_factor = 0.33
+  StatusBar.top:organize()
+   
+  
+  
+  -- Bottom panel layout
+      
+  -- Add the time panel
+  -- Manually laying this out to avoid lag from Geyser.Fixed.
+  StatusBar.timePanel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.panel",
+      x = 0, y = topBarHeight.."%",
+      width = GUI.Time.width,
+      height = (100-topBarHeight).."%",
+    }, 
+    StatusBar.panel)
+   
+  GUI.Time.buildPanel(StatusBar.timePanel)
+  
+  -- Hbox for the rest of the bottom row
+  StatusBar.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.bottom",
+      x = GUI.Time.width, 
+      y = topBarHeight.."%", 
+      width = "100%-"..GUI.Time.width.."px", 
+      height = (100-topBarHeight).."%",
+    }, 
+    StatusBar.panel)
+  
+  -- Add the vitals panel
+  GUI.Vitals.buildPanel2x2(StatusBar.bottom)
+
+  -- Add the misc info panel
+  GUI.MiscInfo.buildPanel(StatusBar.bottom)
+  --MiscInfo.panel.h_stretch_factor = 0.5
+
+
+  -- Force the box to reorganize / update
+  -- forces a redraw if stretch factors are modified
+  StatusBar.bottom:organize()
+  
+  -- Update with default values
+  StatusBar.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.StatusBar", "gmcp.Char", GUI.StatusBar.update)
+  
+end
+
+
+-- Compact status bar uses a 4x1 layout of gauges
+function StatusBar.buildPanelCompact(parent)  
+  
+  -- A container for the status bar
+  StatusBar.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.panel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+  
+  -- Add the time panel
+  -- Manually laying this out to avoid lag from Geyser.Fixed.
+  StatusBar.timePanel = Geyser.Container:new(
+    {
+      name = "GUI.StatusBar.timePanel",
+      x = 0, y = 0,
+      width = GUI.Time.width,
+      height = "100%",
+    }, 
+    StatusBar.panel)
+   
+  GUI.Time.buildPanel(StatusBar.timePanel)
+  
+  GUI.StatusBar.vbox = Geyser.VBox:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.vbox",
+      x = GUI.Time.width,
+      y = 0,
+      width = "100%-" .. GUI.Time.width .. "px",
+      height = "100%",
+    },
+    StatusBar.panel)
+  
+  -- Top panel layout
+  
+  -- HBox for the top row
+  StatusBar.top = Geyser.HBox:new(
+    {
+      name = "StatusBarTop",
+      x = 0, y = 0, width = "100%", height = "100%",      
+    },
+    StatusBar.vbox)
+  
+  
+  -- Label for the top portion of status bar
+  StatusBar.topLabel = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.topLabel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    StatusBar.top)
+  StatusBar.topLabel:setFontSize(GUI.Utils.uiFontSize)
+  
+    -- Add the misc info panel third
+  GUI.MiscInfo.buildPanel(StatusBar.top)
+  -- Swap the updater to the single line version
+  registerNamedEventHandler("BlackMUDlet", "GUI.MiscInfo", "gmcp.Char", GUI.MiscInfo.updateCompact)
+  GUI.MiscInfo.updateCompact()
+    
+  -- Add a Target gauge to the top panel
+  GUI.Target.buildCompactPanel(GUI.StatusBar.top)
+  --GUI.Target.panel.h_stretch_factor = 0.66
+  StatusBar.top:organize()
+   
+  
+  -- Bottom panel layout
+  
+  -- Hbox for the rest of the bottom row
+  StatusBar.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.bottom",
+      x = 0, y = 0, width = "100%", height = "100%",
+    }, 
+    StatusBar.vbox)
+  
+  -- Add the vitals panel
+  GUI.Vitals.buildPanel4x1(StatusBar.bottom)
+
+  -- Force the box to reorganize / update
+  -- forces a redraw if stretch factors are modified
+  StatusBar.bottom:organize()
+  
+  -- Update with default values
+  StatusBar.updateCompact()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.StatusBar", "gmcp.Char", GUI.StatusBar.updateCompact)
+  
+end
+
+
+-- Minimal status bar, compact time, 2x2 unlabeled gauges, no text, no header
+function StatusBar.buildPanelMinimal(parent)  
+  
+  -- A container for the status bar
+  StatusBar.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.panel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+        
+  -- Hbox for the status bar
+  StatusBar.bottom = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.bottom",
+      x = 0, y = 0, width = "100%", height = "100%", 
+    },
+    StatusBar.panel)
+  
+    
+  -- Add the time panel first  
+  GUI.Time.buildCompactPanel(GUI.StatusBar.bottom)
+  
+  -- Add the vitals panel second
+  GUI.Vitals.buildMinimalPanel(GUI.StatusBar.bottom)
+
+  -- Add the misc info panel third
+  GUI.MiscInfo.buildPanel(StatusBar.bottom)
+  registerNamedEventHandler("BlackMUDlet", "GUI.MiscInfo", "gmcp.Char", GUI.MiscInfo.updateCompact)
+  GUI.MiscInfo.updateCompact()
+  
+  -- Add a Target gauge to the panel
+  GUI.Target.buildCompactPanel(GUI.StatusBar.bottom)
+    
+  -- Force the box to reorganize if we tweaked stretch factor
+  StatusBar.bottom:organize()
+  
+  -- Update with default values
+  StatusBar.updateMinimal()
+  
+  if StatusBar.top then StatusBar.top:hide() end
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.StatusBar", "gmcp.Char", GUI.StatusBar.updateMinimal)
+  
+end</script>
+					<eventHandlerList />
+				</Script>
+				<Script isActive="yes" isFolder="no">
+					<name>Update Status Bar Panel</name>
+					<packageName></packageName>
+					<script>
+local GUI = BlackMUDlet.GUI
+local StatusBar = GUI.StatusBar
+
+-- Update this panel/window. Sub-panels manage themselves
+function GUI.StatusBar.update()
+
+  local output
+  
+  if gmcp and gmcp.Char and gmcp.Char.Base then
+    
+    output = string.format("%s (%d %s) | %s", 
+      gmcp.Char.Base.name,
+      gmcp.Char.Base.level,
+      gmcp.Char.Base.class,
+      gmcp.Char.Base.position
+    )
+
+  else -- gmcp.Char == nil
+    output = "Character Status - Waiting for update..."
+  end
+
+  GUI.StatusBar.topLabel:echo(output)
+   
+end
+
+
+function GUI.StatusBar.updateMinimal()
+
+  -- do nothing, each sub-panel handles itself
+   
+end
+
+
+-- Update this panel/window. Sub-panels manage themselves
+function GUI.StatusBar.updateCompact()
+
+  local output
+  
+  if gmcp and gmcp.Char and gmcp.Char.Base then
+--[[    
+    output = string.format("&amp;nbsp;%s (%d %s) | %s", 
+      gmcp.Char.Base.name,
+      gmcp.Char.Base.level,
+      gmcp.Char.Base.class,
+      gmcp.Char.Base.position
+    )
+]]--
+
+    output = "&amp;nbsp;" .. gmcp.Char.Base.position
+    
+    if gmcp.Char.Mount and gmcp.Char.Mount.name ~= "" then
+      mount = gmcp.Char.Mount
+      --output = output .. " (" .. GUI.Utils.getBadnessLevel(100 - mount.health, 100) .. mount.health .." (HP:" 
+      --output = output .. GUI.Utils.getBadnessLevel(100 - mount.movement, 100) .. " MV:" .. mount.movement .. ")"
+      output = output .. " (HP:" .. mount.health .. "% MV:" .. mount.movement .. "%)"
+    end
+    
+  else -- gmcp.Char == nil
+    output = "Waiting for update..."
+  end
+
+  GUI.StatusBar.topLabel:echo(output)
+  
+end</script>
+					<eventHandlerList />
+				</Script>
+			</ScriptGroup>
+			<ScriptGroup isActive="yes" isFolder="yes">
+				<name>Communication</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.GUI.Communication = BlackMUDlet.GUI.Communication or {}</script>
+				<eventHandlerList />
+				<Script isActive="yes" isFolder="no">
+					<name>Build Communication Panel</name>
+					<packageName></packageName>
+					<script>
+local GUI = BlackMUDlet.GUI
+local Communication = GUI.Communication
+
+local EMCO = require("BlackMUDlet.emco")
+
+function Communication.buildPanel(parent)
+
+  Communication.emco = Communication.emco or EMCO:new(
+    {
+      name = "BlackMUDlet.GUI.Communication.emco",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = "100%",
+      allTab = true,
+      allTabName = "All",
+      gap = 4,
+      consoles = {
+        "All",
+        "Local",
+        "Group",
+        "Global",
+        "OOC",
+        "Private",
+        "Other",
+      },
+      inactiveTabCSS = GUI.inactiveTabCSS,
+      activeTabCSS = GUI.activeTabCSS,
+    },
+    parent
+  )
+  
+  Communication.emco:setFontSize(GUI.Utils.commsFontSize)
+  Communication.emco:enableTimestamp()
+  Communication.emco:enableBlink()
+  Communication.emco:enableAutoWrap()
+  Communication.emco:enableScrollbars()
+  
+  -- Loading after setting defaults, so user customization can overwrite
+  Communication.emco:load()
+ 
+end
+
+
+function Communication.toggleGag(s)
+  
+  local emco = Communication.emco
+  
+  s = string.trim(s)
+  
+  if s == "" then
+    return
+  elseif table.contains(emco.gags, s) then
+    emco:removeGag(s)
+    GUI.cecho("Removed \"" .. s .. "\" from gag list\n")
+  else
+    emco:addGag(s)
+    GUI.cecho("Adding \"" .. s .. "\" to gag list\n")
+  end
+  
+end
+
+
+function Communication.clearGags()
+  Communication.emco.gags = {}
+  GUI.cecho("Gag list cleared")
+end
+
+
+function Communication.showGags()
+
+  GUI.cecho("Current gag list:")
+  for k,v in pairs(Communication.emco.gags) do
+    GUI.cecho("  " .. k)
+  end
+  
+  echo("\n")
+end</script>
+					<eventHandlerList />
+				</Script>
+			</ScriptGroup>
+			<ScriptGroup isActive="yes" isFolder="yes">
+				<name>World Info</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.GUI.WorldInfo = BlackMUDlet.GUI.WorldInfo or {}</script>
+				<eventHandlerList />
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Mapper</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Mapper = BlackMUDlet.GUI.Mapper or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Mapper Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+
+
+function GUI.Mapper.buildPanel(parent)
+
+ GUI.Mapper.map = Geyser.Mapper:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.map",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = "100%",
+    },
+    parent
+  )
+  
+end
+  </script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Item Database</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.ItemDB = BlackMUDlet.GUI.ItemDB or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build ItemDB Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local ItemDB = GUI.ItemDB
+
+
+function ItemDB.buildPanel(parent)
+
+  ItemDB.console = Geyser.MiniConsole:new(
+    {
+      name = "BlackMUDlet.GUI.ItemDB.console",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+  
+  ItemDB.loadDB(GUI.Config.itemdb)
+    
+  ItemDB.console:enableCommandLine()
+  ItemDB.console:setCmdAction(ItemDB.handleInput)
+  ItemDB.console:enableAutoWrap()
+  ItemDB.console:enableScrollBar()
+  ItemDB.console:setFontSize(GUI.Utils.uiFontSize)
+    
+  ItemDB.handleInput("")
+  printCmdLine(ItemDB.console.name, "Search...")
+
+end
+
+
+function ItemDB.loadDB(path)
+
+  if io.exists(path) then
+    local file = io.open(path)
+    ItemDB.db = file:read("*all")
+    -- strip carriage returns, if present
+    ItemDB.db = string.gsub(ItemDB.db, "\r\n", "\n")
+    io.close(file)
+  else
+    ItemDB.db = "\n\n&lt;red&gt;Failed to load " .. path .. "\n"
+  end
+  
+end
+
+
+-- Handler for the Item DB command line
+function ItemDB.handleInput(query)
+
+  ItemDB.console:clear()
+
+  if query == "" then
+    ItemDB.console:cecho("&lt;LightBlue&gt;" .. ItemDB.db)
+    ItemDB.console:cecho("\n\n&lt;white&gt;Use the search bar below to filter items.")
+    ItemDB.console:cecho("\n\n&lt;white&gt;Or, use &lt;i&gt;/id itemname&lt;/i&gt; or &lt;i&gt;/item itemname&lt;/i&gt; from the main window.")
+    ItemDB.console:cecho("\n\n&lt;white&gt;Use an empty search to clear results.\n\n")
+  else
+    local result = ItemDB.itemLookup(query, 100)
+    
+    -- highlight matches in white
+    result = string.gsub(result, 
+                         string.genNocasePattern(string.gsub(query, "%-", "%%-")), -- handle dashes properly
+                         function(match) 
+                           return "&lt;white&gt;"..match.."&lt;LightBlue&gt;" 
+                         end
+                        )
+            
+    -- print search results
+    ItemDB.console:cecho("&lt;LightBlue&gt;" .. result)
+    
+    -- append reset instructions as clickable link
+    ItemDB.console:cechoLink("\n&lt;white&gt;Click here or empty search to clear.\n\n",
+      [[BlackMUDlet.GUI.ItemDB.handleInput("")]],
+      "",
+      true      
+    )
+  end
+
+end
+
+
+-- Returns any block of text between blank lines that contains the target string
+-- Will return early if maxMatches is reached
+function ItemDB.itemLookup(target, maxMatches)
+
+  local count = 0
+  local result = ""
+  
+  local db = ItemDB.db
+  
+  maxMatches = maxMatches or 100
+
+  -- Find first character after blank line
+  local itemStart = string.find(db, "\n\n") + 2
+    
+  while itemStart &lt; string.len(db) do
+  
+    local itemEnd = string.find(db, "\n\n", itemStart + 1)
+    
+    if itemEnd == nil then break end -- eof
+    
+    local item = string.sub(db, itemStart, itemEnd)
+         
+    -- case-insensitive search 
+    -- dashes are a "magic character" in patterns, so replace them appropriately
+    if string.find(item:upper(), string.gsub(target:upper(), "%-", "%%-")) then
+        count = count + 1
+        result = result .. "\n" .. item
+    end
+    
+    itemStart = itemEnd + 2
+    
+    if(count == maxMatches) then 
+      result = result .. "\nMax matches reached."
+      break
+    end
+  
+  end
+  
+  result = result .. "\n"..count.." items found matching \""..target.."\".\n\n"
+  
+  return result
+
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Event  Log</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.EventLog = BlackMUDlet.GUI.EventLog or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Event Log Panel</name>
+						<packageName></packageName>
+						<script>local GUI = BlackMUDlet.GUI
+local EventLog = GUI.EventLog
+
+function EventLog.buildPanel(parent)
+
+  EventLog.console = Geyser.MiniConsole:new(
+    {
+      name = "BlackMUDlet.GUI.EventLog.console",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+  
+  EventLog.console:clear()
+  EventLog.console:enableCommandLine()
+  EventLog.console:setCmdAction(EventLog.cecho)
+  EventLog.console:enableAutoWrap()
+  EventLog.console:enableScrollBar()
+  EventLog.console:setFontSize(GUI.Utils.uiFontSize)
+  
+  EventLog.echo(
+    "&lt;LightBlue&gt;Input log entries using the input box below, or from a trigger using:"
+    .. "\n"
+    .. "\n\t&lt;white&gt;&lt;i&gt; BlackMUDlet.GUI.EventLog.echo(\"log message\")"
+    .. "\n"
+  )
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.EventLog", "gmcp.Char", GUI.EventLog.update)
+
+end
+
+
+function EventLog.cecho(s)
+  EventLog.console:cecho("\n&lt;white&gt;" .. getTime(true, "hh:mm:ss") .. "&lt;reset&gt; " .. s)
+end
+
+EventLog.echo = EventLog.cecho</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Event Log Panel</name>
+						<packageName></packageName>
+						<script>local GUI = BlackMUDlet.GUI
+local EventLog = GUI.EventLog
+
+local gmcpCache = gmcpCache or nil
+
+
+function EventLog.update()
+
+  -- these checks seem like overkill, but there was a consistent case where
+  -- gmcpCache was updated but did not contain Char.Worth, which caused the 
+  -- function to crash and never refresh gmcpCache with correct data.  
+  if gmcpCache and gmcpCache.Char and gmcpCache.Char.Worth and gmcpCache.Char.Base
+     and gmcp and gmcp.Char and gmcp.Char.Worth and gmcp.Char.Base then
+        
+    local dGold = gmcp.Char.Worth.gold - gmcpCache.Char.Worth.gold
+    local dExp = gmcp.Char.Worth.xp - gmcpCache.Char.Worth.xp
+    local dLevel = gmcp.Char.Base.level - gmcpCache.Char.Base.level
+    
+    if dGold &lt; 0 then
+      EventLog.cecho("&lt;yellow&gt;Gold lost: " .. GUI.Utils.commaNum(-dGold))
+    elseif dGold &gt; 0 then
+      EventLog.cecho("&lt;LightBlue&gt;Gold gained: " .. dGold)
+    end
+
+    if dExp &lt; 0 then
+      EventLog.cecho("&lt;yellow&gt;Experience lost: " .. GUI.Utils.commaNum(dExp))
+    elseif dExp &gt; 0 then
+      EventLog.cecho("&lt;LightBlue&gt;Experience gained: " .. GUI.Utils.commaNum(dExp))
+    end
+    
+    if dLevel &gt; 0 then
+      EventLog.cecho("&lt;green&gt;You gained a level! You are now level " .. gmcp.Char.Base.level)
+    elseif dLevel &lt; 0 then
+      EventLog.cecho("&lt;red&gt;You lost a level! You are now level " .. gmcp.Char.Base.level)
+    end
+    
+    if gmcp.Char.Worth.alignment ~= gmcpCache.Char.Worth.alignment then
+      EventLog.cecho("&lt;LightBlue&gt;Alignment shifted to " .. gmcp.Char.Worth.alignment)
+    end
+
+  end
+  
+  -- cache current gmcp data for comparison next time
+  gmcpCache = table.deepcopy(gmcp)
+
+end</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<Script isActive="yes" isFolder="no">
+					<name>Build WorldInfo  Panel</name>
+					<packageName></packageName>
+					<script>
+local GUI = BlackMUDlet.GUI
+local WorldInfo = GUI.WorldInfo
+
+
+local EMCO = require("BlackMUDlet.emco")
+
+function WorldInfo.buildPanel(parent)  
+
+  WorldInfo.emco = WorldInfo.emco or EMCO:new(
+    {
+      name = "BlackMUDlet.GUI.WorldInfo.emco",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = "100%",
+      gap = 4,
+      consoles = {
+        "Mapper",
+        "World Map",
+        "Item Database",
+        "Event Log",
+        "Help",
+        "GMCP",
+      },    
+      inactiveTabCSS = GUI.inactiveTabCSS,
+      activeTabCSS = GUI.activeTabCSS,
+    },
+    parent
+  )
+  
+  WorldInfo.emco:setFontSize(GUI.Utils.uiFontSize)
+  WorldInfo.emco:enableAutoWrap()
+  
+  WorldInfo.emco:load()
+  --WorldInfo.emco:reset()
+  
+  
+  -- add mapper
+  GUI.Mapper.buildPanel(WorldInfo.emco.mc.Mapper)
+   
+  -- add world map
+  WorldInfo.imageLabel = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Map.World_Map",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+      
+    },
+    WorldInfo.emco.mc["World Map"]
+  )
+  
+  -- This doesn't preserve aspect ratio, doesn't seem to be an easy way to do so
+  WorldInfo.imageLabel:setStyleSheet([[border-image: url(]]..getMudletHomeDir()..[[/BlackMUDlet/images/Balric.jpg);]])
+  
+  -- add itemDB
+  GUI.ItemDB.buildPanel(GUI.WorldInfo.emco.mc["Item Database"])
+  
+  -- add Activity Log
+  GUI.EventLog.buildPanel(GUI.WorldInfo.emco.mc["Event Log"])
+ 
+ --[[   
+  -- Add "other" tab
+  WorldInfo.emco:clear("Other")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;TBD Content")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;Could add inventory panel, help, guides, etc.")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
+  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;Would be neat if Mudlet supported an embedded text editor or webpage")
+]]--  
+
+  
+  -- Populate Help tab
+  WorldInfo.emco:clear("Help")
+  WorldInfo.emco.mc.Help:enableScrollBar()
+  WorldInfo.emco.mc.Help:enableAutoWrap()
+  WorldInfo.emco.mc.Help:setFontSize(GUI.Utils.uiFontSize)
+  WorldInfo.emco.mc.Help:cecho(GUI.Help.help)
+  
+  -- Populate GMCP tab
+  WorldInfo.emco.mc.GMCP:setFontSize(8)
+  WorldInfo.emco.mc.GMCP:enableScrollBar()
+  GUI.WorldInfo.handleGmcpUpdate()
+
+end
+
+
+
+function GUI.WorldInfo.handleGmcpUpdate(...)
+
+  WorldInfo.emco:clear("GMCP")
+    
+  WorldInfo.emco:cecho("GMCP", "&lt;LightBlue&gt;Current GMCP Data:\n\n" .. inspect(gmcp))
+
+end
+
+registerNamedEventHandler("BlackMUDlet", "GUI.gmcpUpdate", "gmcp.General.Time", GUI.WorldInfo.handleGmcpUpdate)
+
+
+
+
+
+-- Tab Change Handlers (not used, for now)
+
+--registerNamedEventHandler("BlackMUDlet", "GUI.tabChange", "EMCO tab change", GUI.WorldInfo.handleTabChange)
+
+function GUI.WorldInfo.handleTabChange(event, name, oldTab, tabName)
+  --echo(name .. " - ")
+  --echo(oldTab .. " - ")
+  --echo(tabName .. "\n")
+
+end</script>
+					<eventHandlerList />
+				</Script>
+			</ScriptGroup>
+			<ScriptGroup isActive="yes" isFolder="yes">
+				<name>Character Info</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.GUI.Info = BlackMUDlet.GUI.Info or {}</script>
+				<eventHandlerList />
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Attributes</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Attributes = BlackMUDlet.GUI.Attributes or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Attributes Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Attributes = GUI.Attributes
+
+function Attributes.buildPanel(parent)
+
+  Attributes.panel = Geyser.Container:new(
+    {
+      name = "GUI.Attributes.panel",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    parent
+  )
+  
+  Attributes.console = Geyser.MiniConsole:new(
+    {
+      name = "BlackMUDlet.GUI.Attributes.console",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    Attributes.panel
+  )
+  
+  Attributes.console:setFontSize(GUI.Utils.uiFontSize)
+
+-- You can place a Geyser Label on top of the console to hijack the scroll wheel
+--[[  
+  Attributes.label = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Attributes.label",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    Attributes.panel
+  )
+  
+  Attributes.label:setFontSize(GUI.Utils.uiFontSize)
+  --Attributes.label:setStyleSheet("qproperty-alignment: 'AlignTop';")
+  Attributes.label:setStyleSheet(GUI.defaultLabelStyle)
+]]--
+  
+  
+  Attributes.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Attributes", "gmcp.Char", GUI.Attributes.update)
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Attributes Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Attributes = GUI.Attributes
+
+
+local function statString(curr, base)
+
+  if curr &lt; base then 
+    return "&lt;yellow&gt;" .. curr .. " (" .. (curr - base) .. ")&lt;reset&gt;"
+  elseif curr &gt; base then 
+    return "&lt;green&gt;" .. curr .. " (+" .. (curr - base) .. ")&lt;reset&gt;"
+  else 
+   return curr .. "     "
+  end
+  
+end
+
+
+function Attributes.update()
+
+  Attributes.console:clear()
+  
+  if gmcp and gmcp.Char and gmcp.Char.Base and gmcp.Char.Stats and gmcp.Char.Worth then
+  
+    local base = gmcp.Char.Base
+    local stats = gmcp.Char.Stats
+    local worth = gmcp.Char.Worth
+
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho(base.name .. "\n")
+    Attributes.console:cecho("Level " .. base.level .. " " .. base.class .. "\n")
+    Attributes.console:cecho(base.size .. " " .. base.race .. "\n")
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho("Str: " .. statString(stats.str, stats.permstr) .. " ")
+    Attributes.console:cecho("Dex: " .. statString(stats.dex, stats.permdex) .. "\n")
+    Attributes.console:cecho("Int: " .. statString(stats.int, stats.permint) .. " ")
+    Attributes.console:cecho("Wis: " .. statString(stats.wis, stats.permwis) .. "\n")
+    Attributes.console:cecho("Con: " .. statString(stats.con, stats.permcon) .. " ")
+    Attributes.console:cecho("Chr: " .. statString(stats.chr, stats.permchr) .. "\n")
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho("Align: " .. (GUI.Utils.translate[worth.alignment] and GUI.Utils.translate[worth.alignment] or worth.alignment) .. "\n")
+    Attributes.console:cecho("Nature: " .. (GUI.Utils.translate[worth.entropy] and GUI.Utils.translate[worth.entropy] or worth.entropy) .. "\n")
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho("Gold: " .. GUI.Utils.commaNum(worth.gold) .. "\n")
+    Attributes.console:cecho("Bank: " .. GUI.Utils.commaNum(worth.bank) .. "\n")
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho("XP to " .. ((gmcp.Char.Base.level == 50) and "Max: " or "Level: ") .. GUI.Utils.commaNum(worth.xptnl) .. "\n")
+  
+-- Remnant from an experiment using Labels instead of a console for output
+-- HTML rendering for Labels makes spacing annoying, so this isn't formatted identically
+--[[
+ local output = "&lt;br&gt;"
+   .. base.name .. "&lt;br&gt;"
+   .. base.level .. " " .. base.class .. "&lt;br&gt;"
+   .. base.size .. " " .. base.race .. "&lt;br&gt;"
+   .. "&lt;br&gt;"
+   .. "Str: " .. statString(stats.str, stats.permstr) .. " Dex: "  .. statString(stats.dex, stats.permdex) .. "&lt;br&gt;"
+   .. "Int: " .. statString(stats.int, stats.permint) .. " Wis: " .. statString(stats.wis, stats.permwis) .. "&lt;br&gt;"
+   .. "Con: " .. statString(stats.con, stats.permcon) .. " Chr: " .. statString(stats.chr, stats.permchr) .. "&lt;br&gt;"
+   .. "&lt;br&gt;"
+   .. "Align: " .. (GUI.Utils.translate[worth.alignment] and GUI.Utils.translate[worth.alignment] or worth.alignment) .. "&lt;br&gt;"
+   .. "Nature: " .. (GUI.Utils.translate[worth.entropy] and GUI.Utils.translate[worth.entropy] or worth.entropy) .. "&lt;br&gt;"
+   .. "&lt;br&gt;"
+   .. "Gold: " .. GUI.Utils.commaNum(worth.gold) .. "&lt;br&gt;"
+   .. "Bank: " .. GUI.Utils.commaNum(worth.bank) .. "&lt;br&gt;"
+   .. "&lt;br&gt;"
+   .. ((base.level &lt; 50) and "To Level: " or "To Max: ") .. GUI.Utils.commaNum(worth.xptnl)
+
+  Attributes.label:cecho("&lt;reset&gt;" .. output)
+]]--  
+  
+  else
+    Attributes.console:cecho("\n")
+    Attributes.console:cecho("Waiting for update.")  
+  end
+
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Buffs</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Buffs = BlackMUDlet.GUI.Buffs or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Buffs Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Buffs = GUI.Buffs
+
+GUI.Config.spellWatch = GUI.Config.spellWatch or {}
+
+Buffs.affecting = Buffs.affecting or {}
+
+
+function Buffs.buildPanel(parent)
+
+  Buffs.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Buffs.panel",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    parent
+  )
+  
+  Buffs.console = Geyser.MiniConsole:new(
+    {
+      name = "BlackMUDlet.GUI.Buffs.console",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    Buffs.panel
+  )
+  
+  Buffs.console:setFontSize(GUI.Utils.uiFontSize)
+  
+  Buffs.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.General.Base", GUI.Buffs.update)
+  
+end
+
+
+function Buffs.updateSpellWatch(spell)
+
+  -- clear all
+  if spell == "clear" then
+    GUI.Config.spellWatch = {}
+    GUI.cecho("Spell watch list cleared")
+  
+  -- if watched, unwatch
+  elseif GUI.Config.spellWatch[spell] then
+    GUI.Config.spellWatch[spell] = nil
+    GUI.cecho(spell .. " removed from spell watch list\n")
+  
+  -- else, add
+  else
+    GUI.Config.spellWatch[spell] = true
+    GUI.cecho(spell .. " added to spell watch list\n")
+  
+  end
+
+  -- Force an update
+  BlackMUDlet.GUI.Buffs.update()
+
+end
+</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Buffs Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Buffs = GUI.Buffs
+
+-- negative effects that will be highlighted in red
+local debuffs = {}
+debuffs["blindness"] = true
+debuffs["curse"] = true
+debuffs["poison"] = true
+debuffs["silence"] = true
+debuffs["weakness"] = true
+debuffs["web"] = true
+
+
+function Buffs.update()
+
+  Buffs.console:clear()
+  
+  --Buffs.console:cecho("\n")
+  Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
+  Buffs.console:cecho("\n")
+  
+  local watchList = table.deepcopy(GUI.Config.spellWatch)
+  
+  if Buffs.affecting == {} then
+    Buffs.console:cecho("  None.")
+  end
+  
+  for k,v in pairs(Buffs.affecting) do
+    
+    local output = ""
+    
+    if watchList[k] then
+      watchList[k] = nil
+      output = "  &lt;green&gt;" .. k .. "\n"
+    elseif debuffs[k] then
+      output = "  &lt;red&gt;" .. k .. "\n"    
+    else
+      output = "  " .. k .. "\n"
+    end
+    
+    -- output as a link where clicking toggles watchlist status
+    Buffs.console:cechoLink(output, 
+      function() BlackMUDlet.GUI.Buffs.updateSpellWatch(k) end, 
+      "",
+      true
+    )
+    
+  end
+  
+  if watchList ~= {} then
+    
+    Buffs.console:cecho("\n")
+    Buffs.console:cecho("Missing:\n")
+    Buffs.console:cecho("\n")
+   
+    for k,v in pairs(watchList) do
+      local color = (k == "sanctuary" and "&lt;red&gt;") or "&lt;yellow&gt;"
+      Buffs.console:cechoLink(color .. "  " .. k .. "\n",
+        [[send("cast ']] .. k .. [[' me")]],
+        "",
+        true
+      )
+    end     
+  
+  end
+  
+end
+
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Group</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Group = BlackMUDlet.GUI.Group or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Group Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Group = GUI.Group
+
+Group.members = Group.members or {}
+
+GUI.Config.groupAction = GUI.Config.groupAction or "glance"
+
+function Group.buildPanel(parent)
+
+  Group.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Group.panel",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    parent
+  )
+  
+  Group.console = Geyser.MiniConsole:new(
+    {
+      name = "BlackMUDlet.GUI.Group.console",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    Group.panel
+  )
+  
+  Group.console:setFontSize(GUI.Utils.uiFontSize)
+  
+  Group.update()
+  
+  -- TODO: Update with proper event when implemented
+  --registerNamedEventHandler("BlackMUDlet", "GUI.Group", "gmcp.Char.Base", GUI.Group.update)
+  
+end
+
+
+function GUI.Group.addMember(name, newHp, newMv)
+  Group.members[name] = {}
+  Group.members[name].hp = newHp
+  Group.members[name].mv = newMv
+end
+
+
+function GUI.Group.clearMembers()
+  Group.members = {}
+end
+</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Group Panel</name>
+						<packageName></packageName>
+						<script>
+local GUI = BlackMUDlet.GUI
+local Group = GUI.Group
+
+
+function Group.update()
+
+  Group.console:clear()
+   
+  Group.console:cechoLink("\nYour group consists of:\n", [[send("group",false)]], "", true)
+  
+  if Group.members == {} then
+    Group.console:cecho("\n None.")
+  end
+  
+  for name, status in pairs(Group.members) do
+    
+    local output
+    output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+    name, 
+    string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
+    BlackMUDlet.GUI.Utils.getBadnessLevel(100 - status.hp, 100),
+    status.hp,
+    string.rep(' ', 3 - #tostring(status.hp)), -- pad hp to 3 digits for consistent spacing
+    BlackMUDlet.GUI.Utils.getBadnessLevel(100 - status.mv, 100),
+    status.mv)
+
+    Group.console:dechoLink(
+      output,                                                       -- link text
+      [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
+      "",                                                           -- hint text
+      true                                                          -- preserve font style
+    )
+  
+  end
+  
+  Group.console:echo("\n ")
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
+				<Script isActive="yes" isFolder="no">
+					<name>Build Character Info  Panel</name>
+					<packageName></packageName>
+					<script>
+local GUI = BlackMUDlet.GUI
+local Info = GUI.Info
+
+
+function Info.buildPanel(parent)
+
+  Info.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Info.panel",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    parent)
+    
+  Info.vbox = Geyser.VBox:new({
+    name = "BlackMUDlet.GUI.Info.vbox",
+    x = 0, y = 0, width = "100%", height = "100%",
+  },
+  Info.panel)
+    
+  
+  GUI.Attributes.buildPanel(Info.vbox)
+  --GUI.Attributes.panel.v_policy = Geyser.Fixed
+  --local w,h = calcFontSize(GUI.Utils.uiFontSize)
+  --GUI.Attributes.panel.height = 17 * h
+  GUI.Attributes.panel.v_stretch_factor = 0.75
+  
+  GUI.Buffs.buildPanel(Info.vbox)
+  
+  GUI.Group.buildPanel(Info.vbox)
+  GUI.Group.panel.v_stretch_factor = 0.75
+  --GUI.Group.panel.v_policy = Geyser.Fixed
+  --GUI.Group.panel.height = 16 * h
+  
+  Info.vbox:organize()
+
+end
+
+</script>
+					<eventHandlerList />
+				</Script>
+			</ScriptGroup>
+			<Script isActive="yes" isFolder="no">
+				<name>UI Management</name>
+				<packageName></packageName>
+				<script>
+local GUI = BlackMUDlet.GUI
+
+-- TODO: If these handlers stay, they should work on both comms and world info
+  -- currently doesn't work if you grab the top window
+-- TODO: WorldInfo -&gt; GameInfo?
+
+-- The three handlers below rely on some quirks of Adjustable.Container
+--   - They will only fire when both WorldInfo and Communication windows are locked
+--   - They will glue the two panels together any time Communication is resized
+--   - A locked container can only be resized when its attached to a border
+--   - You can unlock, reposition, and relock independently with default behavior when not attached
+
+-- This handler pins the WorldInfo pane and the Communication pane together during mouse-based resize events
+local function resizeHandler(eventName, containerName, width, height, x, y, mouseAction)
+
+  if containerName == "BlackMUDlet.GUI.Communication.window" 
+     and GUI.WorldInfo.window.locked
+     and GUI.Communication.window.locked
+     and mouseAction then
+      
+    local totalW, totalH = getMainWindowSize()
+    GUI.WorldInfo.window:move(x, 2)
+    GUI.WorldInfo.window:resize(width, totalH - height)
+
+  end
+
+end
+
+
+-- This handler pins the WorldInfo pane and the Communication pane together after mouse-based resize events
+-- Might be redundant, but doesn't hurt
+local function resizeFinishedHandler(eventName, containerName, width, height, x, y)
+  
+ if containerName == "BlackMUDlet.GUI.Communication.window" 
+    and GUI.WorldInfo.window.locked
+    and GUI.Communication.window.locked then
+  
+    local totalW, totalH = getMainWindowSize()
+    GUI.WorldInfo.window:move(x, 2)
+    GUI.WorldInfo.window:resize(width, totalH - height)
+    
+    -- Pin the comms window to the bottom again
+    GUI.Communication.window:move(x, totalH - height)
+
+  end  
+    
+end
+
+
+-- This handler pins the WorldInfo pane and Communication pane together on main window resize
+-- This is also needed to handle when a second profile is opened and the tab bar shrinks main window
+local function mainWindowResizeHandler(eventName, mw, mh)
+  
+  if GUI.WorldInfo.window.locked and GUI.Communication.window.locked then
+    local x = GUI.Communication.window:get_x()
+    local y = GUI.Communication.window:get_y()
+    local width = GUI.Communication.window:get_width()
+    --local height = GUI.Communication.window:get_height()
+    GUI.WorldInfo.window:move(x, 2)
+    GUI.WorldInfo.window:resize(width, y)
+  end
+  
+end
+
+
+function GUI.buildUI()
+
+  -- The window for the status bar
+  GUI.StatusBar.window = GUI.StatusBar.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.StatusBar.window", 
+      titleText = "Status",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  GUI.StatusBar.buildPanel(GUI.StatusBar.window, GUI.Config.statusBarFormat)
+  
+
+  -- The window for the Communication pane
+  GUI.Communication.window = GUI.Communication.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Communication.window",
+      titleText = "Communication",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  GUI.Communication.buildPanel(GUI.Communication.window)
+  
+
+  -- The window for World Info pane
+  GUI.WorldInfo.window = GUI.WorldInfo.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.WorldInfo.window",
+      titleText = "World Info",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  GUI.WorldInfo.buildPanel(GUI.WorldInfo.window)
+
+  
+  -- Window for the Character Info pane
+  GUI.Info.window = GUI.Info.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Info.window",
+      titleText = "Character Information",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  GUI.Info.buildPanel(GUI.Info.window)  
+  
+  -- Lock the WorldInfo and Comms panel together during resizes
+  registerNamedEventHandler("BlackMUDlet", "GUI.windowReposition", "AdjustableContainerReposition", resizeHandler)
+  registerNamedEventHandler("BlackMUDlet", "GUI.windowRepositionFinish", "AdjustableContainerRepositionFinish", resizeFinishedHandler)
+  registerNamedEventHandler("BlackMUDlet", "GUI.sysMainWindowResize", "sysWindowResizeEvent", mainWindowResizeHandler)
+  
+end
+
+
+function GUI.resetLayout()
+
+  -- default status bar size
+  local defaultW = 1100
+  local defaultH = GUI.StatusBar.defaultHeight[GUI.Config.statusBarFormat]
+  local hDivider = 0.33
+
+  local totalW, totalH = getMainWindowSize()
+  
+  if GUI.StatusBar.window then
+    GUI.StatusBar.window:show()
+    GUI.StatusBar.window:move(0, totalH - defaultH)
+    GUI.StatusBar.window:resize(defaultW, defaultH)
+    GUI.StatusBar.window:attachToBorder("bottom")
+    GUI.StatusBar.window:lockContainer("border")
+  end
+  
+  if GUI.Communication.window then
+    GUI.Communication.window:show()
+    GUI.Communication.window:move(defaultW, totalH - math.floor(hDivider * totalH))
+    GUI.Communication.window:resize(totalW - defaultW, hDivider * totalH)
+    GUI.Communication.window:attachToBorder("right")
+    if GUI.StatusBar.window then GUI.StatusBar.window:connectToBorder("right") end
+    GUI.Communication.window:lockContainer("border")
+  end
+  
+  if GUI.WorldInfo.window then
+    GUI.WorldInfo.window:show()
+    GUI.WorldInfo.window:move(x, 2)
+    GUI.WorldInfo.window:resize(totalW - defaultW, totalH - math.floor(hDivider * totalH))
+    GUI.WorldInfo.window:lockContainer("border")
+  end
+  
+  if GUI.Info.window then
+    GUI.Info.window:show()
+    GUI.Info.window:move(0, 2)
+    GUI.Info.window:resize(230, totalH - defaultH - 4)
+    GUI.Info.window:attachToBorder("left")
+    --GUI.Info.window:connectToBorder("bottom")
+  end
+
+  -- Set the constraints to be percentages instead of absolutes
+  -- This will allow the panels to resize with the window
+  GUI.Communication.window:setPercent(true, true)
+  GUI.StatusBar.window:setPercent(true, true)
+  GUI.WorldInfo.window:setPercent(true, true)
+  GUI.Info.window:setPercent(true, true)
+
+end
+
+
+function GUI.setStatusBarFormat(format)
+
+  local current = GUI.Config.statusBarFormat
+
+  if current == format then
+    GUI.cecho("Status bar format already set to &lt;white&gt;" .. format)
+    return
+  end
+  
+  if format ~= "full" and format ~= "compact" and format ~= "minimal" then
+    GUI.cecho("Error: Valid status bar formats are: \"full\", \"compact\", or \"minimal\"\n")
+    return
+  end
+  
+  GUI.Config.statusBarFormat = format
+  GUI.StatusBar.buildPanel(GUI.StatusBar.window, GUI.Config.statusBarFormat)
+  
+  local defaultH = GUI.StatusBar.defaultHeight[GUI.Config.statusBarFormat]
+  local totalW, totalH = getMainWindowSize()
+  
+  GUI.StatusBar.window:show()
+  GUI.StatusBar.window:move(0, totalH - defaultH)
+  GUI.StatusBar.window:resize(nil, defaultH)
+  GUI.StatusBar.window:attachToBorder("bottom")
+  GUI.StatusBar.window:connectToBorder("right")
+  GUI.StatusBar.window:lockContainer("border")
+  
+  GUI.cecho("Status bar format changed to &lt;white&gt;" .. format)
+  GUI.cecho("Use &lt;white&gt;ui reset&lt;LightBlue&gt; to reset layout if needed\n")
+    
+end
+
+
+function GUI.hideUI()
+
+  -- Could use Adjustable.Container:doAll() to avoid repetition
+  -- But that would affect user-defined windows too
+
+  if GUI.StatusBar.window then
+    GUI.StatusBar.window:detach()
+    GUI.StatusBar.window:hide()
+  end
+  
+  if GUI.Communication.window then
+    GUI.Communication.window:detach()
+    GUI.Communication.window:hide()
+  end
+  
+  if GUI.WorldInfo.window then
+    GUI.WorldInfo.window:detach()
+    GUI.WorldInfo.window:hide()
+  end
+  
+  if GUI.Info.window then
+    GUI.Info.window:detach()
+    GUI.Info.window:hide()
+  end
+
+end
+
+
+function GUI.showUI(window)
+
+  GUI.buildUI()
+  GUI.resetLayout()
+
+end
+</script>
+				<eventHandlerList />
+			</Script>
+			<ScriptGroup isActive="yes" isFolder="yes">
+				<name>Enemy List</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.GUI.Enemies = BlackMUDlet.GUI.Enemies or {}</script>
+				<eventHandlerList />
+				<Script isActive="yes" isFolder="no">
+					<name>Build Enemies Panel</name>
+					<packageName></packageName>
+					<script>GUI = BlackMUDlet.GUI
+Enemies = GUI.Enemies
+
+Enemies.maxSize = 8
+Enemies.gaugePadding = 2
+Enemies.gaugeHeight = 25
+Enemies.gauges = Enemies.gauges or {}
+
+function Enemies.buildPanel(parent)
+
+  Enemies.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.panel",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    parent
+  )
+  
+  for i = 1, Enemies.maxSize do
+    Enemies.gauges[i] = Geyser.Gauge:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.gauge" .. i,
+      x = Enemies.gaugePadding, 
+      y = Enemies.gaugePadding + (Enemies.gaugePadding + Enemies.gaugeHeight) * (i - 1), 
+      width = -Enemies.gaugePadding, 
+      height = Enemies.gaugeHeight,
+    },
+    Enemies.panel)
+
+    Enemies.gauges[i]:setFontSize(GUI.Utils.gaugeFontSize)
+    
+    Enemies.gauges[i].front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
+    Enemies.gauges[i].back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
+    Enemies.gauges[i].text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
+    
+    Enemies.gauges[i].text:setClickCallback([[Enemies.onClick(]] .. i .. [[)]])
+  
+  end
+  
+  Enemies.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Enemies", "gmcp.Char.Enemies", Enemies.update)
+  
+end
+
+
+function Enemies.onClick(i)
+
+  -- make sure gmcp data exists
+  if gmcp and gmcp.Char and gmcp.Char.Enemies and gmcp.Char.Enemies[i] then
+    
+    target = gmcp.Char.Enemies[i].name or gmcp.Char.Enemies[i].target
+    desc = gmcp.Char.Enemies[i].desc
+    local count = 0
+    
+    for k,v in ipairs(gmcp.Char.Enemies) do
+      
+      if v.desc == desc then 
+        count = count + 1
+      end
+      
+      if k == i then
+        break
+      end
+      
+    end
+    
+    send("glance " .. count .. "." .. target)
+  
+  end
+end
+
+
+
+function Enemies.update()
+
+  if gmcp and gmcp.Char and gmcp.Char.Enemies and table.size(gmcp.Char.Enemies) &gt; 0 then
+  
+    local e = gmcp.Char.Enemies
+    
+    for i = 1, Enemies.maxSize do
+      
+      if e[i] then -- if Enemies[i] exists then populate gauges[i]
+        local desc = e[i].desc
+  
+--        if e[i].target then -- show who we're attacking
+--          desc = "⚔️  " .. desc
+--        end
+        -- TODO: try this instead of above: (e[i].target and "⚔️  " or "") .. e[i].desc
+        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc)
+        Enemies.gauges[i]:show()
+     
+      else -- hide unused gauges
+        Enemies.gauges[i]:hide()
+        --Enemies.gauges[i]:setValue(0, 100, "")
+      end
+      
+    end
+  
+  else
+   
+    Enemies.gauges[1]:show()
+    Enemies.gauges[1]:setValue(0, 100, "Target: None")
+    
+    for i = 2, Enemies.maxSize do
+      Enemies.gauges[i]:hide()
+      Enemies.gauges[i]:setValue(0, 100, "")
+    end
+
+  end
+
+end
+
+
+function Enemies.buildWindow()
+
+-- The window for the status bar
+  Enemies.window = Enemies.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.window", 
+      titleText = "Enemies",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  Enemies.buildPanel(Enemies.window)
+  
+end
+</script>
+					<eventHandlerList />
+				</Script>
+			</ScriptGroup>
+		</ScriptGroup>
+		<ScriptGroup isActive="yes" isFolder="yes">
+			<name>Mapper</name>
+			<packageName></packageName>
+			<script></script>
+			<eventHandlerList />
+			<Script isActive="yes" isFolder="no">
+				<name>GMCP Mapper</name>
+				<packageName></packageName>
+				<script>
+-- TODO: Wishlist item, but an Undo function would be amaizng. More of a Mudlet-level feature
+
+-- TODO: Incorporate this into BlackMUDlet, incl. configs and help
+  -- any value in making the script universal? With a game-specific profile instead?
+  
+-- TODO: Consider adding error and warn echoes in BlackMUDlet proper on top of info/echo
+
+-- TODO: Refactor room creation in handleExits. Duplicate code there and tryCreateRoom()
+  
+-- TODO: Door keywords in GMCP data, but no info on lock status
+  -- the imm exit command does show this info
+  -- could request a doors_locked entry too, but not sure what other games do
+  -- current script will already pick up the keyword "locked" if ever added
+
+-- TODO: Special exits (enter)
+  -- leaning towards making this manual when the destination does not already exist
+  -- don't know where the new room should be otherwise, usually doesn't "fit" in map
+  -- the "command" variable contains the last command, which is probably "enter x"
+  -- if we receive gmcp and the last command is "enter x", good guess it's a special exit
+    -- input commands and movement are not sync'd though, error prone
+  -- could use this same trick for recall, but that seems less useful, also error prone
+  -- with GMCP data, special exits really only matter for speedwalk paths and completeness
+  -- could also include it in gmcp. any non-supported dir could be treated as a special exit
+    -- probably worth matching IRE mud behaviors?
+  -- special exits are somewhat sparse in the world too:
+    -- dracolich, citadel, gralners, cavaliers, khast, vylar's library, ancient library
+    -- manual editing seems fine
+  -- a quick skim of the Mudlet map loading code suggests special exits aren't loaded at import?
+
+-- TODO: Might want to track command inputs for enter and dirs, use as hint
+  -- this is tedious, hardest part of making the generic_mapper work
+
+-- TODO: environment-based weighting
+
+-- TODO: figure out vision fail (how mud/gmcp will handle it?)
+  -- imms currently get reliable gmcp data in dark rooms, not sure about mortals
+  
+-- TODO: description capture?
+  -- this is only easy if gmcp updates and console updates are strictly in sync
+    
+-- TODO: core mapping stuff in one script, extensions in another, config in another
+
+-- TODO: verbosity options for console outputs
+
+-- TODO: write a "highlight path" function?
+
+-- TODO: Imm-only translation table for area name to zone number
+
+-- TODO: clickable links in echos (centerview or goto?)
+
+-- TODO: Symbols are pretty tiny outside of GridMode. Maybe override colors too?
+
+-- TODO: potentially needed options
+  -- verbosity
+  -- auto color based on environment?
+  -- auto symbol
+  -- auto move rooms to own area?
+  -- auto add symbols/colors for special properties?
+  
+-- TODO: potentially needed aliases (can use generic_mapper for some?)
+  -- create/remove area (with confirm for non-empty area?)
+  -- list zones ("map areas" from generic_mapper)
+  -- add portal? might be best done in the editor or automatically
+  -- find room
+  -- get path?
+  -- color tools? Color by zone, environment, room name, user defined, etc.
+
+
+
+-- TODO: Incorporate this with BlackMUDlet config, add actual interface for setting
+local config = config or {}
+
+
+
+--- mapmode: how to respond to gmcp room data (e.g., is the mapper active or not?)
+local supported_mapmodes = {
+  "off",    -- ignore gmcp.Room data
+  "follow", -- center view on map when possible, but do not update anything
+  "update", -- update existing rooms when visited but do not create new rooms
+  "create"  -- create new rooms and update existing
+}
+
+config.mapmode = "create"
+
+
+
+--- createmode: how to behave when creating a room at coords with an existing room
+local supported_createmodes = {
+  "skip",    -- skip room when no space is available
+  "warn",    -- skip room and output a warning to main console
+  "stretch", -- shift all rooms in the current map (all levels) to make room
+  "overlap"  -- place the room overlappign the existing room(s)
+}
+
+config.createmode = "warn"
+
+
+
+-- exitmode: how the mapper should handle exits for the current room
+local supported_exitmodes = {
+  "stubs", -- create exits stubs only
+  "rooms"  -- create highlighted placeholder rooms
+}
+
+config.exitmode = "rooms"
+
+
+
+-- slots for custom environment colors
+local envIds = {}
+envIds["Default"]       = 257 -- used if no environment data available
+envIds["Air"]           = 300
+envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
+envIds["City"]          = 302
+envIds["Desert"]        = 303
+envIds["Field"]         = 304
+envIds["Fire"]          = 305
+envIds["Forest"]        = 306
+envIds["Hills"]         = 307
+envIds["In the ground"] = 308
+envIds["Inside"]        = 309
+envIds["Mountains"]     = 310
+envIds["Underwater"]    = 311
+envIds["Water NoSwim"]  = 312
+envIds["Water Swim"]    = 313
+
+
+-- {r,g,b} color definitions for each environment
+-- type "lua showColors()" in the main console to preview Mudlet's color_table
+local envColors = {}
+envColors["Default"]       = color_table.ansi_red
+envColors["Air"]           = color_table.azure
+envColors["CHARM"]         = color_table.ansi_light_magenta
+envColors["City"]          = color_table.light_grey
+envColors["Desert"]        = color_table.pale_goldenrod
+envColors["Field"]         = color_table.lawn_green
+envColors["Fire"]          = color_table.indian_red
+envColors["Forest"]        = color_table.forest_green
+envColors["Hills"]         = color_table.lime_green
+envColors["In the ground"] = color_table.ansi_yellow
+envColors["Inside"]        = color_table.pale_turquoise
+envColors["Mountains"]     = color_table.dim_grey
+envColors["Underwater"]    = color_table.blue
+envColors["Water NoSwim"]  = color_table.steel_blue
+envColors["Water Swim"]    = color_table.deep_sky_blue
+
+-- set the reserved IDs to the above colors
+-- TODO: Need a startup/init function
+for area, id in pairs(envIds) do
+  local r, g, b = unpack(envColors[area])
+  setCustomEnvColor(id, r, g, b, 255)
+end
+
+
+
+--- Symbols to set based on gmcp.Room.Info.spec field
+local specials = {}
+specials["fountain"] = "⛲"
+specials["godstone"] = "🗿"
+
+
+
+--- list of movement directions the mapper will search for in gmcp data
+local supported_dirs = {"north", "east", "south", "west", "up", "down"}
+
+--- lookup table for the opposite of a direction
+local reverse_dir = {
+  north = "south",
+  east  = "west",
+  south = "north",
+  west  = "east",
+  up    = "down",
+  down  = "up"
+}
+
+-- translation table to shorten direction names for certain Mudlet functions
+local short_dir = {
+  north = 'n',
+  east  = 'e',
+  south = 's',
+  west  = 'w',
+  up    = 'u',
+  down  = 'd'
+}
+
+
+
+--- set the mapper creation mode
+function setMapMode(mode)
+  if table.contains(supported_mapmodes, mode) then
+    config.mapmode = mode
+    BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- set the mapper room creation mode
+function setCreateMode(mode)
+  if table.contains(supported_createmodes, mode) then
+    config.createmode = mode
+    BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- set the mapper exit creation mode
+function setExitMode(mode)
+  if table.contains(supported_exitmodes, mode) then
+    config.exitmode = mode
+    BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- stretches a map to make room for just added room that would overlap with existing room
+-- modified from the generic_mapper
+local function stretchMap(dir,x,y,z)
+
+    BlackMUDlet.GUI.echo("Stretching map")
+
+    local dx,dy,dz
+    if not dir then return end
+    for k,v in pairs(getAreaRooms(getRoomArea(getPlayerRoom()))) do
+        if v ~= map.currentRoom then
+            dx,dy,dz = getRoomCoordinates(v)
+            if dx &gt;= x and string.find(dir,"east") then
+                dx = dx + 1
+            elseif dx &lt;= x and string.find(dir,"west") then
+                dx = dx - 1
+            end
+            if dy &gt;= y and string.find(dir,"north") then
+                dy = dy + 1
+            elseif dy &lt;= y and string.find(dir,"south") then
+                dy = dy - 1
+            end
+            if dz &gt;= z and string.find(dir,"up") then
+                dz = dz + 1
+            elseif dz &lt;= z and string.find(dir,"down") then
+                dz = dz - 1
+            end
+            setRoomCoordinates(v,dx,dy,dz)
+        end
+    end
+end
+
+
+
+--- translate a given set of coordinates based on the input direction
+-- used to determine the location of a room in the given direction
+local function translateCoords(dir, x, y, z)
+  if dir == "north" then return x, y+1, z end
+  if dir == "east" then return x+1, y, z end
+  if dir == "south" then return x, y-1, z end
+  if dir == "west" then return x-1, y, z end
+  if dir == "up" then return x, y, z+1 end
+  if dir == "down" then return x, y, z-1 end
+  return x, y, z
+end
+
+
+
+--- updates the room name for a given room
+local function updateRoomName(info)
+
+  if info == nil then return end
+
+  if info.name ~= getRoomName(info.num) then
+    setRoomName(info.num, info.name or "Unknown")  
+  end
+
+end
+
+
+
+--- updates the area name for a given room
+-- assume that user will set mapper areas manually
+-- put the gmcp-provided area name into the user data instead
+local function updateAreaName(info)
+
+  if info == nil then return end
+  
+  if info.area ~= getRoomUserData(info.num, "area") then
+    setRoomUserData(info.num, "area", info.area)
+  end
+
+end 
+
+
+
+--- updates the exits for a given room
+-- creates placeholder rooms and connects them to the current room
+local function updateExits(info)
+
+  if info == nil then return end
+
+  local x,y,z = getRoomCoordinates(info.num)
+  local areaID = getRoomArea(info.num)
+  
+  -- handle possible exits
+  for k,v in pairs(supported_dirs) do
+  
+    local skip = false
+    
+    -- if an exit in this direction exists
+    if info.exits[v] then
+      
+      -- if the room at the exit does not already exist we need to create it
+      if roomExists(info.exits[v]) == false
+        and config.mapmode == "create" 
+        and config.exitmode == "rooms" then
+        
+        -- get the coordinates of the new room
+        local dx,dy,dz = translateCoords(v, x, y, z)
+        
+        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
+        
+        -- check if if a room already exists at the new position
+        if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
+          
+          if config.createmode == "stretch" then
+            -- shift rooms to make space
+            stretchMap(v, dx, dy, dz)
+          end
+          
+          -- skip room creation if it doesn't fit on the map
+          if config.createmode == "warn" then
+            BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
+            skip = true
+          elseif config.createmode == "skip" then
+            skip = true
+          end          
+          
+        end
+        
+        if skip == false then
+          -- create the room and put it in the correct spot
+          addRoom(info.exits[v])
+          setRoomName(info.exits[v], "Unknown")
+          setRoomArea(info.exits[v], areaID)
+          setRoomCoordinates(info.exits[v], dx, dy, dz)
+      
+          -- highlight the room as unvisited
+          -- TODO: move this elsewhere, only do once, pick better colors
+          local r,g,b = unpack(color_table.gold)
+          local br,bg,bb = unpack(color_table.black)
+          highlightRoom(info.exits[v], r, g, b, br, bg, bb, 0.75, 255, 255)
+        end
+      end
+      
+      -- add the exit line if the room exists, or a stub if not
+      if roomExists(info.exits[v]) then
+        -- add an exit leading to the identified room
+        setExit(info.num, info.exits[v], v)
+      else
+        setExitStub(info.num, v, true)
+      end
+    
+    else -- no exit in this direction
+      setExit(info.num, -1, v)
+    end
+  end
+end
+
+
+
+--- updates the door information for the given room
+local function updateDoors(info)
+
+  if info == nil then return end
+ 
+  for k,v in pairs(getRoomExits(info.num)) do
+     
+    -- Mudlet functions want n, e, s, w, u, or d
+    -- GMCP data is north, east, south, west, up, down
+    local dir = short_dir[k]
+
+    if info.doors_closed[k] then
+      if string.find(info.doors_closed[k], "locked") then
+        setDoor(info.num, dir, 3)
+      else
+        setDoor(info.num, dir, 2)
+      end
+    elseif info.doors_opened[k] then
+      setDoor(info.num, dir, 1)
+    else
+      setDoor(info.num, dir, 0)
+    end
+  
+  end
+end
+
+
+
+--- update room environment data
+local function updateEnvironment(info)
+
+  if info == nil then return end
+  
+  setRoomUserData(info.num, "environment", info.environment)
+  setRoomEnv(info.num, envIds[info.environment] or envIds["Default"])
+end
+
+
+
+--- update room special properties
+local function updateSpec(info)
+
+  if info == nil then return end
+  
+  if info.spec then
+    setRoomUserData(info.num, "spec", info.spec)
+    setRoomChar(info.num, specials[info.spec] or "")
+  end
+end
+
+
+--- tries to creates a new room based on the given info (room number)
+-- will only create a room that can connect to the known map
+-- room coords based on exit data of existing connected room
+local function tryCreateRoom(info)
+
+  if roomExists(info.num) then
+    BlackMUDlet.GUI.echo("Attempting to create new room, but room " .. info.num .. ", already exists in map!")
+    return
+  end
+  
+  -- for each exit in the to-be-placed room
+  for dir,id in pairs(info.exits) do
+    
+    -- if an exit to a known room exists in the given direction
+    if roomExists(id) then
+      
+      local x, y, z = getRoomCoordinates(id)
+             
+      -- get the coordinates of the new room
+      local dx,dy,dz = translateCoords(reverse_dir[dir], x, y, z)
+        
+        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
+        
+        -- check if if a room already exists at the new position
+        if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
+          
+        if config.createmode == "stretch" then
+          -- shift rooms to make space
+          stretchMap(v, dx, dy, dz)
+        end
+          
+        -- skip room creation if it doesn't fit on the map
+        if config.createmode == "warn" then
+          BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
+          return
+        elseif config.createmode == "skip" then
+          return
+        end          
+          
+      end
+      
+        -- create the room and put it in the correct spot
+        addRoom(info.exits[v])
+        setRoomName(info.exits[v], "Unknown")
+        setRoomArea(info.exits[v], areaID)
+        setRoomCoordinates(info.exits[v], dx, dy, dz)        
+    end    
+  end
+end
+
+
+
+--- handle the current gmcp room info
+local function handleGmcpRoomData()
+
+  if config.mapmode == "off" then
+    return
+  end
+
+  local info
+
+  if gmcp and gmcp.Room and gmcp.Room.Info then
+    info = gmcp.Room.Info
+  else
+    return
+  end
+  
+  BlackMUDlet.GUI.echo("GMCP Room Info for " .. info.num .. " received by Mapper")
+
+  -- if the current room doesn't exist on the map, see if we can create and connect it to a known room
+  if roomExists(info.num) == false and config.mapmode == "create" then
+    tryCreateRoom(info)
+  end
+
+  -- will currently only extend the map from a known room
+  if roomExists(info.num) then
+  
+    if config.mapmode == "update" or config.mapmode == "create" then
+      
+      updateRoomName(info)
+      updateAreaName(info)
+      updateExits(info)
+      updateDoors(info)
+      updateEnvironment(info)  
+      updateSpec(info)
+      
+      -- force a redraw of the map since something probably changed
+      updateMap()
+    
+    end
+        
+    -- center the map on the current room 
+    centerview(info.num)
+    
+    -- un-highlight the room if it's highlighted
+    unHighlightRoom(info.num)
+  end
+
+end
+
+-- automatically call the gmcp handler on each gmcp.Room update
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.gmcpMapper", "gmcp.Room", handleGmcpRoomData)
+
+
+
+--- deletes the currently selected room and replaces with one containing the current gmcp data
+-- will return an error if current gmcp data already exists in map, or if multiple selected
+-- intended to be called from a right click menu
+local function replaceCurrentRoom()
+
+  local info
+  
+  if gmcp and gmcp.Room and gmcp.Room.Info then
+    info = gmcp.Room.Info
+  else
+    BlackMUDlet.GUI.echo("Error: No room data available!")
+    return
+  end
+
+  if roomExists(info.num) then
+    BlackMUDlet.GUI.echo("Error: Current room (" .. info.num .. ") already exists in map.")
+    return
+  end
+  
+  local selected = getMapSelection()
+  
+  if #selected["rooms"] ~= 1 then
+    BlackMUDlet.GUI.echo("Error: Select a single empty room to be replaced.")
+    return
+  end
+  
+  if getRoomName(selected.center) ~= "" then
+    BlackMUDlet.GUI.echo("Error: Selected room already populated. Please select an empty room.")
+    return
+  end
+  
+  local x,y,z = getRoomCoordinates(selected.center)
+  
+  -- everything looks good, so create and position the new room
+  addRoom(info.num)
+  setRoomArea(info.num, getRoomArea(selected.center))
+  setRoomCoordinates(info.num, x, y, z)
+  
+  -- populate it with current room data
+  handleGmcpRoomData()  
+  
+  -- and delete the old placeholder room
+  deleteRoom(selected.center)
+
+end
+
+-- add a replace room option to the right click menu
+addMapEvent("mapUtils.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
+registerNamedEventHandler("BlackMUDlet", "mapUtils.replaceRoom", "replaceRoom", replaceCurrentRoom)
+
+
+
+
+
+
+
+--- Map Utils
+-- TODO: Figure out what's universal, what's imm-only, and what's personal toy
+  -- refactor accordingly
+
+mapUtils = mapUtils or {}
+
+--- prints the currently known environments to the screen
+function mapUtils.getEnvironments()
+  
+  local envs = {}
+  
+  BlackMUDlet.GUI.echo("Known Environments:")
+  
+  for id,name in pairs(getRooms()) do
+    
+    env = getRoomUserData(id, "environment")
+    
+    if not envs[env] then
+      envs[env] = true
+      BlackMUDlet.GUI.echo("  " .. env)
+--      if env == "CHARM" then
+--        BlackMUDlet.GUI.echo("CHARM room: " .. id .. " " .. name)
+--      end
+    end
+  end  
+end
+
+
+
+--- prints the currently known spec properties to the screen
+function mapUtils.getSpecs()
+  
+  local specs = {}
+  
+  BlackMUDlet.GUI.echo("Known specials:")
+  
+  for id,name in pairs(getRooms()) do
+    
+    spec = getRoomUserData(id, "spec")
+    
+    if not specs[spec] then
+      specs[spec] = true
+      BlackMUDlet.GUI.echo("  " .. spec)
+    end
+  end  
+end
+
+
+-- prints the currently known areas to the screen
+function mapUtils.getAreas()
+  
+  local areas = {}
+  
+  BlackMUDlet.GUI.echo("Known Areas:")
+  
+  for id,name in pairs(getRooms()) do
+    
+    area = getRoomUserData(id, "area")
+    
+    if not areas[area] then
+      areas[area] = true
+      BlackMUDlet.GUI.echo("  " .. area)      
+    end
+  end  
+end
+
+
+--- Highlight any room with the name "Unknown"
+-- Used to recover highlighting after profile restart
+function mapUtils.highlightUnknown()
+  for id,name in pairs(getRooms()) do
+    if name == "Unknown" then
+      -- TODO: make this configurable, pull from a variable
+      local r,g,b = unpack(color_table.gold)
+      local br,bg,bb = unpack(color_table.black)
+      highlightRoom(id, r, g, b, br, bg, bb, 0.75, 255, 255)
+    end
+  end
+end
+
+-- call highlightUnknown to highlight rooms rooms once at startup
+registerNamedEventHandler("BlackMUDlet", "mapUtils.highlightUnknown", "sysLoadEvent", mapUtils.highlightUnknown)
+
+
+
+--- add a "goto" option to mapper right click menu
+function mapUtils.goto()
+
+  local selected = getMapSelection()
+  
+  if selected == nil then
+    BlackMUDlet.GUI.echo("Error: No room selected")
+    return
+  elseif #selected["rooms"] &gt; 1 then
+    BlackMUDlet.GUI.echo("Multiple rooms selected. Teleporting to center " .. selected["center"])
+  else
+    BlackMUDlet.GUI.echo("Teleporting to room " .. selected["center"])
+  end
+  send("goto " .. selected["center"], false)
+end
+
+addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: Goto room")
+registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
+
+
+
+--- List any room with the name "Unknown"
+function mapUtils.listUnfinished()
+BlackMUDlet.GUI.echo("Listing Unknown and unfinished rooms")
+  for id,name in pairs(getRooms()) do
+    if name == "Unknown" then
+      BlackMUDlet.GUI.echo("  Unknown room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
+    end
+    if #getExitStubs(id) &gt; 0 then
+      BlackMUDlet.GUI.echo("  Stubs found in room " .. id)
+    end
+  end
+end
+
+
+--- Recolors the map based on stored environment string
+function mapUtils.colorByEnv()
+BlackMUDlet.GUI.echo("Coloring based on environment")
+  for id,name in pairs(getRooms()) do
+    local env = getRoomUserData(id, "environment")
+    if env then
+      setRoomEnv(id, envIds[env] or envIds["Default"])
+    end
+  end
+  updateMap()
+end
+
+--- Redraws symbols for specialson the map based on stored spec
+function mapUtils.updateSymbols()
+BlackMUDlet.GUI.echo("Updating symbols")
+  for id,name in pairs(getRooms()) do
+    local spec = getRoomUserData(id, "spec")
+    if spec then
+      setRoomChar(id, specials[spec] or "")
+    end
+  end
+  updateMap()
+end
+
+
+
+--- Set FIXME user data for red rooms
+-- don't call this unless you know what you're doing
+function mapUtils.setFixMe()
+BlackMUDlet.GUI.echo("Setting FIXME room user data for red rooms")
+  for id,name in pairs(getRooms()) do
+    if getRoomEnv(id) == 265 then
+      BlackMUDlet.GUI.echo("  FIXME room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
+      setRoomUserData(id, "FIXME", "true")
+    end
+  end
+end
+
+
+function mapUtils.getFixMe(highlight)
+  mapUtils.fixMe = {}
+  BlackMUDlet.GUI.echo("Getting FIXME rooms")
+  for id,name in pairs(getRooms()) do
+    if getRoomUserData(id, "FIXME") == "true" then
+      BlackMUDlet.GUI.echo("  FIXME room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
+      mapUtils.fixMe[id] = name
+      if highlight then
+        local r,g,b = unpack(color_table.red)
+        local br,bg,bb = unpack(color_table.blue)
+        highlightRoom(id, r, g, b, br, bg, bb, 0.75, 255, 255)
+      else
+        unHighlightRoom(id)
+      end
+    end
+  end
+  BlackMUDlet.GUI.echo(table.size(mapUtils.fixMe) .. " tagged rooms found and stored in mapUtils.fixMe")
+end
+</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>GMCP Mapper Utils</name>
+				<packageName></packageName>
+				<script>
+</script>
+				<eventHandlerList />
+			</Script>
+		</ScriptGroup>
+		<Script isActive="yes" isFolder="no">
+			<name>Package Manager</name>
+			<packageName></packageName>
+			<script>BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.version = 1
+
+BlackMUDlet.packageName = "BlackMUDlet"
+BlackMUDlet.packagePath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
+BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
+BlackMUDlet.configFile = "BlackMUDlet_config.lua"
+
+-- TODO: Should these be configs so they can be modified and persisted?
+  -- Or should they stay owned by the script itself?
+BlackMUDlet.remoteUrl = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
+BlackMUDlet.packageFile = "BlackMUDlet.mpackage"
+BlackMUDlet.versionFile = "BlackMUDlet.version"
+
+
+BlackMUDlet.config = BlackMUDlet.Config or {}
+BlackMUDlet.defaults = {}
+
+
+-- sysLoadEvent
+-- sysInstall
+local function initialize()
+
+  -- load config data
+  local config = {}
+  if io.exists(BlackMUDlet.packagePath .. BlackMUDlet.configFile) then
+    table.load(BlackMUDlet.packagePath .. BlackMUDlet.configFile, config)
+  end
+  BlackMUDlet.config = table.update(BlackMUDlet.defaults, config)
+  
+  
+  -- TODO: Disable generic_mapper english exits triggers in Mapper init, not here
+  if isActive("generic_mapper", "trigger") then
+    disableTrigger("generic_mapper")
+    BlackMUDlet.GUI.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
+    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
+  end
+
+end
+
+
+-- TODO: Make an event for this
+local function onEnterGame()
+
+  -- TODO: When should this actually be called?
+  -- If we install while in game, we want to run this
+  -- If we install before loading character we don't
+  -- Maybe gmcp.Char being set is a good hint?
+
+end
+
+
+-- sysExitEvent
+local function shutDown()
+
+end
+
+
+-- sysUninstallPackage
+local function uninitialize()
+
+end
+
+
+
+
+
+
+
+
+
+
+
+-- Begin BlackMUDlet.Updater
+
+BlackMUDlet = BlackMUDlet or {}
+BlackMUDlet.Updater = BlackMUDlet.Updater or {}
+local Updater = BlackMUDlet.Updater
+
+Updater.state = "up-to-date"
+-- up-to-date - nothing to do
+-- pending - newer version found
+-- downloading - package download started
+-- updating - package download complete
+
+
+
+--- download a version file from the provided URL or the default remote path
+-- intended to be called with nil unless there's a need to override
+function Updater.downloadVersion(url)
+  
+  BlackMUDlet.GUI.echo("Checking for updates...")
+  
+  if not io.exists(BlackMUDlet.downloadPath) then
+    lfs.mkdir(BlackMUDlet.downloadPath)
+  end
+    
+  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile, 
+               url or (BlackMUDlet.remoteUrl .. BlackMUDlet.versionFile))
+end
+
+
+
+--- handle the completion of a version download and prompts for action, if required
+function Updater.handleVersion()
+   if io.exists(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile) then
+    local file = io.open(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile)
+    ver = tonumber(file:read("*all"))
+ 
+    if ver &gt; BlackMUDlet.version then
+      BlackMUDlet.GUI.echo("Update found! Type xxx or click here to install (TODO)")
+      Updater.state = "pending" 
+    elseif ver == BlackMUDlet.version then
+      BlackMUDlet.GUI.echo("Package is up to date")
+      Updater.state = "up-to-date"
+    else
+      BlackMUDlet.GUI.echo("Local package install is newer than server")
+    end
+ 
+  end
+end
+
+
+--- downloads the mpackage from the provided url, using the package default if none specified
+-- intended to be called with nil, but keeping a URL option as an override for manual updates
+function Updater.downloadUpdate(url)
+  
+  BlackMUDlet.GUI.echo("Downloading update...")
+  
+  if not io.exists(BlackMUDlet.downloadPath) then
+    lfs.mkdir(BlackMUDlet.downloadPath)
+  end
+
+  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.packageFile, 
+               url or (BlackMUDlet.remoteUrl .. BlackMUDlet.packageFile))
+               
+  Updater.state = "downloading"
+  
+end
+
+
+
+--- updates to the downloaded mpackage
+local function handleUpdate()
+
+  BlackMUDlet.GUI.echo("Update handler called, but not implemented")
+  
+  if Updater.state ~= "updating" then
+    BlackMUDlet.GUI.echo("Updated not in expected state. Restart profile and try again.")
+    return
+  end
+  
+  -- save settings
+  -- hide UI (TODO: Uninstall hooks should do this)
+  -- uninstall package
+  -- install package
+end
+
+
+
+local function onDownloadDone(event, file)
+  
+  -- if the downloaded file is a version file
+  if string.ends(file, BlackMUDlet.versionFile) then
+    Updater.handleVersion()
+  
+  -- if the downloaded file is a BlackMUDlet package
+  elseif string.ends(file, BlackMUDlet.packageFile) then
+    
+    -- only install if we were expecting an update
+    if Updater.state == "downloading" then
+      Updated.handleDownload()
+    end
+  end
+  
+end
+
+
+
+local function onDownloadError(event, error, localFile, remoteFile)
+  if string.ends(localFile, BlackMUDlet.versionFile) 
+     or string.ends(localFile, BlackMUDlet.packageFile) then
+    BlackMUDlet.GUI.echo("Could not download " .. remoteFile)
+    BlackMUDlet.GUI.echo(error)
+  end
+  Updater.state = "up-to-date"  -- this could be named better...
+end
+
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadDone", "sysDownloadDone", onDownloadDone)
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", "sysDownloadError", onDownloadError)
+
+</script>
+			<eventHandlerList />
+		</Script>
+	</ScriptPackage>
+	<KeyPackage>
+		<KeyGroup isActive="yes" isFolder="yes">
+			<name>NumPad Movement</name>
+			<packageName></packageName>
+			<script></script>
+			<command></command>
+			<keyCode>-1</keyCode>
+			<keyModifier>0</keyModifier>
+			<Key isActive="no" isFolder="no">
+				<name>Southwest</name>
+				<packageName></packageName>
+				<script></script>
+				<command>southwest</command>
+				<keyCode>49</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>South</name>
+				<packageName></packageName>
+				<script></script>
+				<command>south</command>
+				<keyCode>50</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="no" isFolder="no">
+				<name>Southeast</name>
+				<packageName></packageName>
+				<script></script>
+				<command>southeast</command>
+				<keyCode>51</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>West</name>
+				<packageName></packageName>
+				<script></script>
+				<command>west</command>
+				<keyCode>52</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>Look</name>
+				<packageName></packageName>
+				<script></script>
+				<command>look</command>
+				<keyCode>53</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>East</name>
+				<packageName></packageName>
+				<script></script>
+				<command>east</command>
+				<keyCode>54</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="no" isFolder="no">
+				<name>Northwest</name>
+				<packageName></packageName>
+				<script></script>
+				<command>northwest</command>
+				<keyCode>55</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>North</name>
+				<packageName></packageName>
+				<script></script>
+				<command>north</command>
+				<keyCode>56</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="no" isFolder="no">
+				<name>Northeast</name>
+				<packageName></packageName>
+				<script></script>
+				<command>northeast</command>
+				<keyCode>57</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="no" isFolder="no">
+				<name>In</name>
+				<packageName></packageName>
+				<script></script>
+				<command>in</command>
+				<keyCode>47</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="no" isFolder="no">
+				<name>Out</name>
+				<packageName></packageName>
+				<script></script>
+				<command>out</command>
+				<keyCode>42</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>Up</name>
+				<packageName></packageName>
+				<script></script>
+				<command>up</command>
+				<keyCode>45</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>Down</name>
+				<packageName></packageName>
+				<script></script>
+				<command>down</command>
+				<keyCode>43</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+		</KeyGroup>
+	</KeyPackage>
+	<HelpPackage>
+		<helpURL></helpURL>
+	</HelpPackage>
+</MudletPackage>
