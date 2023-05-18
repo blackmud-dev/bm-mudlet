@@ -860,21 +860,21 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<regex></regex>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set mapmode</name>
-				<script>setMapMode(matches[2])</script>
+				<script>BlackMUDlet.Mapper.setMapMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui mapmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set createmode</name>
-				<script>setCreateMode(matches[2])</script>
+				<script>BlackMUDlet.Mapper.setCreateMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui createmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set exitmode</name>
-				<script>setExitMode(matches[2])</script>
+				<script>BlackMUDlet.Mapper.setExitMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui exitmode (\w+)$</regex>
@@ -3899,14 +3899,49 @@ end
 BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}</script>
 			<eventHandlerList />
 			<Script isActive="yes" isFolder="no">
+				<name>Config</name>
+				<packageName></packageName>
+				<script>BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
+
+local Mapper = BlackMUDlet.Mapper
+
+Mapper.Config = Mapper.Config or {}
+
+Mapper.Defaults = {
+  mapmode    = "follow",
+  createmode = "warn",
+  exitmode   = "rooms"
+}
+
+--- mapmode: how to respond to gmcp room data (e.g., is the mapper active or not?)
+Mapper.supported_mapmodes = {
+  "off",    -- ignore gmcp.Room data
+  "follow", -- center view on map when possible, but do not update anything
+  "update", -- update existing rooms when visited but do not create new rooms
+  "create"  -- create new rooms and update existing
+}
+
+--- createmode: how to behave when creating a room at coords with an existing room
+Mapper.supported_createmodes = {
+  "skip",    -- skip room when no space is available
+  "warn",    -- skip room and output a warning to main console
+  "stretch", -- shift all rooms in the current map (all levels) to make room
+  "overlap"  -- place the room overlappign the existing room(s)
+}
+
+-- exitmode: how the mapper should handle exits for the current room
+Mapper.supported_exitmodes = {
+  "stubs", -- create exits stubs only
+  "rooms"  -- create highlighted placeholder rooms
+}</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
 				<name>GMCP Mapper</name>
 				<packageName></packageName>
 				<script>
 -- TODO: Wishlist item, but an Undo function would be amaizng. More of a Mudlet-level feature
 
--- TODO: Incorporate this into BlackMUDlet, incl. configs and help
-  -- any value in making the script universal? With a game-specific profile instead?
-  
 -- TODO: Consider adding error and warn echoes in BlackMUDlet proper on top of info/echo
 
 -- TODO: Refactor room creation in handleExits. Duplicate code there and tryCreateRoom()
@@ -3942,7 +3977,7 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}</script>
 -- TODO: description capture?
   -- this is only easy if gmcp updates and console updates are strictly in sync
     
--- TODO: core mapping stuff in one script, extensions in another, config in another
+-- TODO: core mapping stuff in one script, extensions in another
 
 -- TODO: verbosity options for console outputs
 
@@ -3975,97 +4010,53 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
 
 local Mapper = BlackMUDlet.Mapper
 
-
--- TODO: Incorporate this with BlackMUDlet config, add actual interface for setting
-local config = Mapper.config or {}
-
-
-
---- mapmode: how to respond to gmcp room data (e.g., is the mapper active or not?)
-local supported_mapmodes = {
-  "off",    -- ignore gmcp.Room data
-  "follow", -- center view on map when possible, but do not update anything
-  "update", -- update existing rooms when visited but do not create new rooms
-  "create"  -- create new rooms and update existing
-}
-
-config.mapmode = "create"
-
-
-
---- createmode: how to behave when creating a room at coords with an existing room
-local supported_createmodes = {
-  "skip",    -- skip room when no space is available
-  "warn",    -- skip room and output a warning to main console
-  "stretch", -- shift all rooms in the current map (all levels) to make room
-  "overlap"  -- place the room overlappign the existing room(s)
-}
-
-config.createmode = "warn"
-
-
-
--- exitmode: how the mapper should handle exits for the current room
-local supported_exitmodes = {
-  "stubs", -- create exits stubs only
-  "rooms"  -- create highlighted placeholder rooms
-}
-
-config.exitmode = "rooms"
+local config = Mapper.Config
 
 
 
 -- slots for custom environment colors
-local envIds = {}
-envIds["Default"]       = 257 -- used if no environment data available
-envIds["Air"]           = 300
-envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
-envIds["City"]          = 302
-envIds["Desert"]        = 303
-envIds["Field"]         = 304
-envIds["Fire"]          = 305
-envIds["Forest"]        = 306
-envIds["Hills"]         = 307
-envIds["In the ground"] = 308
-envIds["Inside"]        = 309
-envIds["Mountains"]     = 310
-envIds["Underwater"]    = 311
-envIds["Water NoSwim"]  = 312
-envIds["Water Swim"]    = 313
-
+Mapper.envIds = {}
+Mapper.envIds["Default"]       = 257 -- used if no environment data available
+Mapper.envIds["Air"]           = 300
+Mapper.envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
+Mapper.envIds["City"]          = 302
+Mapper.envIds["Desert"]        = 303
+Mapper.envIds["Field"]         = 304
+Mapper.envIds["Fire"]          = 305
+Mapper.envIds["Forest"]        = 306
+Mapper.envIds["Hills"]         = 307
+Mapper.envIds["In the ground"] = 308
+Mapper.envIds["Inside"]        = 309
+Mapper.envIds["Mountains"]     = 310
+Mapper.envIds["Underwater"]    = 311
+Mapper.envIds["Water NoSwim"]  = 312
+Mapper.envIds["Water Swim"]    = 313
 
 -- {r,g,b} color definitions for each environment
 -- type "lua showColors()" in the main console to preview Mudlet's color_table
-local envColors = {}
-envColors["Default"]       = color_table.ansi_red
-envColors["Air"]           = color_table.azure
-envColors["CHARM"]         = color_table.ansi_light_magenta
-envColors["City"]          = color_table.light_grey
-envColors["Desert"]        = color_table.pale_goldenrod
-envColors["Field"]         = color_table.lawn_green
-envColors["Fire"]          = color_table.indian_red
-envColors["Forest"]        = color_table.forest_green
-envColors["Hills"]         = color_table.lime_green
-envColors["In the ground"] = color_table.ansi_yellow
-envColors["Inside"]        = color_table.pale_turquoise
-envColors["Mountains"]     = color_table.dim_grey
-envColors["Underwater"]    = color_table.blue
-envColors["Water NoSwim"]  = color_table.steel_blue
-envColors["Water Swim"]    = color_table.deep_sky_blue
-
--- TODO Move this to initialize()
--- set custom environment colors
-for area, id in pairs(envIds) do
-  local r, g, b = unpack(envColors[area])
-  setCustomEnvColor(id, r, g, b, 255)
-end
+Mapper.envColors = {}
+Mapper.envColors["Default"]       = color_table.ansi_red
+Mapper.envColors["Air"]           = color_table.azure
+Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
+Mapper.envColors["City"]          = color_table.light_grey
+Mapper.envColors["Desert"]        = color_table.pale_goldenrod
+Mapper.envColors["Field"]         = color_table.lawn_green
+Mapper.envColors["Fire"]          = color_table.indian_red
+Mapper.envColors["Forest"]        = color_table.forest_green
+Mapper.envColors["Hills"]         = color_table.lime_green
+Mapper.envColors["In the ground"] = color_table.ansi_yellow
+Mapper.envColors["Inside"]        = color_table.pale_turquoise
+Mapper.envColors["Mountains"]     = color_table.dim_grey
+Mapper.envColors["Underwater"]    = color_table.blue
+Mapper.envColors["Water NoSwim"]  = color_table.steel_blue
+Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
 
 
 
 --- Symbols to set based on gmcp.Room.Info.spec field
-local specials = {}
-specials["fountain"] = "⛲"
-specials["godstone"] = "🗿"
+Mapper.specials = {}
+Mapper.specials["fountain"] = "⛲"
+Mapper.specials["godstone"] = "🗿"
 
 
 
@@ -4093,10 +4084,30 @@ local short_dir = {
 }
 
 
+--- highlights the given room as "unknown"
+-- used to ensure consistent style applied on room creation and on map load
+local function markUnknown(id)
+  local r,g,b = unpack(color_table.gold)
+  local br,bg,bb = unpack(color_table.black)
+  highlightRoom(id, r, g, b, br, bg, bb, 0.75, 255, 255)
+end
+
+
+
+--- set custom environment colors
+-- intended to be called once during initialization or if definitions change
+function Mapper.setCustomEnvColors()
+  for area, id in pairs(Mapper.envIds) do
+    local r, g, b = unpack(Mapper.envColors[area])
+    setCustomEnvColor(id, r, g, b, 255)
+  end
+end
+
+
 
 --- set the mapper creation mode
-function setMapMode(mode)
-  if table.contains(supported_mapmodes, mode) then
+function Mapper.setMapMode(mode)
+  if table.contains(Mapper.supported_mapmodes, mode) then
     config.mapmode = mode
     BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
   else
@@ -4107,8 +4118,8 @@ end
 
 
 --- set the mapper room creation mode
-function setCreateMode(mode)
-  if table.contains(supported_createmodes, mode) then
+function Mapper.setCreateMode(mode)
+  if table.contains(Mapper.supported_createmodes, mode) then
     config.createmode = mode
     BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
   else
@@ -4119,13 +4130,46 @@ end
 
 
 --- set the mapper exit creation mode
-function setExitMode(mode)
-  if table.contains(supported_exitmodes, mode) then
+function Mapper.setExitMode(mode)
+  if table.contains(Mapper.supported_exitmodes, mode) then
     config.exitmode = mode
     BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
   end
+end
+
+
+
+--- create an area with the given name if it's not a duplicate
+function Mapper.addAreaName(name)
+  if table.contains(getAreaTable(), name) then
+    BlackMUDlet.GUI.echo("Area with name \"" .. name .. "\" already exists.")
+    return
+  end
+  
+  addAreaName(name)
+  BlackMUDlet.GUI.echo("Area \"" .. name .. "\" added with ID " .. getAreaTable()[name])
+end
+
+
+--- delete the specified area if empty, or if force != nil or false
+function Mapper.deleteAreaName(name, force)
+  if not table.contains(getAreaTable(), name) then
+    BlackMUDlet.GUI.echo("Area \"" .. name .. "\" does not exist!")
+    return
+  end
+  
+  if table.size(getAreaRooms(getAreaTable()[name])) &gt; 0 and (force == nil or force == false) then
+    BlackMUDlet.GUI.echo("Area \"" .. name .. "\" is not empty, use force option to force deletion.")
+    return
+  end
+  
+  deleteArea(name)
+  BlackMUDlet.GUI.echo("Deleting area \"" .. name .. "\".")
+  
+  updateMap()
+  
 end
 
 
@@ -4258,10 +4302,7 @@ local function updateExits(info)
           setRoomCoordinates(info.exits[v], dx, dy, dz)
       
           -- highlight the room as unvisited
-          -- TODO: move this elsewhere, only do once, pick better colors
-          local r,g,b = unpack(color_table.gold)
-          local br,bg,bb = unpack(color_table.black)
-          highlightRoom(info.exits[v], r, g, b, br, bg, bb, 0.75, 255, 255)
+          markUnknown(id)
         end
       end
       
@@ -4276,6 +4317,7 @@ local function updateExits(info)
     else -- no exit in this direction
       setExit(info.num, -1, v)
     end
+  
   end
 end
 
@@ -4315,7 +4357,7 @@ local function updateEnvironment(info)
   if info == nil then return end
   
   setRoomUserData(info.num, "environment", info.environment)
-  setRoomEnv(info.num, envIds[info.environment] or envIds["Default"])
+  setRoomEnv(info.num, Mapper.envIds[info.environment] or Mapper.envIds["Default"])
 end
 
 
@@ -4327,9 +4369,10 @@ local function updateSpec(info)
   
   if info.spec then
     setRoomUserData(info.num, "spec", info.spec)
-    setRoomChar(info.num, specials[info.spec] or "")
+    setRoomChar(info.num, Mapper.specials[info.spec] or "")
   end
 end
+
 
 
 --- tries to creates a new room based on the given info (room number)
@@ -4349,6 +4392,7 @@ local function tryCreateRoom(info)
     if roomExists(id) then
       
       local x, y, z = getRoomCoordinates(id)
+      local areaID = getRoomArea(id)
              
       -- get the coordinates of the new room
       local dx,dy,dz = translateCoords(reverse_dir[dir], x, y, z)
@@ -4360,12 +4404,12 @@ local function tryCreateRoom(info)
           
         if config.createmode == "stretch" then
           -- shift rooms to make space
-          stretchMap(v, dx, dy, dz)
+          stretchMap(dir, dx, dy, dz)
         end
           
         -- skip room creation if it doesn't fit on the map
         if config.createmode == "warn" then
-          BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
+          BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. dir .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
           return
         elseif config.createmode == "skip" then
           return
@@ -4373,11 +4417,12 @@ local function tryCreateRoom(info)
           
       end
       
-        -- create the room and put it in the correct spot
-        addRoom(info.exits[v])
-        setRoomName(info.exits[v], "Unknown")
-        setRoomArea(info.exits[v], areaID)
-        setRoomCoordinates(info.exits[v], dx, dy, dz)        
+      -- create the room and put it in the correct spot
+      addRoom(info.num)
+      setRoomName(info.num, "Unknown")
+      setRoomArea(info.num, areaID)
+      setRoomCoordinates(info.num, dx, dy, dz)
+          
     end    
   end
 end
@@ -4489,6 +4534,15 @@ registerNamedEventHandler("BlackMUDlet", "mapUtils.replaceRoom", "replaceRoom", 
 
 
 
+--- Highlight any room with the name "Unknown"
+-- Used to recover highlighting after profile restart
+function Mapper.highlightUnknown()
+  for id,name in pairs(getRooms()) do
+    if name == "Unknown" then
+     markUnknown(id)
+    end
+  end
+end
 
 
 
@@ -4548,33 +4602,41 @@ function mapUtils.getAreas()
   
   BlackMUDlet.GUI.echo("Known Areas:")
   
+  local i = 0
+  
   for id,name in pairs(getRooms()) do
-    
-    area = getRoomUserData(id, "area")
+    local area = getRoomUserData(id, "area")
     
     if not areas[area] then
+      i = i+1
       areas[area] = true
-      BlackMUDlet.GUI.echo("  " .. area)      
+      BlackMUDlet.GUI.echo("  " .. i .. ". " .. area)      
     end
   end  
 end
 
 
---- Highlight any room with the name "Unknown"
--- Used to recover highlighting after profile restart
-function mapUtils.highlightUnknown()
-  for id,name in pairs(getRooms()) do
-    if name == "Unknown" then
-      -- TODO: make this configurable, pull from a variable
-      local r,g,b = unpack(color_table.gold)
-      local br,bg,bb = unpack(color_table.black)
-      highlightRoom(id, r, g, b, br, bg, bb, 0.75, 255, 255)
-    end
+-- prints the currently known areas to the screen
+function mapUtils.getRoomsByArea(target)
+  
+  if target == nil then
+    BlackMUDlet.GUI.echo("area is nil")
   end
+  
+  BlackMUDlet.GUI.echo("Rooms in " .. target .. ":")
+  
+  local i = 0
+  
+  for id,name in pairs(getRooms()) do
+    local area = getRoomUserData(id, "area")
+    
+    if area == target then
+      i = i+1
+      BlackMUDlet.GUI.echo("  " .. id .. " " .. name)      
+    end
+  end  
+  BlackMUDlet.GUI.echo(i .. " rooms found in " .. target)
 end
-
--- call highlightUnknown to highlight rooms rooms once at startup
-registerNamedEventHandler("BlackMUDlet", "mapUtils.highlightUnknown", "sysLoadEvent", mapUtils.highlightUnknown)
 
 
 
@@ -4601,7 +4663,7 @@ registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.go
 
 --- List any room with the name "Unknown"
 function mapUtils.listUnfinished()
-BlackMUDlet.GUI.echo("Listing Unknown and unfinished rooms")
+  BlackMUDlet.GUI.echo("Listing Unknown and unfinished rooms")
   for id,name in pairs(getRooms()) do
     if name == "Unknown" then
       BlackMUDlet.GUI.echo("  Unknown room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
@@ -4688,17 +4750,9 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
 
 local Mapper = BlackMUDlet.Mapper
 
-Mapper.Config = Mapper.Config or {}
-
-Mapper.Defaults = {
-  mapmode    = "follow",
-  createmode = "warn",
-  exitmode   = "rooms"
-}
 
 
-
-function BlackMUDlet.Mapper.initialize(config)
+function Mapper.initialize(config)
 
   if isActive("generic_mapper", "trigger") then
     disableTrigger("generic_mapper")
@@ -4709,23 +4763,30 @@ function BlackMUDlet.Mapper.initialize(config)
   -- load config, fall back on defaults
   Mapper.Config = table.update(Mapper.Defaults, config or {})
   
+  -- set custom environment colors
+  Mapper.setCustomEnvColors()
+  
+  -- Highlight any rooms with the name "Unknown"
+  Mapper.highlightUnknown()
+  
 end
 
 
+
  -- onEnterGame
-function BlackMUDlet.Mapper.onEnterGame()
+function Mapper.onEnterGame()
   -- do nothing 
 end
 
 
 
-function BlackMUDlet.Mapper.shutdown()
+function Mapper.shutdown()
   -- do nothing
 end
 
 
 
-function BlackMUDlet.Mapper.uninstall()
+function Mapper.uninstall()
   -- we shut these off at init, so assume they should be turned back on
   enableTrigger("generic_mapper")
 end
@@ -4850,10 +4911,10 @@ BlackMUDlet.Updater = BlackMUDlet.Updater or {}
 local Updater = BlackMUDlet.Updater
 
 Updater.state = "up-to-date"
--- up-to-date - nothing to do
--- pending - newer version found
+-- up-to-date  - nothing to do
+-- pending     - newer version found
 -- downloading - package download started
--- updating - package download complete
+-- updating    - package download complete
 
 
 
@@ -4918,12 +4979,11 @@ local function handleUpdate()
   BlackMUDlet.GUI.echo("Update handler called, but not implemented")
   
   if Updater.state ~= "updating" then
-    BlackMUDlet.GUI.echo("Updated not in expected state. Restart profile and try again.")
+    BlackMUDlet.GUI.echo("Updater not in expected state. Restart profile and try again.")
     return
   end
   
   -- save settings
-  -- hide UI (TODO: Uninstall hooks should do this)
   -- uninstall package
   -- install package
 end
