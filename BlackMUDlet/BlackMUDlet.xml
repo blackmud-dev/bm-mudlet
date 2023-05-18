@@ -422,30 +422,6 @@ local ignoreList = [[
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Wiz</name>
-					<script>
-if matches[2] ~= "Syslog" then
-  BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;green&gt;" .. matches[1] .. "\n")
-end
-  </script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^::(\w+)::.+$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
 			</TriggerGroup>
 			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 				<name>Buffs</name>
@@ -653,6 +629,46 @@ BlackMUDlet.GUI.Group.update()</script>
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
+		</TriggerGroup>
+		<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+			<name>Imm Extensions</name>
+			<script></script>
+			<triggerType>0</triggerType>
+			<conditonLineDelta>0</conditonLineDelta>
+			<mStayOpen>0</mStayOpen>
+			<mCommand></mCommand>
+			<packageName></packageName>
+			<mFgColor>#ff0000</mFgColor>
+			<mBgColor>#ffff00</mBgColor>
+			<mSoundFile></mSoundFile>
+			<colorTriggerFgColor>#000000</colorTriggerFgColor>
+			<colorTriggerBgColor>#000000</colorTriggerBgColor>
+			<regexCodeList />
+			<regexCodePropertyList />
+			<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Wiz</name>
+				<script>
+if matches[2] ~= "Syslog" then
+  BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;green&gt;::&lt;white&gt;" .. matches[2] .. "&lt;green&gt;:: " .. matches[3] .. "\n")
+end
+  </script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList>
+					<string>^::(\w+)::(.+)$</string>
+				</regexCodeList>
+				<regexCodePropertyList>
+					<integer>1</integer>
+				</regexCodePropertyList>
+			</Trigger>
 		</TriggerGroup>
 		<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 			<name>Enter the game</name>
@@ -890,6 +906,127 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 	</AliasPackage>
 	<ActionPackage />
 	<ScriptPackage>
+		<Script isActive="yes" isFolder="no">
+			<name>Config</name>
+			<packageName></packageName>
+			<script>BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.packageName = "BlackMUDlet"
+BlackMUDlet.version     = 1
+
+--[[
+BlackMUDlet.packageName  = "BlackMUDlet"
+BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
+BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
+BlackMUDlet.packageFile  = BlackMUDlet.packageName .. ".mpackage"
+BlackMUDlet.versionFile  = BlackMUDlet.packageName .. ".version"
+BlackMUDlet.configFile   = BlackMUDlet.packageName .. "_config.lua"
+BlackMUDlet.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
+]]--
+
+
+BlackMUDlet.Defaults = {}
+local Defaults = BlackMUDlet.Defaults
+
+Defaults.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
+Defaults.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
+Defaults.packageFile  = BlackMUDlet.packageName .. ".mpackage"
+Defaults.versionFile  = BlackMUDlet.packageName .. ".version"
+Defaults.configFile   = BlackMUDlet.packageName .. "_config.lua"
+Defaults.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
+Defaults.GUI = {}
+Defaults.Mapper = {}
+
+
+
+BlackMUDlet.Config = BlackMUDlet.Config or {}
+
+</script>
+			<eventHandlerList />
+		</Script>
+		<Script isActive="yes" isFolder="no">
+			<name>Utils</name>
+			<packageName></packageName>
+			<script>
+BlackMUDlet = BlackMUDlet or {}
+
+BlackMUDlet.Utils = BlackMUDlet.Utils or {}
+
+local Utils = BlackMUDlet.Utils
+
+
+
+--- Communication functions so that BlackMUDlet messages are consistent and stand out
+function BlackMUDlet.cecho(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;BlackMUDlet&lt;LightBlue&gt;]: " .. m)
+end
+
+BlackMUDlet.echo = BlackMUDlet.cecho
+BlackMUDlet.info = BlackMUDlet.cecho
+
+function BlackMUDlet.warn(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;BlackMUDlet&lt;LightBlue&gt;]: &lt;yellow&gt;Warning: " .. m)
+end
+
+function BlackMUDlet.error(m)
+  cecho("\n&lt;LightBlue&gt;[&lt;white&gt;BlackMUDlet&lt;LightBlue&gt;]: &lt;red&gt;Error: " .. m)
+end
+
+
+
+--- simple utility function to shorten a number using k, m, b, or t suffix
+function Utils.shortenNum(n)
+  if math.abs(n) &gt;= 10^12 then
+    return string.format("%.1ft", n / 10^12)
+  elseif math.abs(n) &gt;= 10^9 then
+    return string.format("%.1fb", n / 10^9)
+  elseif math.abs(n) &gt;= 10^6 then
+    return string.format("%.1fm", n / 10^6)
+  elseif math.abs(n) &gt;= 10^3 then
+    return string.format("%.1fk", n / 10^3)
+  else 
+    return tostring(n) 
+  end
+end
+
+
+
+--- Add comma separation to a long number for readability
+-- http://lua-users.org/wiki/FormattingNumbers
+function Utils.commaNum(amount)
+  local formatted = amount
+  while true do  
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
+
+
+--- returns a &lt;r,g,b&gt; tag for decho representing a danger level
+-- intended to color code percentages in UI
+-- modified from https://gist.github.com/demonnic/bf50cd8c80a0d96766478143251561b2
+function Utils.getBadnessLevel(num, max)
+  local halfWay = (max+1) / 2
+  local stepSize = 255 / (halfWay - 1)
+  local r,g,b = 0,255,0
+  if num &lt;= 1 then
+    r,g,b =  r,g,b
+  elseif num &gt; max then
+    r,g,b = 255,0,0
+  elseif num &lt; halfWay then
+    r = math.floor((num - 1) * stepSize)
+  else
+    r = 255
+    g = 255 - math.floor((num - halfWay) * stepSize)
+  end
+  return "&lt;"..r..","..g..","..b.."&gt;"
+end</script>
+			<eventHandlerList />
+		</Script>
 		<ScriptGroup isActive="yes" isFolder="yes">
 			<name>GUI</name>
 			<packageName></packageName>
@@ -1794,7 +1931,7 @@ function Vitals.buildPanel4x1(parent)
   -- Create the wimpy bar
   Vitals.wimpyBar = Geyser.Label:new(
     {
-      name = "BlackMUDLet.GUI.Vitals.wimpyBar",
+      name = "BlackMUDlet.GUI.Vitals.wimpyBar",
       x = 0, y = 0, width = 1, height = "100%",
     },
     Vitals.hpGauge.back)
@@ -3933,7 +4070,56 @@ Mapper.supported_createmodes = {
 Mapper.supported_exitmodes = {
   "stubs", -- create exits stubs only
   "rooms"  -- create highlighted placeholder rooms
-}</script>
+}
+
+
+
+-- {r,g,b} color definitions for each environment
+-- type "lua showColors()" in the main console to preview Mudlet's color_table
+Mapper.envColors = {}
+Mapper.envColors["Default"]       = color_table.ansi_red
+Mapper.envColors["Air"]           = color_table.azure
+Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
+Mapper.envColors["City"]          = color_table.light_grey
+Mapper.envColors["Desert"]        = color_table.pale_goldenrod
+Mapper.envColors["Field"]         = color_table.lawn_green
+Mapper.envColors["Fire"]          = color_table.indian_red
+Mapper.envColors["Forest"]        = color_table.forest_green
+Mapper.envColors["Hills"]         = color_table.lime_green
+Mapper.envColors["In the ground"] = color_table.ansi_yellow
+Mapper.envColors["Inside"]        = color_table.pale_turquoise
+Mapper.envColors["Mountains"]     = color_table.dim_grey
+Mapper.envColors["Underwater"]    = color_table.blue
+Mapper.envColors["Water NoSwim"]  = color_table.steel_blue
+Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
+
+-- slots for custom environment colors
+Mapper.envIds = {}
+Mapper.envIds["Default"]       = 257 -- used if no environment data available
+Mapper.envIds["Air"]           = 300
+Mapper.envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
+Mapper.envIds["City"]          = 302
+Mapper.envIds["Desert"]        = 303
+Mapper.envIds["Field"]         = 304
+Mapper.envIds["Fire"]          = 305
+Mapper.envIds["Forest"]        = 306
+Mapper.envIds["Hills"]         = 307
+Mapper.envIds["In the ground"] = 308
+Mapper.envIds["Inside"]        = 309
+Mapper.envIds["Mountains"]     = 310
+Mapper.envIds["Underwater"]    = 311
+Mapper.envIds["Water NoSwim"]  = 312
+Mapper.envIds["Water Swim"]    = 313
+
+
+
+--- Symbols to set based on gmcp.Room.Info.spec field
+Mapper.specials = {}
+Mapper.specials["fountain"] = "⛲"
+Mapper.specials["godstone"] = "🗿"
+
+
+</script>
 				<eventHandlerList />
 			</Script>
 			<Script isActive="yes" isFolder="no">
@@ -4010,53 +4196,7 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
 
 local Mapper = BlackMUDlet.Mapper
 
-local config = Mapper.Config
-
-
-
--- slots for custom environment colors
-Mapper.envIds = {}
-Mapper.envIds["Default"]       = 257 -- used if no environment data available
-Mapper.envIds["Air"]           = 300
-Mapper.envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
-Mapper.envIds["City"]          = 302
-Mapper.envIds["Desert"]        = 303
-Mapper.envIds["Field"]         = 304
-Mapper.envIds["Fire"]          = 305
-Mapper.envIds["Forest"]        = 306
-Mapper.envIds["Hills"]         = 307
-Mapper.envIds["In the ground"] = 308
-Mapper.envIds["Inside"]        = 309
-Mapper.envIds["Mountains"]     = 310
-Mapper.envIds["Underwater"]    = 311
-Mapper.envIds["Water NoSwim"]  = 312
-Mapper.envIds["Water Swim"]    = 313
-
--- {r,g,b} color definitions for each environment
--- type "lua showColors()" in the main console to preview Mudlet's color_table
-Mapper.envColors = {}
-Mapper.envColors["Default"]       = color_table.ansi_red
-Mapper.envColors["Air"]           = color_table.azure
-Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
-Mapper.envColors["City"]          = color_table.light_grey
-Mapper.envColors["Desert"]        = color_table.pale_goldenrod
-Mapper.envColors["Field"]         = color_table.lawn_green
-Mapper.envColors["Fire"]          = color_table.indian_red
-Mapper.envColors["Forest"]        = color_table.forest_green
-Mapper.envColors["Hills"]         = color_table.lime_green
-Mapper.envColors["In the ground"] = color_table.ansi_yellow
-Mapper.envColors["Inside"]        = color_table.pale_turquoise
-Mapper.envColors["Mountains"]     = color_table.dim_grey
-Mapper.envColors["Underwater"]    = color_table.blue
-Mapper.envColors["Water NoSwim"]  = color_table.steel_blue
-Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
-
-
-
---- Symbols to set based on gmcp.Room.Info.spec field
-Mapper.specials = {}
-Mapper.specials["fountain"] = "⛲"
-Mapper.specials["godstone"] = "🗿"
+local Config = Mapper.Config
 
 
 
@@ -4108,7 +4248,7 @@ end
 --- set the mapper creation mode
 function Mapper.setMapMode(mode)
   if table.contains(Mapper.supported_mapmodes, mode) then
-    config.mapmode = mode
+    Config.mapmode = mode
     BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
@@ -4120,7 +4260,7 @@ end
 --- set the mapper room creation mode
 function Mapper.setCreateMode(mode)
   if table.contains(Mapper.supported_createmodes, mode) then
-    config.createmode = mode
+    Config.createmode = mode
     BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
@@ -4132,7 +4272,7 @@ end
 --- set the mapper exit creation mode
 function Mapper.setExitMode(mode)
   if table.contains(Mapper.supported_exitmodes, mode) then
-    config.exitmode = mode
+    Config.exitmode = mode
     BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
@@ -4151,6 +4291,7 @@ function Mapper.addAreaName(name)
   addAreaName(name)
   BlackMUDlet.GUI.echo("Area \"" .. name .. "\" added with ID " .. getAreaTable()[name])
 end
+
 
 
 --- delete the specified area if empty, or if force != nil or false
@@ -4268,8 +4409,8 @@ local function updateExits(info)
       
       -- if the room at the exit does not already exist we need to create it
       if roomExists(info.exits[v]) == false
-        and config.mapmode == "create" 
-        and config.exitmode == "rooms" then
+        and Config.mapmode == "create" 
+        and Config.exitmode == "rooms" then
         
         -- get the coordinates of the new room
         local dx,dy,dz = translateCoords(v, x, y, z)
@@ -4279,16 +4420,16 @@ local function updateExits(info)
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
           
-          if config.createmode == "stretch" then
+          if Config.createmode == "stretch" then
             -- shift rooms to make space
             stretchMap(v, dx, dy, dz)
           end
           
           -- skip room creation if it doesn't fit on the map
-          if config.createmode == "warn" then
+          if Config.createmode == "warn" then
             BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
             skip = true
-          elseif config.createmode == "skip" then
+          elseif Config.createmode == "skip" then
             skip = true
           end          
           
@@ -4402,16 +4543,16 @@ local function tryCreateRoom(info)
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
           
-        if config.createmode == "stretch" then
+        if Config.createmode == "stretch" then
           -- shift rooms to make space
           stretchMap(dir, dx, dy, dz)
         end
           
         -- skip room creation if it doesn't fit on the map
-        if config.createmode == "warn" then
+        if Config.createmode == "warn" then
           BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. dir .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
           return
-        elseif config.createmode == "skip" then
+        elseif Config.createmode == "skip" then
           return
         end          
           
@@ -4432,7 +4573,7 @@ end
 --- handle the current gmcp room info
 local function handleGmcpRoomData()
 
-  if config.mapmode == "off" then
+  if Config.mapmode == "off" then
     return
   end
 
@@ -4447,14 +4588,14 @@ local function handleGmcpRoomData()
   BlackMUDlet.GUI.echo("GMCP Room Info for " .. info.num .. " received by Mapper")
 
   -- if the current room doesn't exist on the map, see if we can create and connect it to a known room
-  if roomExists(info.num) == false and config.mapmode == "create" then
+  if roomExists(info.num) == false and Config.mapmode == "create" then
     tryCreateRoom(info)
   end
 
   -- will currently only extend the map from a known room
   if roomExists(info.num) then
   
-    if config.mapmode == "update" or config.mapmode == "create" then
+    if Config.mapmode == "update" or Config.mapmode == "create" then
       
       updateRoomName(info)
       updateAreaName(info)
@@ -4756,7 +4897,7 @@ function Mapper.initialize(config)
 
   if isActive("generic_mapper", "trigger") then
     disableTrigger("generic_mapper")
-    BlackMUDlet.GUI.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
+    BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
     -- disable aliases too? I'd like to keep "map areas" though, maybe others?
   end
 
@@ -4800,43 +4941,36 @@ end
 			<packageName></packageName>
 			<script>BlackMUDlet = BlackMUDlet or {}
 
-BlackMUDlet.version = 1
-
-BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.packagePath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
-BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
-BlackMUDlet.packageFile = BlackMUDlet.packageName .. ".mpackage"
-BlackMUDlet.versionFile = BlackMUDlet.packageName .. ".version"
-BlackMUDlet.configFile = BlackMUDlet.packageName .. "_config.lua"
-
-BlackMUDlet.remoteUrl = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
-
-
-
 BlackMUDlet.Config = BlackMUDlet.Config or {}
 
-BlackMUDlet.Defaults = {
-  GUI = {},
-  Mapper = {}
-}
+-- Using this was causing problem, not sure why?
+--local Config = BlackMUDlet.Config
 
 
 
 -- track status to avoid double init on module install+load
-local initialized = false
+-- should this be non-local?
+local initialized = initialized or false
 
--- sysLoadEvent
--- sysInstall
-function BlackMUDlet.initialize(event)
+
+
+--- initialize BlackMUDlet and submodules
+-- called on sysLoadEvent and sysInstall, but will only run once
+function BlackMUDlet.initialize()
 
   if initialized == false then
-  
+
+    -- make sure we at least have a valid config path before trying to load       
+    local path = Config.packagePath or BlackMUDlet.Defaults.packagePath
+    local file = Config.configFile or BlackMUDlet.Defaults.configFile
+    
      -- load config data
-    local config = {}
-    if io.exists(BlackMUDlet.packagePath .. BlackMUDlet.configFile) then
-      table.load(BlackMUDlet.packagePath .. BlackMUDlet.configFile, config)
+    local loaded = {}
+    if io.exists(path .. file) then
+      table.load(path .. file, loaded)
     end
-    BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, config)
+    
+    BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, loaded or {})
   
     BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
     BlackMUDlet.Mapper.initialize(BlackMUDlet.Config.Mapper)
@@ -4847,7 +4981,7 @@ function BlackMUDlet.initialize(event)
     end
   
     initialized = true
-  
+    
   end
   
 end
@@ -4857,7 +4991,8 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysInstall", "sysInstall",
 
 
 
- -- onEnterGame
+--- code to run when entering the game
+-- called on onEnterGame, or after initialization if it appears we're already in game
 function BlackMUDlet.onEnterGame()
 
   BlackMUDlet.GUI.onEnterGame()
@@ -4868,14 +5003,15 @@ end
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.onEnterGame", "onEnterGame", BlackMUDlet.onEnterGame)
 
 
--- sysExitEvent
+
+--- Handle shutdown, primarily takes care of saving configuration data
+-- called on sysExitEvent
 function BlackMUDlet.shutdown()
   
   BlackMUDlet.Config.GUI = BlackMUDlet.GUI.Config
   BlackMUDlet.Config.Mapper = BlackMUDlet.Mapper.Config
   
-  table.save(BlackMUDlet.packagePath .. BlackMUDlet.configFile, BlackMUDlet.Config)
-  
+  table.save(Config.packagePath .. Config.configFile, Config)
   
   BlackMUDlet.GUI.shutdown()
   BlackMUDlet.Mapper.shutdown()
@@ -4886,7 +5022,8 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEve
 
 
 
--- sysUninstallPackage
+--- Clean up on uninstall, primarily making sure the main window is in a nice state
+-- called on sysUninstallPackage
 function BlackMUDlet.uninstall()
   BlackMUDlet.GUI.uninstall()
   BlackMUDlet.Mapper.uninstall()
@@ -4895,20 +5032,20 @@ end
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninstall", BlackMUDlet.uninstall)
 
 
-
-
-
-
-
-
-
-
-
--- Begin BlackMUDlet.Updater
-
+</script>
+			<eventHandlerList />
+		</Script>
+		<Script isActive="yes" isFolder="no">
+			<name>Updater</name>
+			<packageName></packageName>
+			<script>
 BlackMUDlet = BlackMUDlet or {}
+
 BlackMUDlet.Updater = BlackMUDlet.Updater or {}
+
 local Updater = BlackMUDlet.Updater
+
+local Config = BlackMUDlet.Config
 
 Updater.state = "up-to-date"
 -- up-to-date  - nothing to do
@@ -4922,32 +5059,35 @@ Updater.state = "up-to-date"
 -- intended to be called with nil unless there's a need to override
 function Updater.downloadVersion(url)
   
-  BlackMUDlet.GUI.echo("Checking for updates...")
+  BlackMUDlet.echo("Checking for updates...")
   
-  if not io.exists(BlackMUDlet.downloadPath) then
-    lfs.mkdir(BlackMUDlet.downloadPath)
+  if not io.exists(Config.downloadPath) then
+    lfs.mkdir(Config.downloadPath)
   end
     
-  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile, 
-               url or (BlackMUDlet.remoteUrl .. BlackMUDlet.versionFile))
+  downloadFile(Config.downloadPath .. Config.versionFile, 
+               url or (Config.updateUrl .. Config.versionFile))
 end
 
 
 
 --- handle the completion of a version download and prompts for action, if required
 function Updater.handleVersion()
-   if io.exists(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile) then
-    local file = io.open(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile)
+   
+  if io.exists(Config.downloadPath .. Config.versionFile) then
+    
+    local file = io.open(Config.downloadPath .. Config.versionFile)
     ver = tonumber(file:read("*all"))
  
     if ver &gt; BlackMUDlet.version then
-      BlackMUDlet.GUI.echo("Update found! Type xxx or click here to install (TODO)")
+      BlackMUDlet.echo("Update found! Type xxx or click here to install (TODO)")
       Updater.state = "pending" 
     elseif ver == BlackMUDlet.version then
-      BlackMUDlet.GUI.echo("Package is up to date")
+      BlackMUDlet.echo("Package is up to date")
       Updater.state = "up-to-date"
     else
-      BlackMUDlet.GUI.echo("Local package install is newer than server")
+      BlackMUDlet.echo("Local package install is newer than server")
+      Updater.state = "up-to-date"
     end
  
   end
@@ -4958,14 +5098,14 @@ end
 -- intended to be called with nil, but keeping a URL option as an override for manual updates
 function Updater.downloadUpdate(url)
   
-  BlackMUDlet.GUI.echo("Downloading update...")
+  BlackMUDlet.echo("Downloading update...")
   
-  if not io.exists(BlackMUDlet.downloadPath) then
-    lfs.mkdir(BlackMUDlet.downloadPath)
+  if not io.exists(Config.downloadPath) then
+    lfs.mkdir(Config.downloadPath)
   end
 
-  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.packageFile, 
-               url or (BlackMUDlet.remoteUrl .. BlackMUDlet.packageFile))
+  downloadFile(Config.downloadPath .. Config.packageFile, 
+               url or (Config.updateUrl .. Config.packageFile))
                
   Updater.state = "downloading"
   
@@ -4976,10 +5116,10 @@ end
 --- updates to the downloaded mpackage
 local function handleUpdate()
 
-  BlackMUDlet.GUI.echo("Update handler called, but not implemented")
+  BlackMUDlet.echo("Update handler called, but not implemented")
   
   if Updater.state ~= "updating" then
-    BlackMUDlet.GUI.echo("Updater not in expected state. Restart profile and try again.")
+    BlackMUDlet.echo("Updater not in expected state. Restart profile and try again.")
     return
   end
   
@@ -4993,11 +5133,11 @@ end
 local function onDownloadDone(event, file)
   
   -- if the downloaded file is a version file
-  if string.ends(file, BlackMUDlet.versionFile) then
+  if string.ends(file, Config.versionFile) then
     Updater.handleVersion()
   
   -- if the downloaded file is a BlackMUDlet package
-  elseif string.ends(file, BlackMUDlet.packageFile) then
+  elseif string.ends(file, Config.packageFile) then
     
     -- only install if we were expecting an update
     if Updater.state == "downloading" then
@@ -5010,10 +5150,10 @@ end
 
 
 local function onDownloadError(event, error, localFile, remoteFile)
-  if string.ends(localFile, BlackMUDlet.versionFile) 
-     or string.ends(localFile, BlackMUDlet.packageFile) then
-    BlackMUDlet.GUI.echo("Could not download " .. remoteFile)
-    BlackMUDlet.GUI.echo(error)
+  if string.ends(localFile, Config.versionFile) 
+     or string.ends(localFile, Config.packageFile) then
+    BlackMUDlet.echo("Could not download " .. remoteFile)
+    BlackMUDlet.echo(error)
   end
   Updater.state = "up-to-date"  -- this could be named better...
 end
