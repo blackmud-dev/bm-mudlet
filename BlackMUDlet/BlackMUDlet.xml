@@ -875,11 +875,11 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<packageName></packageName>
 			<regex></regex>
 			<Alias isActive="yes" isFolder="no">
-				<name>Set mapmode</name>
-				<script>BlackMUDlet.Mapper.setMapMode(matches[2])</script>
+				<name>Set areamode</name>
+				<script></script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui mapmode (\w+)$</regex>
+				<regex>^ui areamode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set createmode</name>
@@ -890,17 +890,46 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set exitmode</name>
-				<script>BlackMUDlet.Mapper.setExitMode(matches[2])</script>
+				<script></script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui exitmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
+				<name>Set mapmode</name>
+				<script>BlackMUDlet.Mapper.setMapMode(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui mapmode (\w+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
 				<name>Map help</name>
-				<script>BlackMUDlet.GUI.showHelp()</script>
+				<script>BlackMUDlet.Mapper.showHelp()</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui map help$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Add area</name>
+				<script>BlackMUDlet.Mapper.addAreaName(matches[2])
+</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui map addarea (.+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Remove empty area</name>
+				<script>BlackMUDlet.Mapper.deleteAreaName(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui map removearea (.+)</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Remove non-empty area</name>
+				<script>BlackMUDlet.Mapper.deleteAreaName(matches[2], true)</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui map force removearea (.+)</regex>
 			</Alias>
 		</AliasGroup>
 	</AliasPackage>
@@ -1417,9 +1446,9 @@ BlackMUDlet UI is installed:
 
 GUI.Help.help = [[&lt;LightBlue&gt;
 ********************************************************************************
-BlackMUDlet UI
+&lt;white&gt;BlackMUDlet UI
 
-This UI is a work in progress and will probably malfunction in many scenarios. 
+&lt;LightBlue&gt;This UI is a work in progress and will probably malfunction in many scenarios. 
 Feel free to report bugs or feedback to yetanotherkevin on the BlackMUD Discord.
 
 All panels are anchored to the Communication window by default and may be resized 
@@ -1456,6 +1485,7 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
     &lt;white&gt; ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;: Map creation mode
     &lt;white&gt; ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;: How to handle overlapping rooms
     &lt;white&gt; ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;: Create placeholder rooms or exit stubs in new rooms
+    &lt;white&gt; ui areamode &lt;i&gt;auto | keep&lt;reset&gt;: Auto place new rooms in correct area or keep in current area
 &lt;LightBlue&gt;    
 ********************************************************************************
 ]]
@@ -4047,7 +4077,8 @@ Mapper.Config = Mapper.Config or {}
 Mapper.Defaults = {
   mapmode    = "follow",
   createmode = "warn",
-  exitmode   = "rooms"
+  exitmode   = "rooms",
+  areamode   = "auto"
 }
 
 --- mapmode: how to respond to gmcp room data (e.g., is the mapper active or not?)
@@ -4070,6 +4101,12 @@ Mapper.supported_createmodes = {
 Mapper.supported_exitmodes = {
   "stubs", -- create exits stubs only
   "rooms"  -- create highlighted placeholder rooms
+}
+
+-- areamode: how the mapper should assign areas to new rooms
+Mapper.supported_areamodes = {
+  "auto", -- automatically place rooms in specified zone
+  "keep"  -- always place new rooms in the current zone
 }
 
 
@@ -4119,6 +4156,52 @@ Mapper.specials["fountain"] = "⛲"
 Mapper.specials["godstone"] = "🗿"
 
 
+
+--- set the mapper creation mode
+function Mapper.setMapMode(mode)
+  if table.contains(Mapper.supported_mapmodes, mode) then
+    Config.mapmode = mode
+    BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- set the mapper room creation mode
+function Mapper.setCreateMode(mode)
+  if table.contains(Mapper.supported_createmodes, mode) then
+    Config.createmode = mode
+    BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- set the mapper exit creation mode
+function Mapper.setExitMode(mode)
+  if table.contains(Mapper.supported_exitmodes, mode) then
+    Config.exitmode = mode
+    BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
+  end
+end
+
+
+
+--- set the mapper area creation mode
+function Mapper.setAreaMode(mode)
+  if table.contains(Mapper.supported_areamodes, mode) then
+    Config.exitmode = mode
+    BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
+  else
+    BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
+  end
+end
 </script>
 				<eventHandlerList />
 			</Script>
@@ -4245,69 +4328,34 @@ end
 
 
 
---- set the mapper creation mode
-function Mapper.setMapMode(mode)
-  if table.contains(Mapper.supported_mapmodes, mode) then
-    Config.mapmode = mode
-    BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
-  else
-    BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
-  end
-end
-
-
-
---- set the mapper room creation mode
-function Mapper.setCreateMode(mode)
-  if table.contains(Mapper.supported_createmodes, mode) then
-    Config.createmode = mode
-    BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
-  else
-    BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
-  end
-end
-
-
-
---- set the mapper exit creation mode
-function Mapper.setExitMode(mode)
-  if table.contains(Mapper.supported_exitmodes, mode) then
-    Config.exitmode = mode
-    BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
-  else
-    BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
-  end
-end
-
-
-
 --- create an area with the given name if it's not a duplicate
 function Mapper.addAreaName(name)
   if table.contains(getAreaTable(), name) then
-    BlackMUDlet.GUI.echo("Area with name \"" .. name .. "\" already exists.")
+    BlackMUDlet.echo("Area with name \"" .. name .. "\" already exists.")
     return
   end
   
   addAreaName(name)
-  BlackMUDlet.GUI.echo("Area \"" .. name .. "\" added with ID " .. getAreaTable()[name])
+  BlackMUDlet.echo("Area \"" .. name .. "\" added with ID " .. getAreaTable()[name])
 end
 
 
 
 --- delete the specified area if empty, or if force != nil or false
 function Mapper.deleteAreaName(name, force)
+  
   if not table.contains(getAreaTable(), name) then
-    BlackMUDlet.GUI.echo("Area \"" .. name .. "\" does not exist!")
+    BlackMUDlet.echo("Area \"" .. name .. "\" does not exist!")
     return
   end
   
   if table.size(getAreaRooms(getAreaTable()[name])) &gt; 0 and (force == nil or force == false) then
-    BlackMUDlet.GUI.echo("Area \"" .. name .. "\" is not empty, use force option to force deletion.")
+    BlackMUDlet.echo("Area \"" .. name .. "\" is not empty, use force option to force deletion.")
     return
   end
   
   deleteArea(name)
-  BlackMUDlet.GUI.echo("Deleting area \"" .. name .. "\".")
+  BlackMUDlet.echo("Deleting area \"" .. name .. "\".")
   
   updateMap()
   
@@ -4319,7 +4367,7 @@ end
 -- modified from the generic_mapper
 local function stretchMap(dir,x,y,z)
 
-    BlackMUDlet.GUI.echo("Stretching map")
+    BlackMUDlet.echo("Stretching map...")
 
     local dx,dy,dz
     if not dir then return end
@@ -4376,16 +4424,35 @@ end
 
 
 --- updates the area name for a given room
--- assume that user will set mapper areas manually
--- put the gmcp-provided area name into the user data instead
+-- caches the gmcp-provided area name into the room user data
+-- will auto set the area of the room if Config.areamode == "auto"
 local function updateAreaName(info)
 
   if info == nil then return end
   
+  -- update the room user data if necessary
   if info.area ~= getRoomUserData(info.num, "area") then
     setRoomUserData(info.num, "area", info.area)
   end
-
+  
+  -- if auto area is turned on
+  if Config.areamode == "auto" then
+   
+    -- getRoomAreaName expects an area ID, not a room ID
+    local current = getRoomAreaName(getRoomArea(info.id))
+    
+    -- check if we need to update the area
+    if current ~= info.area then
+      
+      -- check if the area already exists
+      if not getAreaTable().contains(info.area) then
+        Mapper.addAreaName(info.name)
+      end
+      
+      -- update the area
+      setRoomArea(info.area)
+    end
+  end
 end 
 
 
@@ -4935,6 +5002,68 @@ end
 </script>
 				<eventHandlerList />
 			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Help</name>
+				<packageName></packageName>
+				<script>
+local Mapper = BlackMUDlet.Mapper
+
+Mapper.Help = Mapper.Help or {}
+
+local Help = Mapper.Help
+
+Help.help = [[&lt;LightBlue&gt;
+********************************************************************************
+&lt;white&gt;BlackMUDlet Mapper&lt;reset&gt;
+&lt;LightBlue&gt;
+  The Mapper will track and display your location within the currently mapped 
+  world. If enabled, your map can be updated automatically as you explore. The 
+  Mapper will make a best effort to track your movement, but you may need to 
+  manually edit your maps as you explore.
+  
+  Please note that the BlackMUDlet Mapper is not compatible with Mudlet's built
+  in "generic_mapper" script.
+
+  &lt;LightBlue&gt;Map Mode&lt;reset&gt;: Specifies how the Mapper should handle incoming room data
+    &lt;white&gt;ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;
+      &lt;white&gt;off&lt;reset&gt;: Do nothing, map will not follow or update
+      &lt;white&gt;follow&lt;reset&gt;: Map will position will follow in game movement for known rooms
+      &lt;white&gt;update&lt;reset&gt;: Follow movement and update existing rooms, do not create new rooms
+      &lt;white&gt;create&lt;reset&gt;: Update existing rooms and create new rooms when encountered
+      
+  &lt;LightBlue&gt;Create Mode&lt;reset&gt;: Behavior when creating new rooms that might not fit nicely on map
+    &lt;white&gt;ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;
+      &lt;white&gt;skip&lt;reset&gt;: Do not create room if there's is no space in the map
+      &lt;white&gt;warn&lt;reset&gt;: Skip and print a warning to the main console
+      &lt;white&gt;stretch&lt;reset&gt;: Shift all rooms in current map to make space for the new room
+      &lt;white&gt;overlap&lt;reset&gt;: Create the new room on top of the existing room
+  
+  &lt;LightBlue&gt;Exit Mode&lt;reset&gt;: Behavior when encountering exits to unmapped rooms
+    &lt;white&gt;ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;
+      &lt;white&gt;stubs&lt;reset&gt;: Create an exit stub for each unmapped exit
+      &lt;white&gt;rooms&lt;reset&gt;: Create a highlighted placeholder room connected to each unmapped exit
+  
+  &lt;LightBlue&gt;Area Mode&lt;reset&gt;: Controls the automatic placement of rooms into different areas/maps
+    &lt;white&gt;ui areamode &lt;i&gt;auto | keep&lt;reset&gt;
+      &lt;white&gt;auto&lt;reset&gt;: Automatically place updated rooms into their MJD-specified area
+      &lt;white&gt;keep&lt;reset&gt;: Keep updated rooms in the existing area
+      
+  &lt;LightBlue&gt;Map Management&lt;reset&gt;
+    &lt;white&gt;ui map addarea &lt;i&gt;areaname&lt;reset&gt;: Add a new area with the specified name
+    &lt;white&gt;ui map removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, if empty
+    &lt;white&gt;ui map force removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, even if non-empty
+
+&lt;LightBlue&gt;********************************************************************************
+]]
+
+
+
+function Mapper.showHelp()
+  cecho(Help.help)
+end
+</script>
+				<eventHandlerList />
+			</Script>
 		</ScriptGroup>
 		<Script isActive="yes" isFolder="no">
 			<name>Package Manager</name>
@@ -4944,6 +5073,7 @@ end
 BlackMUDlet.Config = BlackMUDlet.Config or {}
 
 -- Using this was causing problem, not sure why?
+-- Everything was broken unless BlackMUDlet.Config used over Config
 --local Config = BlackMUDlet.Config
 
 
@@ -4961,8 +5091,8 @@ function BlackMUDlet.initialize()
   if initialized == false then
 
     -- make sure we at least have a valid config path before trying to load       
-    local path = Config.packagePath or BlackMUDlet.Defaults.packagePath
-    local file = Config.configFile or BlackMUDlet.Defaults.configFile
+    local path = BlackMUDlet.Config.packagePath or BlackMUDlet.Defaults.packagePath
+    local file = BlackMUDlet.Config.configFile or BlackMUDlet.Defaults.configFile
     
      -- load config data
     local loaded = {}
@@ -4970,8 +5100,10 @@ function BlackMUDlet.initialize()
       table.load(path .. file, loaded)
     end
     
+    -- fall back to defaults where needed
     BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, loaded or {})
-  
+    
+    -- initialized submodules  
     BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
     BlackMUDlet.Mapper.initialize(BlackMUDlet.Config.Mapper)
         
@@ -4994,10 +5126,8 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysInstall", "sysInstall",
 --- code to run when entering the game
 -- called on onEnterGame, or after initialization if it appears we're already in game
 function BlackMUDlet.onEnterGame()
-
   BlackMUDlet.GUI.onEnterGame()
   BlackMUDlet.Mapper.onEnterGame()
-
 end
 
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.onEnterGame", "onEnterGame", BlackMUDlet.onEnterGame)
