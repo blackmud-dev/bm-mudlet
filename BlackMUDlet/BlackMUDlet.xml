@@ -933,7 +933,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 		</AliasGroup>
 		<Alias isActive="yes" isFolder="no">
 			<name>Update UI</name>
-			<script>BlackMUDlet.Updater.downloadUpdate(BlackMUDlet.Config.updateUrl)</script>
+			<script>BlackMUDlet.Updater.downloadUpdate()</script>
 			<command></command>
 			<packageName></packageName>
 			<regex>^ui update$</regex>
@@ -947,7 +947,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.version     = 2
+BlackMUDlet.version     = 1
 
 --[[
 BlackMUDlet.packageName  = "BlackMUDlet"
@@ -4205,9 +4205,9 @@ end
 function Mapper.setAreaMode(mode)
   if table.contains(Mapper.supported_areamodes, mode) then
     Config.areamode = mode
-    BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
+    BlackMUDlet.GUI.echo("Mapper area creation mode set to &lt;white&gt;" .. mode)
   else
-    BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
+    BlackMUDlet.GUI.echo("Unknown mapper area creation mode. See &lt;white&gt;ui map help")
   end
 end
 </script>
@@ -4969,12 +4969,6 @@ local Mapper = BlackMUDlet.Mapper
 
 function Mapper.initialize(config)
 
-  if isActive("generic_mapper", "trigger") then
-    disableTrigger("generic_mapper")
-    BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
-    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
-  end
-
   -- load config, fall back on defaults
   Mapper.Config = table.update(Mapper.Defaults, config or {})
   
@@ -4987,10 +4981,13 @@ function Mapper.initialize(config)
 end
 
 
-
  -- onEnterGame
 function Mapper.onEnterGame()
-  -- do nothing 
+    if isActive("generic_mapper", "trigger") then
+    disableTrigger("generic_mapper")
+    BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
+    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
+  end
 end
 
 
@@ -5121,8 +5118,6 @@ function BlackMUDlet.initialize()
   
     initialized = true
     
-    BlackMUDlet.Updater.downloadVersion(url)
-    
   end
   
 end
@@ -5137,6 +5132,10 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysInstall", "sysInstall",
 function BlackMUDlet.onEnterGame()
   BlackMUDlet.GUI.onEnterGame()
   BlackMUDlet.Mapper.onEnterGame()
+  
+  -- check for updates
+  BlackMUDlet.Updater.downloadVersion()
+  
 end
 
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.onEnterGame", "onEnterGame", BlackMUDlet.onEnterGame)
@@ -5150,7 +5149,7 @@ function BlackMUDlet.shutdown()
   BlackMUDlet.Config.GUI = BlackMUDlet.GUI.Config
   BlackMUDlet.Config.Mapper = BlackMUDlet.Mapper.Config
   
-  table.save(Config.packagePath .. Config.configFile, Config)
+  table.save(BlackMUDlet.Config.packagePath .. BlackMUDlet.Config.configFile, BlackMUDlet.Config)
   
   BlackMUDlet.GUI.shutdown()
   BlackMUDlet.Mapper.shutdown()
@@ -5200,12 +5199,13 @@ function Updater.downloadVersion(url)
   
   BlackMUDlet.echo("Checking for updates...")
   
-  if not io.exists(Config.downloadPath) then
-    lfs.mkdir(Config.downloadPath)
+  
+  if not io.exists(BlackMUDlet.Config.downloadPath) then
+    lfs.mkdir(BlackMUDlet.Config.downloadPath)
   end
     
-  downloadFile(Config.downloadPath .. Config.versionFile, 
-               url or (Config.updateUrl .. Config.versionFile))
+  downloadFile(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile, 
+               url or (BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.versionFile))
 end
 
 
@@ -5213,20 +5213,23 @@ end
 --- handle the completion of a version download and prompts for action, if required
 function Updater.handleVersion()
    
-  if io.exists(Config.downloadPath .. Config.versionFile) then
+  if io.exists(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile) then
     
-    local file = io.open(Config.downloadPath .. Config.versionFile)
+    local file = io.open(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile)
     ver = tonumber(file:read("*all"))
  
     if ver &gt; BlackMUDlet.version then
       BlackMUDlet.echo("Update found! Type &lt;white&gt;ui update &lt;LightBlue&gt;to install")
-      Updater.state = "pending" 
+      Updater.state = "pending"
+      enableAlias("Update UI")
     elseif ver == BlackMUDlet.version then
       BlackMUDlet.echo("Package is up to date")
       Updater.state = "up-to-date"
+      disableAlias("Update UI")
     else
       BlackMUDlet.echo("Local package install is newer than server")
       Updater.state = "up-to-date"
+      disableAlias("Update UI")
     end
  
   end
@@ -5239,12 +5242,12 @@ function Updater.downloadUpdate(url)
   
   BlackMUDlet.echo("Downloading update...")
   
-  if not io.exists(Config.downloadPath) then
-    lfs.mkdir(Config.downloadPath)
+  if not io.exists(BlackMUDlet.Config.downloadPath) then
+    lfs.mkdir(BlackMUDlet.Config.downloadPath)
   end
 
-  downloadFile(Config.downloadPath .. Config.packageFile, 
-               url or (Config.updateUrl .. Config.packageFile))
+  downloadFile(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.packageFile, 
+               url or (BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.packageFile))
                
   Updater.state = "downloading"
   
@@ -5259,12 +5262,12 @@ local function handleUpdate(file)
     return
   end
 
-  BlackMUDlet.echo("Installing update...")
-  
   if Updater.state ~= "updating" then
-    BlackMUDlet.echo("Updater not in expected state. Restart profile and try again.")
+    BlackMUDlet.echo("Updater not in expected state. Restart profile and try again, or install package manually")
     return
   end
+
+  BlackMUDlet.echo("Installing update...")
   
   BlackMUDlet.shutdown()
   BlackMUDlet.uninstall()
@@ -5275,17 +5278,21 @@ end
 
 
 local function onDownloadDone(event, file)
-  
+
+  if file == nil then
+    return
+  end
+
   -- if the downloaded file is a version file
-  if string.ends(file, Config.versionFile) then
+  if string.ends(file, BlackMUDlet.Config.versionFile) then
     Updater.handleVersion()
   
   -- if the downloaded file is a BlackMUDlet package
-  elseif string.ends(file, Config.packageFile) then
+  elseif string.ends(file, BlackMUDlet.Config.packageFile) then
     
     -- only install if we were expecting an update
     if Updater.state == "downloading" then
-      Updated.handleDownload(file)
+      Updater.handleUpdate(file)
     end
   end
   
