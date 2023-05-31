@@ -876,7 +876,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<regex></regex>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set areamode</name>
-				<script></script>
+				<script>BlackMUDlet.Mapper.setAreaMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui areamode (\w+)$</regex>
@@ -890,7 +890,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set exitmode</name>
-				<script></script>
+				<script>BlackMUDlet.Mapper.setExitMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui exitmode (\w+)$</regex>
@@ -911,8 +911,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Add area</name>
-				<script>BlackMUDlet.Mapper.addAreaName(matches[2])
-</script>
+				<script>BlackMUDlet.Mapper.addAreaName(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui map addarea (.+)$</regex>
@@ -932,6 +931,13 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 				<regex>^ui map force removearea (.+)</regex>
 			</Alias>
 		</AliasGroup>
+		<Alias isActive="yes" isFolder="no">
+			<name>Update UI</name>
+			<script>BlackMUDlet.Updater.downloadUpdate(BlackMUDlet.Config.updateUrl)</script>
+			<command></command>
+			<packageName></packageName>
+			<regex>^ui update$</regex>
+		</Alias>
 	</AliasPackage>
 	<ActionPackage />
 	<ScriptPackage>
@@ -941,7 +947,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.version     = 1
+BlackMUDlet.version     = 2
 
 --[[
 BlackMUDlet.packageName  = "BlackMUDlet"
@@ -1071,7 +1077,7 @@ BlackMUDlet.GUI = BlackMUDlet.GUI or {}
 				<script>
 local GUI = BlackMUDlet.GUI
 
-GUI.version = 1
+GUI.version = 2
 
 GUI.Utils = GUI.Utils or {}
 GUI.Colors = GUI.Colors or {}
@@ -1317,7 +1323,7 @@ end</script>
 				<eventHandlerList />
 			</Script>
 			<Script isActive="yes" isFolder="no">
-				<name>Startup / Exit</name>
+				<name>Submodule Management</name>
 				<packageName></packageName>
 				<script>local GUI = BlackMUDlet.GUI
 
@@ -4074,6 +4080,8 @@ local Mapper = BlackMUDlet.Mapper
 
 Mapper.Config = Mapper.Config or {}
 
+local Config = Mapper.Config
+
 Mapper.Defaults = {
   mapmode    = "follow",
   createmode = "warn",
@@ -4196,7 +4204,7 @@ end
 --- set the mapper area creation mode
 function Mapper.setAreaMode(mode)
   if table.contains(Mapper.supported_areamodes, mode) then
-    Config.exitmode = mode
+    Config.areamode = mode
     BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
@@ -4262,7 +4270,6 @@ end
   -- verbosity
   -- auto color based on environment?
   -- auto symbol
-  -- auto move rooms to own area?
   -- auto add symbols/colors for special properties?
   
 -- TODO: potentially needed aliases (can use generic_mapper for some?)
@@ -4510,7 +4517,7 @@ local function updateExits(info)
           setRoomCoordinates(info.exits[v], dx, dy, dz)
       
           -- highlight the room as unvisited
-          markUnknown(id)
+          markUnknown(info.exits[v])
         end
       end
       
@@ -5114,6 +5121,8 @@ function BlackMUDlet.initialize()
   
     initialized = true
     
+    BlackMUDlet.Updater.downloadVersion(url)
+    
   end
   
 end
@@ -5210,7 +5219,7 @@ function Updater.handleVersion()
     ver = tonumber(file:read("*all"))
  
     if ver &gt; BlackMUDlet.version then
-      BlackMUDlet.echo("Update found! Type xxx or click here to install (TODO)")
+      BlackMUDlet.echo("Update found! Type &lt;white&gt;ui update &lt;LightBlue&gt;to install")
       Updater.state = "pending" 
     elseif ver == BlackMUDlet.version then
       BlackMUDlet.echo("Package is up to date")
@@ -5244,18 +5253,23 @@ end
 
 
 --- updates to the downloaded mpackage
-local function handleUpdate()
+local function handleUpdate(file)
 
-  BlackMUDlet.echo("Update handler called, but not implemented")
+  if file == nil then 
+    return
+  end
+
+  BlackMUDlet.echo("Installing update...")
   
   if Updater.state ~= "updating" then
     BlackMUDlet.echo("Updater not in expected state. Restart profile and try again.")
     return
   end
   
-  -- save settings
-  -- uninstall package
-  -- install package
+  BlackMUDlet.shutdown()
+  BlackMUDlet.uninstall()
+  installPackage(file)
+  
 end
 
 
@@ -5271,7 +5285,7 @@ local function onDownloadDone(event, file)
     
     -- only install if we were expecting an update
     if Updater.state == "downloading" then
-      Updated.handleDownload()
+      Updated.handleDownload(file)
     end
   end
   
