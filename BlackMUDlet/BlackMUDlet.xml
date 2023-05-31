@@ -947,18 +947,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.version     = 2
-
---[[
-BlackMUDlet.packageName  = "BlackMUDlet"
-BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
-BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
-BlackMUDlet.packageFile  = BlackMUDlet.packageName .. ".mpackage"
-BlackMUDlet.versionFile  = BlackMUDlet.packageName .. ".version"
-BlackMUDlet.configFile   = BlackMUDlet.packageName .. "_config.lua"
-BlackMUDlet.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
-]]--
-
+BlackMUDlet.version     = 1
 
 BlackMUDlet.Defaults = {}
 local Defaults = BlackMUDlet.Defaults
@@ -968,6 +957,7 @@ Defaults.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. 
 Defaults.packageFile  = BlackMUDlet.packageName .. ".mpackage"
 Defaults.versionFile  = BlackMUDlet.packageName .. ".version"
 Defaults.configFile   = BlackMUDlet.packageName .. "_config.lua"
+Defaults.mapFile      = BlackMUDlet.packageName .. "_starter.map"
 Defaults.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
 Defaults.GUI = {}
 Defaults.Mapper = {}
@@ -976,6 +966,15 @@ Defaults.Mapper = {}
 
 BlackMUDlet.Config = BlackMUDlet.Config or {}
 
+BlackMUDlet.Config.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
+BlackMUDlet.Config.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
+BlackMUDlet.Config.packageFile  = BlackMUDlet.packageName .. ".mpackage"
+BlackMUDlet.Config.versionFile  = BlackMUDlet.packageName .. ".version"
+BlackMUDlet.Config.configFile   = BlackMUDlet.packageName .. "_config.lua"
+BlackMUDlet.Config.mapFile      = BlackMUDlet.packageName .. "_starter.map"
+BlackMUDlet.Config.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
+BlackMUDlet.Config.GUI = {}
+BlackMUDlet.Config.Mapper = {}
 </script>
 			<eventHandlerList />
 		</Script>
@@ -983,7 +982,7 @@ BlackMUDlet.Config = BlackMUDlet.Config or {}
 			<name>Utils</name>
 			<packageName></packageName>
 			<script>
-BlackMUDlet = BlackMUDlet or {}
+--BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.Utils = BlackMUDlet.Utils or {}
 
@@ -1067,9 +1066,7 @@ end</script>
 			<packageName></packageName>
 			<script>BlackMUDlet = BlackMUDlet or {}
 
-BlackMUDlet.GUI = BlackMUDlet.GUI or {}
-
-</script>
+BlackMUDlet.GUI = BlackMUDlet.GUI or {}</script>
 			<eventHandlerList />
 			<Script isActive="yes" isFolder="no">
 				<name>Config</name>
@@ -1077,14 +1074,11 @@ BlackMUDlet.GUI = BlackMUDlet.GUI or {}
 				<script>
 local GUI = BlackMUDlet.GUI
 
-GUI.version = 2
-
 GUI.Utils = GUI.Utils or {}
 GUI.Colors = GUI.Colors or {}
 GUI.Config = GUI.Config or {}
 
-GUI.packageName = "BlackMUDlet"
-GUI.packagePath = getMudletHomeDir() .. "/" .. GUI.packageName .. "/"
+
 
 -- GUI.Config takes precedence
 -- Below are used at sysLoadEvent to populate any missing values
@@ -1097,7 +1091,7 @@ GUI.Defaults = {
   showWimpyBar    = "false",
   showTickNotice  = "true",
   spellWatch      = {sanctuary = true,},
-  itemdb          = GUI.packagePath .. "resources/itemdb.txt"
+  itemdb          = BlackMUDlet.Defaults.packagePath .. "resources/itemdb.txt"
 }
 
 -- TODO: font face isn't actually used anywhere
@@ -1325,8 +1319,8 @@ end</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Submodule Management</name>
 				<packageName></packageName>
-				<script>local GUI = BlackMUDlet.GUI
-
+				<script>
+local GUI = BlackMUDlet.GUI
 
 
 function BlackMUDlet.GUI.initialize(config)
@@ -1376,59 +1370,6 @@ function BlackMUDlet.GUI.uninstall()
   GUI.hideUI()
   GUI.Config.initialized = false -- this will force a reset on reinstall
 end
-
-
---[[
--- Load config and display ui
-function GUI.onStartup()
-  
-  -- load config data
-  local config = {}
-  if io.exists(GUI.packagePath .. "ui_config.lua") then
-    table.load(GUI.packagePath .. "ui_config.lua", config)
-  end
-  GUI.Config = table.update(GUI.Defaults, config)
-  
-  -- build the UI
-  -- Adjustable.Container windows save their position across restarts
-  -- EMCO panel settings are loaded in builders as needed
-  GUI.buildUI()
-  
-  -- run once code goes here
-  -- TODO: Any reason for distinct "run once" and "at install"?
-  -- TODO: Perhaps hide status bar and character info until you enter game?
-  -- TODO: If so, need to handle install while logged in
-  if not GUI.Config.initialized then
-    GUI.resetLayout()
-    GUI.buildUI() -- rebuild now that windows are correctly sized
-    GUI.WorldInfo.emco:switchTab("Help") -- show the help window on init
-    GUI.Config.initialized = true
-  end
-  
-  -- Delay welcome message so it appears after the profile loading info
-  tempTimer(1, GUI.showWelcome)
-  
-  -- In Mudlet 4.16 this isn't safe to call multiple times
-  -- https://github.com/Mudlet/Mudlet/issues/6318
-  -- Adds the "connect" menu to all adjustable containers
-  -- This modifies all Adjustable.Container windows, not just this package
-  Adjustable.Container:doAll(function(self) self:addConnectMenu() end)
-  
-end
-
-
--- Save config on exit
-function GUI.onExit()
-  table.save(GUI.packagePath .. "ui_config.lua", GUI.Config)
-  GUI.Communication.emco:save()
-  GUI.WorldInfo.emco:save()
-end
-
--- TODO: Switched these to named to avoid duplication
-registerAnonymousEventHandler("sysLoadEvent", GUI.onStartup, true)
-registerAnonymousEventHandler("sysInstallPackage", GUI.onStartup, true)
-registerAnonymousEventHandler("sysExitEvent", GUI.onExit, true)
-]]--
 </script>
 				<eventHandlerList />
 			</Script>
@@ -4080,9 +4021,9 @@ local Mapper = BlackMUDlet.Mapper
 
 Mapper.Config = Mapper.Config or {}
 
-local Config = Mapper.Config
 
-Mapper.Defaults = {
+
+BlackMUDlet.Mapper.Defaults = {
   mapmode    = "follow",
   createmode = "warn",
   exitmode   = "rooms",
@@ -4102,7 +4043,7 @@ Mapper.supported_createmodes = {
   "skip",    -- skip room when no space is available
   "warn",    -- skip room and output a warning to main console
   "stretch", -- shift all rooms in the current map (all levels) to make room
-  "overlap"  -- place the room overlappign the existing room(s)
+  "overlap"  -- place the room overlapping the existing room(s)
 }
 
 -- exitmode: how the mapper should handle exits for the current room
@@ -4948,7 +4889,7 @@ end
 				<name>Submodule Management</name>
 				<packageName></packageName>
 				<script>
-BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
+--BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
 
 local Mapper = BlackMUDlet.Mapper
 
@@ -4958,6 +4899,12 @@ function Mapper.initialize(config)
 
   -- load config, fall back on defaults
   Mapper.Config = table.update(Mapper.Defaults, config or {})
+
+  -- if no map, load the default
+  if #getRooms() == 0 then
+    BlackMUDlet.echo("No map found, downloading default map...")
+    loadMap(BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.mapFile)
+  end
   
   -- set custom environment colors
   Mapper.setCustomEnvColors()
@@ -5009,6 +4956,8 @@ local Mapper = BlackMUDlet.Mapper
 Mapper.Help = Mapper.Help or {}
 
 local Help = Mapper.Help
+
+
 
 Help.help = [[&lt;LightBlue&gt;
 ********************************************************************************
@@ -5066,10 +5015,7 @@ end
 		<Script isActive="yes" isFolder="no">
 			<name>Package Manager</name>
 			<packageName></packageName>
-			<script>BlackMUDlet = BlackMUDlet or {}
-
-BlackMUDlet.Config = BlackMUDlet.Config or {}
-
+			<script>
 -- Using this was causing problem, not sure why?
 -- Everything was broken unless BlackMUDlet.Config used over Config
 --local Config = BlackMUDlet.Config
@@ -5179,7 +5125,7 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninsta
 			<name>Updater</name>
 			<packageName></packageName>
 			<script>
-BlackMUDlet = BlackMUDlet or {}
+--BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.Updater = BlackMUDlet.Updater or {}
 
