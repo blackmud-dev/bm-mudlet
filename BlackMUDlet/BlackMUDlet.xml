@@ -947,7 +947,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.version     = 1
+BlackMUDlet.version     = 2
 
 --[[
 BlackMUDlet.packageName  = "BlackMUDlet"
@@ -1374,6 +1374,7 @@ end
 
 function BlackMUDlet.GUI.uninstall()
   GUI.hideUI()
+  GUI.Config.initialized = false -- this will force a reset on reinstall
 end
 
 
@@ -4074,8 +4075,7 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Config</name>
 				<packageName></packageName>
-				<script>BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
-
+				<script>
 local Mapper = BlackMUDlet.Mapper
 
 Mapper.Config = Mapper.Config or {}
@@ -4086,7 +4086,7 @@ Mapper.Defaults = {
   mapmode    = "follow",
   createmode = "warn",
   exitmode   = "rooms",
-  areamode   = "auto"
+  areamode   = "keep"
 }
 
 --- mapmode: how to respond to gmcp room data (e.g., is the mapper active or not?)
@@ -4168,7 +4168,7 @@ Mapper.specials["godstone"] = "🗿"
 --- set the mapper creation mode
 function Mapper.setMapMode(mode)
   if table.contains(Mapper.supported_mapmodes, mode) then
-    Config.mapmode = mode
+    Mapper.Config.mapmode = mode
     BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
@@ -4180,7 +4180,7 @@ end
 --- set the mapper room creation mode
 function Mapper.setCreateMode(mode)
   if table.contains(Mapper.supported_createmodes, mode) then
-    Config.createmode = mode
+    Mapper.Config.createmode = mode
     BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
@@ -4192,7 +4192,7 @@ end
 --- set the mapper exit creation mode
 function Mapper.setExitMode(mode)
   if table.contains(Mapper.supported_exitmodes, mode) then
-    Config.exitmode = mode
+    Mapper.Config.exitmode = mode
     BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
@@ -4204,7 +4204,7 @@ end
 --- set the mapper area creation mode
 function Mapper.setAreaMode(mode)
   if table.contains(Mapper.supported_areamodes, mode) then
-    Config.areamode = mode
+    Mapper.Config.areamode = mode
     BlackMUDlet.GUI.echo("Mapper area creation mode set to &lt;white&gt;" .. mode)
   else
     BlackMUDlet.GUI.echo("Unknown mapper area creation mode. See &lt;white&gt;ui map help")
@@ -4280,13 +4280,7 @@ end
   -- get path?
   -- color tools? Color by zone, environment, room name, user defined, etc.
 
-BlackMUDlet = BlackMUDlet or {}
-
-BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
-
 local Mapper = BlackMUDlet.Mapper
-
-local Config = Mapper.Config
 
 
 
@@ -4316,7 +4310,7 @@ local short_dir = {
 
 --- highlights the given room as "unknown"
 -- used to ensure consistent style applied on room creation and on map load
-local function markUnknown(id)
+function Mapper.markUnknown(id)
   local r,g,b = unpack(color_table.gold)
   local br,bg,bb = unpack(color_table.black)
   highlightRoom(id, r, g, b, br, bg, bb, 0.75, 255, 255)
@@ -4443,21 +4437,21 @@ local function updateAreaName(info)
   end
   
   -- if auto area is turned on
-  if Config.areamode == "auto" then
+  if Mapper.Config.areamode == "auto" then
    
     -- getRoomAreaName expects an area ID, not a room ID
-    local current = getRoomAreaName(getRoomArea(info.id))
+    local current = getRoomAreaName(getRoomArea(info.num))
     
     -- check if we need to update the area
     if current ~= info.area then
       
       -- check if the area already exists
-      if not getAreaTable().contains(info.area) then
-        Mapper.addAreaName(info.name)
+      if not table.contains(getAreaTable(), info.area) then
+        Mapper.addAreaName(info.area)
       end
       
       -- update the area
-      setRoomArea(info.area)
+      setRoomArea(info.num, info.area)
     end
   end
 end 
@@ -4483,8 +4477,8 @@ local function updateExits(info)
       
       -- if the room at the exit does not already exist we need to create it
       if roomExists(info.exits[v]) == false
-        and Config.mapmode == "create" 
-        and Config.exitmode == "rooms" then
+        and Mapper.Config.mapmode == "create" 
+        and Mapper.Config.exitmode == "rooms" then
         
         -- get the coordinates of the new room
         local dx,dy,dz = translateCoords(v, x, y, z)
@@ -4494,16 +4488,16 @@ local function updateExits(info)
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
           
-          if Config.createmode == "stretch" then
+          if Mapper.Config.createmode == "stretch" then
             -- shift rooms to make space
             stretchMap(v, dx, dy, dz)
           end
           
           -- skip room creation if it doesn't fit on the map
-          if Config.createmode == "warn" then
+          if Mapper.Config.createmode == "warn" then
             BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
             skip = true
-          elseif Config.createmode == "skip" then
+          elseif Mapper.Config.createmode == "skip" then
             skip = true
           end          
           
@@ -4517,7 +4511,7 @@ local function updateExits(info)
           setRoomCoordinates(info.exits[v], dx, dy, dz)
       
           -- highlight the room as unvisited
-          markUnknown(info.exits[v])
+          Mapper.markUnknown(info.exits[v])
         end
       end
       
@@ -4617,16 +4611,16 @@ local function tryCreateRoom(info)
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
           
-        if Config.createmode == "stretch" then
+        if Mapper.Config.createmode == "stretch" then
           -- shift rooms to make space
           stretchMap(dir, dx, dy, dz)
         end
           
         -- skip room creation if it doesn't fit on the map
-        if Config.createmode == "warn" then
+        if Mapper.Config.createmode == "warn" then
           BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. dir .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
           return
-        elseif Config.createmode == "skip" then
+        elseif Mapper.Config.createmode == "skip" then
           return
         end          
           
@@ -4647,7 +4641,7 @@ end
 --- handle the current gmcp room info
 local function handleGmcpRoomData()
 
-  if Config.mapmode == "off" then
+  if Mapper.Config.mapmode == "off" then
     return
   end
 
@@ -4662,14 +4656,14 @@ local function handleGmcpRoomData()
   BlackMUDlet.GUI.echo("GMCP Room Info for " .. info.num .. " received by Mapper")
 
   -- if the current room doesn't exist on the map, see if we can create and connect it to a known room
-  if roomExists(info.num) == false and Config.mapmode == "create" then
+  if roomExists(info.num) == false and Mapper.Config.mapmode == "create" then
     tryCreateRoom(info)
   end
 
   -- will currently only extend the map from a known room
   if roomExists(info.num) then
   
-    if Config.mapmode == "update" or Config.mapmode == "create" then
+    if Mapper.Config.mapmode == "update" or Mapper.Config.mapmode == "create" then
       
       updateRoomName(info)
       updateAreaName(info)
@@ -4700,7 +4694,7 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.gmcpMapper", "gmcp.Room", 
 --- deletes the currently selected room and replaces with one containing the current gmcp data
 -- will return an error if current gmcp data already exists in map, or if multiple selected
 -- intended to be called from a right click menu
-local function replaceCurrentRoom()
+function Mapper.replaceCurrentRoom()
 
   local info
   
@@ -4743,10 +4737,6 @@ local function replaceCurrentRoom()
 
 end
 
--- add a replace room option to the right click menu
-addMapEvent("mapUtils.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
-registerNamedEventHandler("BlackMUDlet", "mapUtils.replaceRoom", "replaceRoom", replaceCurrentRoom)
-
 
 
 --- Highlight any room with the name "Unknown"
@@ -4754,7 +4744,7 @@ registerNamedEventHandler("BlackMUDlet", "mapUtils.replaceRoom", "replaceRoom", 
 function Mapper.highlightUnknown()
   for id,name in pairs(getRooms()) do
     if name == "Unknown" then
-     markUnknown(id)
+      Mapper.markUnknown(id)
     end
   end
 end
@@ -4871,9 +4861,6 @@ function mapUtils.goto()
   send("goto " .. selected["center"], false)
 end
 
-addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: Goto room")
-registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
-
 
 
 --- List any room with the name "Unknown"
@@ -4977,6 +4964,13 @@ function Mapper.initialize(config)
   
   -- Highlight any rooms with the name "Unknown"
   Mapper.highlightUnknown()
+  
+  -- add a replace room option to the right click menu
+  addMapEvent("Mapper.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
+  registerNamedEventHandler("BlackMUDlet", "Mapper.replaceRoom", "replaceRoom", BlackMUDlet.Mapper.replaceCurrentRoom)
+
+  addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: Goto room")
+  registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
   
 end
 
@@ -5104,8 +5098,13 @@ function BlackMUDlet.initialize()
       table.load(path .. file, loaded)
     end
     
-    -- fall back to defaults where needed
-    BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, loaded or {})
+    -- if no config file then use what's in memory, falling back to defaults
+    if table.is_empty(loaded) or loaded == nil then
+      BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, BlackMUDlet.Config)
+    else
+      -- use loaded config, falling back to defaults
+      BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, loaded or {})
+    end
     
     -- initialized submodules  
     BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
@@ -5113,7 +5112,7 @@ function BlackMUDlet.initialize()
         
     -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
     if gmcp and gmcp.Room then
-      onEnterGame()
+      BlackMUDlet.onEnterGame()
     end
   
     initialized = true
@@ -5165,6 +5164,9 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEve
 function BlackMUDlet.uninstall()
   BlackMUDlet.GUI.uninstall()
   BlackMUDlet.Mapper.uninstall()
+  uninstallPackage(BlackMUDlet.packageName)
+  
+  BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
 end
 
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninstall", BlackMUDlet.uninstall)
@@ -5256,7 +5258,7 @@ end
 
 
 --- updates to the downloaded mpackage
-local function handleUpdate(file)
+function Updater.handleUpdate(file)
 
   if file == nil then 
     return
@@ -5292,6 +5294,7 @@ local function onDownloadDone(event, file)
     
     -- only install if we were expecting an update
     if Updater.state == "downloading" then
+      Updater.state = "updating"
       Updater.handleUpdate(file)
     end
   end
