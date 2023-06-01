@@ -931,7 +931,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 				<regex>^ui map force removearea (.+)</regex>
 			</Alias>
 		</AliasGroup>
-		<Alias isActive="yes" isFolder="no">
+		<Alias isActive="no" isFolder="no">
 			<name>Update UI</name>
 			<script>BlackMUDlet.Updater.downloadUpdate()</script>
 			<command></command>
@@ -4889,8 +4889,8 @@ function Mapper.initialize(config)
 
   -- if no map, load the default
   if #getRooms() == 0 then
-    BlackMUDlet.echo("No map found, downloading default map...")
-    loadMap(BlackMUDlet.updateUrl .. BlackMUDlet.mapFile)
+    BlackMUDlet.echo("No map found, loading default map...")
+    loadMap(BlackMUDlet.packagePath .. "resources/" .. BlackMUDlet.mapFile)
   end
   
   -- set custom environment colors
