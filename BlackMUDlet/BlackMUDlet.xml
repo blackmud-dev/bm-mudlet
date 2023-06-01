@@ -955,7 +955,7 @@ BlackMUDlet.packageFile  = BlackMUDlet.packageName .. ".mpackage"
 BlackMUDlet.versionFile  = BlackMUDlet.packageName .. ".version"
 BlackMUDlet.configFile   = BlackMUDlet.packageName .. "_config.lua"
 BlackMUDlet.mapFile      = BlackMUDlet.packageName .. "_starter.map"
-BlackMUDlet.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
+BlackMUDlet.updateUrl    = "https://github.com/blackmud-dev/bm-mudlet/raw/main/"
 
 
 
