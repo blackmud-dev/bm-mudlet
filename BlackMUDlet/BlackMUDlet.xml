@@ -946,35 +946,22 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<packageName></packageName>
 			<script>BlackMUDlet = BlackMUDlet or {}
 
-BlackMUDlet.packageName = "BlackMUDlet"
-BlackMUDlet.version     = 1
+BlackMUDlet.packageName  = "BlackMUDlet"
+BlackMUDlet.version      = 2
 
-BlackMUDlet.Defaults = {}
-local Defaults = BlackMUDlet.Defaults
-
-Defaults.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
-Defaults.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
-Defaults.packageFile  = BlackMUDlet.packageName .. ".mpackage"
-Defaults.versionFile  = BlackMUDlet.packageName .. ".version"
-Defaults.configFile   = BlackMUDlet.packageName .. "_config.lua"
-Defaults.mapFile      = BlackMUDlet.packageName .. "_starter.map"
-Defaults.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
-Defaults.GUI = {}
-Defaults.Mapper = {}
+BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
+BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
+BlackMUDlet.packageFile  = BlackMUDlet.packageName .. ".mpackage"
+BlackMUDlet.versionFile  = BlackMUDlet.packageName .. ".version"
+BlackMUDlet.configFile   = BlackMUDlet.packageName .. "_config.lua"
+BlackMUDlet.mapFile      = BlackMUDlet.packageName .. "_starter.map"
+BlackMUDlet.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
 
 
 
 BlackMUDlet.Config = BlackMUDlet.Config or {}
-
-BlackMUDlet.Config.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
-BlackMUDlet.Config.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
-BlackMUDlet.Config.packageFile  = BlackMUDlet.packageName .. ".mpackage"
-BlackMUDlet.Config.versionFile  = BlackMUDlet.packageName .. ".version"
-BlackMUDlet.Config.configFile   = BlackMUDlet.packageName .. "_config.lua"
-BlackMUDlet.Config.mapFile      = BlackMUDlet.packageName .. "_starter.map"
-BlackMUDlet.Config.updateUrl    = "file:///" .. getMudletHomeDir() .. "/BlackMUDlet Update Test/"
-BlackMUDlet.Config.GUI = {}
-BlackMUDlet.Config.Mapper = {}
+BlackMUDlet.Config.GUI = BlackMUDlet.Config.GUI or {}
+BlackMUDlet.Config.Mapper = BlackMUDlet.Config.Mapper or {}
 </script>
 			<eventHandlerList />
 		</Script>
@@ -1091,7 +1078,7 @@ GUI.Defaults = {
   showWimpyBar    = "false",
   showTickNotice  = "true",
   spellWatch      = {sanctuary = true,},
-  itemdb          = BlackMUDlet.Defaults.packagePath .. "resources/itemdb.txt"
+  itemdb          = BlackMUDlet.packagePath .. "resources/itemdb.txt"
 }
 
 -- TODO: font face isn't actually used anywhere
@@ -4424,7 +4411,7 @@ local function updateExits(info)
         -- get the coordinates of the new room
         local dx,dy,dz = translateCoords(v, x, y, z)
         
-        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
+--        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
         
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
@@ -4531,7 +4518,7 @@ end
 local function tryCreateRoom(info)
 
   if roomExists(info.num) then
-    BlackMUDlet.GUI.echo("Attempting to create new room, but room " .. info.num .. ", already exists in map!")
+--    BlackMUDlet.GUI.echo("Attempting to create new room, but room " .. info.num .. ", already exists in map!")
     return
   end
   
@@ -4547,7 +4534,7 @@ local function tryCreateRoom(info)
       -- get the coordinates of the new room
       local dx,dy,dz = translateCoords(reverse_dir[dir], x, y, z)
         
-        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
+--        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
         
         -- check if if a room already exists at the new position
         if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
@@ -4594,7 +4581,7 @@ local function handleGmcpRoomData()
     return
   end
   
-  BlackMUDlet.GUI.echo("GMCP Room Info for " .. info.num .. " received by Mapper")
+--  BlackMUDlet.GUI.echo("GMCP Room Info for " .. info.num .. " received by Mapper")
 
   -- if the current room doesn't exist on the map, see if we can create and connect it to a known room
   if roomExists(info.num) == false and Mapper.Config.mapmode == "create" then
@@ -4903,7 +4890,7 @@ function Mapper.initialize(config)
   -- if no map, load the default
   if #getRooms() == 0 then
     BlackMUDlet.echo("No map found, downloading default map...")
-    loadMap(BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.mapFile)
+    loadMap(BlackMUDlet.updateUrl .. BlackMUDlet.mapFile)
   end
   
   -- set custom environment colors
@@ -4916,7 +4903,7 @@ function Mapper.initialize(config)
   addMapEvent("Mapper.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
   registerNamedEventHandler("BlackMUDlet", "Mapper.replaceRoom", "replaceRoom", BlackMUDlet.Mapper.replaceCurrentRoom)
 
-  addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: Goto room")
+  addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: (Imm) Goto room")
   registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
   
 end
@@ -5034,9 +5021,8 @@ function BlackMUDlet.initialize()
 
   if initialized == false then
 
-    -- make sure we at least have a valid config path before trying to load       
-    local path = BlackMUDlet.Config.packagePath or BlackMUDlet.Defaults.packagePath
-    local file = BlackMUDlet.Config.configFile or BlackMUDlet.Defaults.configFile
+    local path = BlackMUDlet.packagePath
+    local file = BlackMUDlet.configFile
     
      -- load config data
     local loaded = {}
@@ -5044,15 +5030,9 @@ function BlackMUDlet.initialize()
       table.load(path .. file, loaded)
     end
     
-    -- if no config file then use what's in memory, falling back to defaults
-    if table.is_empty(loaded) or loaded == nil then
-      BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, BlackMUDlet.Config)
-    else
-      -- use loaded config, falling back to defaults
-      BlackMUDlet.Config = table.update(BlackMUDlet.Defaults, loaded or {})
-    end
-    
-    -- initialized submodules  
+    BlackMUDlet.Config = table.update(BlackMUDlet.Config, loaded or {})
+        
+    -- initialize submodules  
     BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
     BlackMUDlet.Mapper.initialize(BlackMUDlet.Config.Mapper)
         
@@ -5094,7 +5074,7 @@ function BlackMUDlet.shutdown()
   BlackMUDlet.Config.GUI = BlackMUDlet.GUI.Config
   BlackMUDlet.Config.Mapper = BlackMUDlet.Mapper.Config
   
-  table.save(BlackMUDlet.Config.packagePath .. BlackMUDlet.Config.configFile, BlackMUDlet.Config)
+  table.save(BlackMUDlet.packagePath .. BlackMUDlet.configFile, BlackMUDlet.Config)
   
   BlackMUDlet.GUI.shutdown()
   BlackMUDlet.Mapper.shutdown()
@@ -5148,12 +5128,12 @@ function Updater.downloadVersion(url)
   BlackMUDlet.echo("Checking for updates...")
   
   
-  if not io.exists(BlackMUDlet.Config.downloadPath) then
-    lfs.mkdir(BlackMUDlet.Config.downloadPath)
+  if not io.exists(BlackMUDlet.downloadPath) then
+    lfs.mkdir(BlackMUDlet.downloadPath)
   end
     
-  downloadFile(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile, 
-               url or (BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.versionFile))
+  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile, 
+               url or (BlackMUDlet.updateUrl .. BlackMUDlet.versionFile))
 end
 
 
@@ -5161,9 +5141,9 @@ end
 --- handle the completion of a version download and prompts for action, if required
 function Updater.handleVersion()
    
-  if io.exists(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile) then
+  if io.exists(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile) then
     
-    local file = io.open(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.versionFile)
+    local file = io.open(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile)
     ver = tonumber(file:read("*all"))
  
     if ver &gt; BlackMUDlet.version then
@@ -5190,12 +5170,12 @@ function Updater.downloadUpdate(url)
   
   BlackMUDlet.echo("Downloading update...")
   
-  if not io.exists(BlackMUDlet.Config.downloadPath) then
-    lfs.mkdir(BlackMUDlet.Config.downloadPath)
+  if not io.exists(BlackMUDlet.downloadPath) then
+    lfs.mkdir(BlackMUDlet.downloadPath)
   end
 
-  downloadFile(BlackMUDlet.Config.downloadPath .. BlackMUDlet.Config.packageFile, 
-               url or (BlackMUDlet.Config.updateUrl .. BlackMUDlet.Config.packageFile))
+  downloadFile(BlackMUDlet.downloadPath .. BlackMUDlet.packageFile, 
+               url or (BlackMUDlet.updateUrl .. BlackMUDlet.packageFile))
                
   Updater.state = "downloading"
   
@@ -5232,11 +5212,11 @@ local function onDownloadDone(event, file)
   end
 
   -- if the downloaded file is a version file
-  if string.ends(file, BlackMUDlet.Config.versionFile) then
+  if string.ends(file, BlackMUDlet.versionFile) then
     Updater.handleVersion()
   
   -- if the downloaded file is a BlackMUDlet package
-  elseif string.ends(file, BlackMUDlet.Config.packageFile) then
+  elseif string.ends(file, BlackMUDlet.packageFile) then
     
     -- only install if we were expecting an update
     if Updater.state == "downloading" then
