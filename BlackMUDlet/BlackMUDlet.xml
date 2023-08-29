@@ -438,7 +438,7 @@ local ignoreList = [[
 				<colorTriggerBgColor>#000000</colorTriggerBgColor>
 				<regexCodeList />
 				<regexCodePropertyList />
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>Affecting Spell List</name>
 					<script>-- TODO: Replace this with gmcp when available
 
@@ -461,7 +461,7 @@ BlackMUDlet.GUI.Buffs.update()</script>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>Clear Spell Window</name>
 					<script>-- TODO: Replace this with gmcp when available
 
@@ -485,7 +485,7 @@ BlackMUDlet.GUI.Buffs.update()</script>
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
-			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+			<TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 				<name>Group</name>
 				<script></script>
 				<triggerType>0</triggerType>
@@ -1416,7 +1416,7 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
   &lt;LightBlue&gt;Group:
     &lt;white&gt;ui groupaction &lt;i&gt;&lt;action&gt;&lt;reset&gt;: set action when clicking on group member
     
-  &lt;LightBlue&gt;Mapper:
+  &lt;LightBlue&gt;Mapper: (see &lt;white&gt;ui map help&lt;LightBlue&gt; for more details)
     &lt;white&gt; ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;: Map creation mode
     &lt;white&gt; ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;: How to handle overlapping rooms
     &lt;white&gt; ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;: Create placeholder rooms or exit stubs in new rooms
@@ -3347,7 +3347,7 @@ function Buffs.buildPanel(parent)
   
   Buffs.update()
   
-  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.General.Base", GUI.Buffs.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.Char.Spells", GUI.Buffs.update)
   
 end
 
@@ -3397,57 +3397,67 @@ debuffs["web"] = true
 
 function Buffs.update()
 
-  Buffs.console:clear()
-  
-  --Buffs.console:cecho("\n")
-  Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
-  Buffs.console:cecho("\n")
-  
-  local watchList = table.deepcopy(GUI.Config.spellWatch)
-  
-  if Buffs.affecting == {} then
-    Buffs.console:cecho("  None.")
-  end
-  
-  for k,v in pairs(Buffs.affecting) do
+  if gmcp and gmcp.Char and gmcp.Char.Spells then
     
-    local output = ""
+    -- deep copy so we can sort without messing up gmcp table
+    local Spells = table.deepcopy(gmcp.Char.Spells)
     
-    if watchList[k] then
-      watchList[k] = nil
-      output = "  &lt;green&gt;" .. k .. "\n"
-    elseif debuffs[k] then
-      output = "  &lt;red&gt;" .. k .. "\n"    
-    else
-      output = "  " .. k .. "\n"
+    Buffs.console:clear()
+    Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
+    Buffs.console:cecho("\n")
+    
+    local watchList = table.deepcopy(GUI.Config.spellWatch)
+    
+    if table.size(Spells) == 0 then
+      Buffs.console:cecho("  None.")
     end
     
-    -- output as a link where clicking toggles watchlist status
-    Buffs.console:cechoLink(output, 
-      function() BlackMUDlet.GUI.Buffs.updateSpellWatch(k) end, 
-      "",
-      true
-    )
+    table.sort(Spells, function(a,b) return a.duration &lt; b.duration end)
     
-  end
-  
-  if watchList ~= {} then
-    
-    Buffs.console:cecho("\n")
-    Buffs.console:cecho("Missing:\n")
-    Buffs.console:cecho("\n")
-   
-    for k,v in pairs(watchList) do
-      local color = (k == "sanctuary" and "&lt;red&gt;") or "&lt;yellow&gt;"
-      Buffs.console:cechoLink(color .. "  " .. k .. "\n",
-        [[send("cast ']] .. k .. [[' me")]],
+    for _, spell in ipairs(Spells) do
+      
+      local output = ""
+
+      if spell.duration &lt; 2 then
+        output = "&lt;i&gt;&lt;yellow&gt;"
+      elseif watchList[spell.name] then
+        output = "&lt;green&gt;"
+      elseif debuffs[spell.name] then
+        output = "&lt;red&gt;"
+      end
+      
+      output = output .. " " .. spell.name .. " (" .. spell.duration .. ")\n"
+        
+      -- output as a link where clicking toggles watchlist status
+      Buffs.console:cechoLink(output, 
+        function() BlackMUDlet.GUI.Buffs.updateSpellWatch(spell.name) end, 
         "",
         true
-      )
-    end     
-  
-  end
-  
+      )        
+
+      if watchList[spell.name] then
+        watchList[spell.name] = nil
+      end
+    end
+    
+
+    if watchList ~= {} then
+      
+      Buffs.console:cecho("\n")
+      Buffs.console:cecho("Missing:\n")
+      Buffs.console:cecho("\n")
+     
+      for k,v in pairs(watchList) do
+        local color = (k == "sanctuary" and "&lt;red&gt;") or "&lt;yellow&gt;"
+        Buffs.console:cechoLink(color .. " " .. k .. "\n",
+          [[send("cast ']] .. k .. [[' me")]],
+          "",
+          true
+        )
+      end     
+ 
+    end
+  end  
 end
 
 </script>
@@ -3494,8 +3504,8 @@ function Group.buildPanel(parent)
   
   Group.update()
   
-  -- TODO: Update with proper event when implemented
-  --registerNamedEventHandler("BlackMUDlet", "GUI.Group", "gmcp.Char.Base", GUI.Group.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Group", "gmcp.Char.Group", GUI.Group.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Charms", "gmcp.Char.Charms", GUI.Group.update)
   
 end
 
@@ -3525,34 +3535,73 @@ function Group.update()
 
   Group.console:clear()
    
-  Group.console:cechoLink("\nYour group consists of:\n", [[send("group",false)]], "", true)
+  Group.console:cechoLink("Your group consists of:", [[send("group",false)]], "", true)
   
-  if Group.members == {} then
-    Group.console:cecho("\n None.")
-  end
+  if gmcp and gmcp.Char and gmcp.Char.Group then
   
-  for name, status in pairs(Group.members) do
+    local group = gmcp.Char.Group
+  
+    if Group.members == {} then
+      Group.console:cecho("\n None.")
+    end
     
-    local output
-    output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
-    name, 
-    string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
-    BlackMUDlet.GUI.Utils.getBadnessLevel(100 - status.hp, 100),
-    status.hp,
-    string.rep(' ', 3 - #tostring(status.hp)), -- pad hp to 3 digits for consistent spacing
-    BlackMUDlet.GUI.Utils.getBadnessLevel(100 - status.mv, 100),
-    status.mv)
-
-    Group.console:dechoLink(
-      output,                                                       -- link text
-      [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
-      "",                                                           -- hint text
-      true                                                          -- preserve font style
-    )
+    for _, member in ipairs(group) do
+    
+      local name = member.name or member.leader
+      
+      local output
+      output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+        name, 
+        string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
+        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.HP_Per, 100),
+        member.HP_Per,
+        string.rep(' ', 3 - #tostring(member.HP_Per)), -- pad hp to 3 digits for consistent spacing
+        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.MV_Per, 100),
+        member.MV_Per
+      )
   
+      Group.console:dechoLink(
+        output,                                                       -- link text
+        [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
+        "",                                                           -- hint text
+        true                                                          -- preserve font style
+      )
+    
+    end
+    
+    Group.console:echo("\n ")
   end
   
-  Group.console:echo("\n ")
+  if gmcp and gmcp.Char and gmcp.Char.Charms then
+  
+    local charms = gmcp.Char.Charms
+    
+    Group.console:echo("\nCharms:")
+    
+    for _, charm in ipairs(charms) do
+    
+      local output
+      output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+        charm.charm, 
+        string.rep(' ', 11 - #charm.charm), -- pad name to a constant width (10 + 1 space) for alignment
+        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.health, 100),
+        charm.health,
+        string.rep(' ', 3 - #tostring(charm.health)), -- pad hp to 3 digits for consistent spacing
+        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.movement, 100),
+        charm.movement
+      )
+      
+      Group.console:dechoLink(
+        output,                                                       -- link text
+        [[send("]] .. GUI.Config.groupAction .. " " .. charm.charm ..[[")]], -- action on click
+        "",                                                           -- hint text
+        true                                                          -- preserve font style
+      )
+    
+    end
+  end
+  
+  --Group.console:echo("\n ")
   
 end
 </script>
@@ -4404,7 +4453,7 @@ local function updateExits(info)
     if info.exits[v] then
       
       -- if the room at the exit does not already exist we need to create it
-      if roomExists(info.exits[v]) == false
+      if roomExists(info.exits[v]) == false and info.exits[v] ~= 0
         and Mapper.Config.mapmode == "create" 
         and Mapper.Config.exitmode == "rooms" then
         
@@ -4891,6 +4940,7 @@ function Mapper.initialize(config)
   if #getRooms() == 0 then
     BlackMUDlet.echo("No map found, loading default map...")
     loadMap(BlackMUDlet.packagePath .. "resources/" .. BlackMUDlet.mapFile)
+    Mapper.handleGmcpRoomData() -- reprocess any current GMCP data to update map
   end
   
   -- set custom environment colors
@@ -4903,6 +4953,7 @@ function Mapper.initialize(config)
   addMapEvent("Mapper.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
   registerNamedEventHandler("BlackMUDlet", "Mapper.replaceRoom", "replaceRoom", BlackMUDlet.Mapper.replaceCurrentRoom)
 
+  -- add a teleport option to the right click menu
   addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: (Imm) Goto room")
   registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
   
