@@ -947,7 +947,7 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName  = "BlackMUDlet"
-BlackMUDlet.version      = 2
+BlackMUDlet.version      = 3
 
 BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
 BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
