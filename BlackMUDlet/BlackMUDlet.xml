@@ -2905,7 +2905,7 @@ function GUI.Mapper.buildPanel(parent)
   
   registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.GUI.Mapper", "BlackMUDlet.Mapper.configUpdate", Mapper.update)
   
-  Mapper.update()
+  --Mapper.update()
     
 end
 
@@ -2973,7 +2973,7 @@ local translate = {
 
 function Mapper.update()
 
-  local config = BlackMUDlet.Mapper.Config
+  local config = BlackMUDlet.Mapper.Config or {}
 
 
   --Mapper.mapModeButton:setStyleSheet(buttonStyle)
@@ -5157,6 +5157,7 @@ function Mapper.initialize(config)
 
   -- load config, fall back on defaults
   Mapper.Config = table.update(Mapper.Defaults, config or {})
+  raiseEvent("BlackMUDlet.Mapper.configUpdate")
 
   -- if no map, load the default
   if #getRooms() == 0 then
