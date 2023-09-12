@@ -423,7 +423,7 @@ local ignoreList = [[
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
-			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+			<TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 				<name>Buffs</name>
 				<script></script>
 				<triggerType>0</triggerType>
@@ -2712,10 +2712,10 @@ function Communication.buildPanel(parent)
       consoles = {
         "All",
         "Local",
+        "Private",
         "Group",
         "Global",
         "OOC",
-        "Private",
         "Other",
       },
       inactiveTabCSS = GUI.inactiveTabCSS,
@@ -2788,13 +2788,27 @@ end</script>
 						<packageName></packageName>
 						<script>
 local GUI = BlackMUDlet.GUI
+local Mapper = GUI.Mapper
+
+
+local buttonStyle = [[
+    background-color: ]] .. GUI.Colors.darkGrey .. [[;
+    border-width: 1px;
+    border-color: ]] .. GUI.Colors.grey .. [[;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 2px;
+    margin: 2px;
+  ]]
 
 
 function GUI.Mapper.buildPanel(parent)
 
- GUI.Mapper.map = Geyser.Mapper:new(
+  local buttonBarHeight = 25
+
+  Mapper.panel = Geyser.Container:new(
     {
-      name = "BlackMUDlet.GUI.Mapper.map",
+      name = "BlackMUDlet.GUI.Mapper.panel",
       x = 0,
       y = 0,
       width = "100%",
@@ -2802,9 +2816,185 @@ function GUI.Mapper.buildPanel(parent)
     },
     parent
   )
+
+
+  Mapper.map = Geyser.Mapper:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.map",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = -buttonBarHeight,
+    },
+    Mapper.panel
+  )
   
+  Mapper.buttonBox = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.panel",
+      x = 0,
+      y = -buttonBarHeight,
+      width = "100%",
+      height = buttonBarHeight,
+    },
+    Mapper.panel
+  )
+  
+  
+  
+  Mapper.mapModeButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.mapModeButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Mapper.buttonBox
+  )
+  Mapper.mapModeButton:setStyleSheet(buttonStyle)
+  Mapper.mapModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map mode")
+  Mapper.mapModeButton:echo("Map Mode: ")
+  
+  
+  Mapper.createModeButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.createModeButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Mapper.buttonBox
+  )
+  Mapper.createModeButton:setStyleSheet(buttonStyle)
+  Mapper.createModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "create mode")
+  Mapper.createModeButton:echo("Room Overlap: ")
+  
+  
+  Mapper.exitModeButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.exitModeButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Mapper.buttonBox
+  )
+  Mapper.exitModeButton:setStyleSheet(buttonStyle)
+  Mapper.exitModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "exit mode")
+  Mapper.exitModeButton:echo("Exit Mode:")
+  
+  
+  Mapper.areaModeButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.areaModeButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Mapper.buttonBox
+  )
+  Mapper.areaModeButton:setStyleSheet(buttonStyle)
+  Mapper.areaModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "area mode")
+  Mapper.areaModeButton:echo("Area Mode")
+  
+--[[  
+  Mapper.helpButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.helpButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+    },
+    Mapper.buttonBox
+  )
+  Mapper.helpButton:setStyleSheet(buttonStyle)
+  Mapper.helpButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map help")
+  Mapper.helpButton:echo("&lt;center&gt;Mapper Help")
+]]--  
+
+  
+  registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.GUI.Mapper", "BlackMUDlet.Mapper.configUpdate", Mapper.update)
+  
+  Mapper.update()
+    
 end
-  </script>
+
+
+
+local function getNext(t, v)
+  local i = table.index_of(t,v) + 1
+  if i &gt; table.size(t) then i = 1 end
+  return t[i]
+end
+
+
+
+function Mapper.handleClick(button)
+
+  if button == "map mode" then    
+    local next = getNext(BlackMUDlet.Mapper.supported_mapmodes, BlackMUDlet.Mapper.Config.mapmode)
+    BlackMUDlet.Mapper.setMapMode(next)    
+  
+  elseif button == "create mode" then
+    local next = getNext(BlackMUDlet.Mapper.supported_createmodes, BlackMUDlet.Mapper.Config.createmode)
+    BlackMUDlet.Mapper.setCreateMode(next)    
+  
+  elseif button == "exit mode" then 
+    local next = getNext(BlackMUDlet.Mapper.supported_exitmodes, BlackMUDlet.Mapper.Config.exitmode)
+    BlackMUDlet.Mapper.setExitMode(next)    
+  
+  elseif button == "area mode" then
+    local next = getNext(BlackMUDlet.Mapper.supported_areamodes, BlackMUDlet.Mapper.Config.areamode)
+    BlackMUDlet.Mapper.setAreaMode(next)    
+  
+  elseif button == "map help" then
+    BlackMUDlet.Mapper.showHelp()
+  else
+    BlackMudlet.GUI.echo("Unknown Mapper button bar event received. This should never happen.")
+  end
+
+end</script>
+						<eventHandlerList />
+					</Script>
+					<Script isActive="yes" isFolder="no">
+						<name>Update Mapper Panel</name>
+						<packageName></packageName>
+						<script>local GUI = BlackMUDlet.GUI
+local Mapper = GUI.Mapper
+
+
+local translate = {
+  off     = "Mapper Off",
+  follow  = "Follow Movement",
+  update  = "Update Existing",
+  create  = "Create New Rooms",
+  
+  skip    = "Skip Overlapping",
+  warn    = "Skip and Warn",
+  stretch = "Stretch Map",
+  overlap = "Overlap Existing",
+  
+  stubs  = "Create Stubs",
+  rooms  = "Create Rooms",
+  
+  auto   = "Auto Area",
+  keep   = "Keep Existing"
+}
+
+function Mapper.update()
+
+  local config = BlackMUDlet.Mapper.Config
+
+
+  --Mapper.mapModeButton:setStyleSheet(buttonStyle)
+  Mapper.mapModeButton:echo("Mode: " .. translate[config.mapmode] or config.mapmode)
+  
+  
+
+  --Mapper.createModeButton:setStyleSheet(buttonStyle)
+  Mapper.createModeButton:echo("New Rooms: " .. translate[config.createmode] or config.createmode)
+  
+  
+
+  --Mapper.exitModeButton:setStyleSheet(buttonStyle)
+  Mapper.exitModeButton:echo("Exits: " .. translate[config.exitmode] or config.exitmode)
+  
+  
+
+  --Mapper.areaModeButton:setStyleSheet(buttonStyle)
+  Mapper.areaModeButton:echo("Areas: " .. translate[config.areamode] or config.areamode)
+
+end</script>
 						<eventHandlerList />
 					</Script>
 				</ScriptGroup>
@@ -3409,7 +3599,7 @@ function Buffs.update()
     local watchList = table.deepcopy(GUI.Config.spellWatch)
     
     if table.size(Spells) == 0 then
-      Buffs.console:cecho("  None.")
+      Buffs.console:cecho("  None.\n")
     end
     
     table.sort(Spells, function(a,b) return a.duration &lt; b.duration end)
@@ -4074,6 +4264,13 @@ Mapper.supported_mapmodes = {
   "create"  -- create new rooms and update existing
 }
 
+Mapper.mapModeHelp = {
+  off    = "Mapper will ignore incoming room data",
+  follow = "Mapper will follow movement in known rooms, but will not update the map in any way",
+  update = "Mapper will follow movement and update existing rooms, but will not create and place new rooms",
+  create = "Mapper will follow movement, update existing rooms, and attempt to create new rooms"
+}
+
 --- createmode: how to behave when creating a room at coords with an existing room
 Mapper.supported_createmodes = {
   "skip",    -- skip room when no space is available
@@ -4082,10 +4279,22 @@ Mapper.supported_createmodes = {
   "overlap"  -- place the room overlapping the existing room(s)
 }
 
+Mapper.createModeHelp = {
+  skip    = "Mapper will skip creation of new room if it overlaps a different existing room",
+  warn    = "Mapper will skip creation of new room if it overlaps a different existing room and echo a warning",
+  stretch = "Mapper will stretch existing map, if needed, to place new room. Please proceed slowly to avoid messing up your map.",
+  overlap = "Mapper will create new rooms overlapping existing rooms. This is generally not recommended."
+}
+
 -- exitmode: how the mapper should handle exits for the current room
 Mapper.supported_exitmodes = {
   "stubs", -- create exits stubs only
   "rooms"  -- create highlighted placeholder rooms
+}
+
+Mapper.exitModeHelp = {
+  stubs = "Mapper will create new rooms with exit stubs at visible exits",
+  rooms = "Mapper will create new rooms with placeholder rooms at visible exits"
 }
 
 -- areamode: how the mapper should assign areas to new rooms
@@ -4094,6 +4303,10 @@ Mapper.supported_areamodes = {
   "keep"  -- always place new rooms in the current zone
 }
 
+Mapper.areaModeHelp = {
+  auto = "Mapper will automatically place rooms in designated area map",
+  keep = "Mapper will keep new rooms in current area/map"
+}
 
 
 -- {r,g,b} color definitions for each environment
@@ -4147,6 +4360,8 @@ function Mapper.setMapMode(mode)
   if table.contains(Mapper.supported_mapmodes, mode) then
     Mapper.Config.mapmode = mode
     BlackMUDlet.GUI.echo("Mapper mode set to &lt;white&gt;" .. mode)
+    BlackMUDlet.GUI.echo("  " .. BlackMUDlet.Mapper.mapModeHelp[mode] .. "\n")
+    raiseEvent("BlackMUDlet.Mapper.configUpdate")
   else
     BlackMUDlet.GUI.echo("Unknown mapper mode. See &lt;white&gt;ui map help")
   end
@@ -4159,6 +4374,8 @@ function Mapper.setCreateMode(mode)
   if table.contains(Mapper.supported_createmodes, mode) then
     Mapper.Config.createmode = mode
     BlackMUDlet.GUI.echo("Mapper room creation mode set to &lt;white&gt;" .. mode)
+    BlackMUDlet.GUI.echo("  " .. BlackMUDlet.Mapper.createModeHelp[mode] .. "\n")
+    raiseEvent("BlackMUDlet.Mapper.configUpdate")
   else
     BlackMUDlet.GUI.echo("Unknown mapper room creation mode. See &lt;white&gt;ui map help")
   end
@@ -4171,6 +4388,8 @@ function Mapper.setExitMode(mode)
   if table.contains(Mapper.supported_exitmodes, mode) then
     Mapper.Config.exitmode = mode
     BlackMUDlet.GUI.echo("Mapper exit creation mode set to &lt;white&gt;" .. mode)
+    BlackMUDlet.GUI.echo("  " .. BlackMUDlet.Mapper.exitModeHelp[mode] .. "\n")
+    raiseEvent("BlackMUDlet.Mapper.configUpdate")
   else
     BlackMUDlet.GUI.echo("Unknown mapper exit creation mode. See &lt;white&gt;ui map help")
   end
@@ -4183,11 +4402,14 @@ function Mapper.setAreaMode(mode)
   if table.contains(Mapper.supported_areamodes, mode) then
     Mapper.Config.areamode = mode
     BlackMUDlet.GUI.echo("Mapper area creation mode set to &lt;white&gt;" .. mode)
+    BlackMUDlet.GUI.echo("  " .. BlackMUDlet.Mapper.areaModeHelp[mode] .. "\n")
+    raiseEvent("BlackMUDlet.Mapper.configUpdate")
   else
     BlackMUDlet.GUI.echo("Unknown mapper area creation mode. See &lt;white&gt;ui map help")
   end
 end
-</script>
+
+  </script>
 				<eventHandlerList />
 			</Script>
 			<Script isActive="yes" isFolder="no">
@@ -5018,7 +5240,7 @@ Help.help = [[&lt;LightBlue&gt;
       
   &lt;LightBlue&gt;Create Mode&lt;reset&gt;: Behavior when creating new rooms that might not fit nicely on map
     &lt;white&gt;ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;
-      &lt;white&gt;skip&lt;reset&gt;: Do not create room if there's is no space in the map
+      &lt;white&gt;skip&lt;reset&gt;: Do not create room if there is no space in the map
       &lt;white&gt;warn&lt;reset&gt;: Skip and print a warning to the main console
       &lt;white&gt;stretch&lt;reset&gt;: Shift all rooms in current map to make space for the new room
       &lt;white&gt;overlap&lt;reset&gt;: Create the new room on top of the existing room
@@ -5030,7 +5252,7 @@ Help.help = [[&lt;LightBlue&gt;
   
   &lt;LightBlue&gt;Area Mode&lt;reset&gt;: Controls the automatic placement of rooms into different areas/maps
     &lt;white&gt;ui areamode &lt;i&gt;auto | keep&lt;reset&gt;
-      &lt;white&gt;auto&lt;reset&gt;: Automatically place updated rooms into their MJD-specified area
+      &lt;white&gt;auto&lt;reset&gt;: Automatically place updated rooms into their MUD-specified area
       &lt;white&gt;keep&lt;reset&gt;: Keep updated rooms in the existing area
       
   &lt;LightBlue&gt;Map Management&lt;reset&gt;
