@@ -3350,6 +3350,41 @@ registerNamedEventHandler("BlackMUDlet", "GUI.gmcpUpdate", "gmcp.General.Time", 
 
 
 
+function GUI.WorldInfo.handleUpdateAvailable()
+
+  WorldInfo.emco:addTab("Update!")
+  WorldInfo.emco:clear("Update!")
+  WorldInfo.emco:cecho("Update!", "\n\n&lt;LightBlue&gt;A BlackMUDlet update is available!\n\n")
+  WorldInfo.emco:cechoLink("Update!",
+    "\n&lt;LightBlue&gt;Type &lt;white&gt;ui update&lt;LightBlue&gt; or click here to install.\n",
+    [[BlackMUDlet.Updater.downloadUpdate()]],
+    "",
+    true,
+    true      
+  )
+  WorldInfo.emco:switchTab("Update!")
+
+end
+
+registerNamedEventHandler("BlackMUDlet", 
+                          "GUI.WorldInfo.updateAvailable", 
+                          "BlackMUDlet.Updater.updateAvailable", 
+                          GUI.WorldInfo.handleUpdateAvailable)
+
+
+function GUI.WorldInfo.handleUpToDate()
+  -- If the Update! tab is visible, remove it
+  if WorldInfo.emco.mc["Update!"] then
+    WorldInfo.emco:removeTab("Update!")
+  end
+end
+
+registerNamedEventHandler("BlackMUDlet", 
+                          "GUI.WorldInfo.upToDate", 
+                          "BlackMUDlet.Updater.upToDate", 
+                          GUI.WorldInfo.handleUpToDate)
+
+
 
 -- Tab Change Handlers (not used, for now)
 
@@ -3359,7 +3394,6 @@ function GUI.WorldInfo.handleTabChange(event, name, oldTab, tabName)
   --echo(name .. " - ")
   --echo(oldTab .. " - ")
   --echo(tabName .. "\n")
-
 end</script>
 					<eventHandlerList />
 				</Script>
@@ -3860,7 +3894,7 @@ function Enemies.buildPanel(parent)
     Enemies.gauges[i].back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
     Enemies.gauges[i].text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
     
-    Enemies.gauges[i].text:setClickCallback([[Enemies.onClick(]] .. i .. [[)]])
+    Enemies.gauges[i].text:setClickCallback(Enemies.onClick, i)
   
   end
   
@@ -3877,12 +3911,12 @@ function Enemies.onClick(i)
   if gmcp and gmcp.Char and gmcp.Char.Enemies and gmcp.Char.Enemies[i] then
     
     target = gmcp.Char.Enemies[i].name or gmcp.Char.Enemies[i].target
-    desc = gmcp.Char.Enemies[i].desc
+    keyword = string.match(target, "(%w+)(.*)") -- parse first keyword
+    
     local count = 0
     
     for k,v in ipairs(gmcp.Char.Enemies) do
-      
-      if v.desc == desc then 
+      if string.find(v.name or v.target, keyword) then 
         count = count + 1
       end
       
@@ -3892,7 +3926,7 @@ function Enemies.onClick(i)
       
     end
     
-    send("kill " .. count .. "." .. target)
+    send("kill " .. count .. "." .. keyword)
   
   end
 end
@@ -3909,12 +3943,8 @@ function Enemies.update()
       
       if e[i] then -- if Enemies[i] exists then populate gauges[i]
         local desc = e[i].desc
-  
---        if e[i].target then -- show who we're attacking
---          desc = "⚔️  " .. desc
---        end
-        -- TODO: try this instead of above: (e[i].target and "⚔️  " or "") .. e[i].desc
-        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc)
+
+        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc .. " [-&gt;" .. e[i].fighting .. "]")
         Enemies.gauges[i]:show()
      
       else -- hide unused gauges
@@ -5589,14 +5619,17 @@ function Updater.handleVersion()
       BlackMUDlet.echo("Update found! Type &lt;white&gt;ui update &lt;LightBlue&gt;to install")
       Updater.state = "pending"
       enableAlias("Update UI")
+      raiseEvent("BlackMUDlet.Updater.updateAvailable")
     elseif ver == BlackMUDlet.version then
       BlackMUDlet.echo("Package is up to date")
       Updater.state = "up-to-date"
       disableAlias("Update UI")
+      raiseEvent("BlackMUDlet.Updater.upToDate")
     else
       BlackMUDlet.echo("Local package install is newer than server")
       Updater.state = "up-to-date"
       disableAlias("Update UI")
+      raiseEvent("BlackMUDlet.Updater.upToDate")
     end
  
   end
