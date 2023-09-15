@@ -2792,10 +2792,11 @@ local Mapper = GUI.Mapper
 
 
 local buttonStyle = [[
+    QToolTip{background:]] .. GUI.Colors.darkGrey .. [[; color: white; border:none;}
     background-color: ]] .. GUI.Colors.darkGrey .. [[;
-    border-width: 1px;
+    border-width: 2px;
     border-color: ]] .. GUI.Colors.grey .. [[;
-    border-style: solid;
+    border-style: outset;
     border-radius: 4px;
     padding: 2px;
     margin: 2px;
@@ -2806,6 +2807,7 @@ function GUI.Mapper.buildPanel(parent)
 
   local buttonBarHeight = 25
 
+  -- parent container
   Mapper.panel = Geyser.Container:new(
     {
       name = "BlackMUDlet.GUI.Mapper.panel",
@@ -2817,7 +2819,8 @@ function GUI.Mapper.buildPanel(parent)
     parent
   )
 
-
+  
+  -- the actual map
   Mapper.map = Geyser.Mapper:new(
     {
       name = "BlackMUDlet.GUI.Mapper.map",
@@ -2829,6 +2832,7 @@ function GUI.Mapper.buildPanel(parent)
     Mapper.panel
   )
   
+  -- container for the UI buttons
   Mapper.buttonBox = Geyser.HBox:new(
     {
       name = "BlackMUDlet.GUI.Mapper.panel",
@@ -2841,7 +2845,7 @@ function GUI.Mapper.buildPanel(parent)
   )
   
   
-  
+  -- Map mode button
   Mapper.mapModeButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.mapModeButton",
@@ -2852,8 +2856,10 @@ function GUI.Mapper.buildPanel(parent)
   Mapper.mapModeButton:setStyleSheet(buttonStyle)
   Mapper.mapModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map mode")
   Mapper.mapModeButton:echo("Map Mode: ")
+  Mapper.mapModeButton:setToolTip("How the Mapper handles incoming room data (e.g., turn mapping on/off)")
   
   
+  -- Room creation mode button
   Mapper.createModeButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.createModeButton",
@@ -2863,9 +2869,10 @@ function GUI.Mapper.buildPanel(parent)
   )
   Mapper.createModeButton:setStyleSheet(buttonStyle)
   Mapper.createModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "create mode")
-  Mapper.createModeButton:echo("Room Overlap: ")
+  Mapper.createModeButton:setToolTip("How the Mapper handles the placement of overlapping rooms")
   
   
+  -- Exit mode button
   Mapper.exitModeButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.exitModeButton",
@@ -2875,9 +2882,10 @@ function GUI.Mapper.buildPanel(parent)
   )
   Mapper.exitModeButton:setStyleSheet(buttonStyle)
   Mapper.exitModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "exit mode")
-  Mapper.exitModeButton:echo("Exit Mode:")
+  Mapper.exitModeButton:setToolTip("How the Mapper handles exits when updating rooms")
   
   
+  -- Area mode button
   Mapper.areaModeButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.areaModeButton",
@@ -2887,9 +2895,11 @@ function GUI.Mapper.buildPanel(parent)
   )
   Mapper.areaModeButton:setStyleSheet(buttonStyle)
   Mapper.areaModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "area mode")
-  Mapper.areaModeButton:echo("Area Mode")
+  Mapper.areaModeButton:setToolTip("In which area (map) the Mapper places newly created rooms")
+
   
---[[  
+--[[
+  -- Help button
   Mapper.helpButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.helpButton",
@@ -2902,15 +2912,19 @@ function GUI.Mapper.buildPanel(parent)
   Mapper.helpButton:echo("&lt;center&gt;Mapper Help")
 ]]--  
 
+
+  -- This technically doesn't do anything unless the Mapper is already initialized
+  -- The Mapper will raise an event to make sure this is called at init
+  Mapper.update()
+  
   
   registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.GUI.Mapper", "BlackMUDlet.Mapper.configUpdate", Mapper.update)
-  
-  --Mapper.update()
     
 end
 
 
-
+-- given an indexed table t and a value v, returns the "next" item in the table after v, wrapping to 1
+-- used to cycle options
 local function getNext(t, v)
   local i = table.index_of(t,v) + 1
   if i &gt; table.size(t) then i = 1 end
@@ -2918,7 +2932,7 @@ local function getNext(t, v)
 end
 
 
-
+-- simple handler for mouse clicks on the button bar
 function Mapper.handleClick(button)
 
   if button == "map mode" then    
@@ -2943,7 +2957,8 @@ function Mapper.handleClick(button)
     BlackMudlet.GUI.echo("Unknown Mapper button bar event received. This should never happen.")
   end
 
-end</script>
+end
+</script>
 						<eventHandlerList />
 					</Script>
 					<Script isActive="yes" isFolder="no">
@@ -2953,44 +2968,45 @@ end</script>
 local Mapper = GUI.Mapper
 
 
+-- translate option name to more readable name
 local translate = {
   off     = "Mapper Off",
   follow  = "Follow Movement",
   update  = "Update Existing",
   create  = "Create New Rooms",
   
-  skip    = "Skip Overlapping",
-  warn    = "Skip and Warn",
+  skip    = "Skip Room",
+  warn    = "Skip &amp; Warn",
   stretch = "Stretch Map",
-  overlap = "Overlap Existing",
+  overlap = "Place Anyway",
   
   stubs  = "Create Stubs",
   rooms  = "Create Rooms",
   
   auto   = "Auto Area",
-  keep   = "Keep Existing"
+  keep   = "Current Area"
 }
+
 
 function Mapper.update()
 
-  local config = BlackMUDlet.Mapper.Config or {}
-
+  -- if the Mapper hasn't been initialzed yet then it isn't safe to read its config
+  if table.size(BlackMUDlet.Mapper.Config) &lt; 4 then return end
+  
+  local config = BlackMUDlet.Mapper.Config
 
   --Mapper.mapModeButton:setStyleSheet(buttonStyle)
   Mapper.mapModeButton:echo("Mode: " .. translate[config.mapmode] or config.mapmode)
   
-  
 
   --Mapper.createModeButton:setStyleSheet(buttonStyle)
-  Mapper.createModeButton:echo("New Rooms: " .. translate[config.createmode] or config.createmode)
+  Mapper.createModeButton:echo("Room Overlap: " .. translate[config.createmode] or config.createmode)
   
   
-
   --Mapper.exitModeButton:setStyleSheet(buttonStyle)
   Mapper.exitModeButton:echo("Exits: " .. translate[config.exitmode] or config.exitmode)
   
   
-
   --Mapper.areaModeButton:setStyleSheet(buttonStyle)
   Mapper.areaModeButton:echo("Areas: " .. translate[config.areamode] or config.areamode)
 
@@ -3385,6 +3401,7 @@ function Attributes.buildPanel(parent)
     Attributes.panel
   )
   
+  
   Attributes.console:setFontSize(GUI.Utils.uiFontSize)
 
 -- You can place a Geyser Label on top of the console to hijack the scroll wheel
@@ -3409,6 +3426,7 @@ function Attributes.buildPanel(parent)
   registerNamedEventHandler("BlackMUDlet", "GUI.Attributes", "gmcp.Char", GUI.Attributes.update)
   
 end
+
 </script>
 						<eventHandlerList />
 					</Script>
@@ -3593,7 +3611,7 @@ function Buffs.update()
     local Spells = table.deepcopy(gmcp.Char.Spells)
     
     Buffs.console:clear()
-    Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
+--    Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
     Buffs.console:cecho("\n")
     
     local watchList = table.deepcopy(GUI.Config.spellWatch)
@@ -3725,13 +3743,13 @@ function Group.update()
 
   Group.console:clear()
    
-  Group.console:cechoLink("Your group consists of:", [[send("group",false)]], "", true)
+--  Group.console:cechoLink("Your group consists of:", [[send("group",false)]], "", true)
   
   if gmcp and gmcp.Char and gmcp.Char.Group then
   
     local group = gmcp.Char.Group
   
-    if Group.members == {} then
+    if table.size(Group.members) == 0 then
       Group.console:cecho("\n None.")
     end
     
@@ -3798,12 +3816,170 @@ end
 						<eventHandlerList />
 					</Script>
 				</ScriptGroup>
+				<ScriptGroup isActive="yes" isFolder="yes">
+					<name>Enemy List</name>
+					<packageName></packageName>
+					<script>BlackMUDlet.GUI.Enemies = BlackMUDlet.GUI.Enemies or {}</script>
+					<eventHandlerList />
+					<Script isActive="yes" isFolder="no">
+						<name>Build Enemies Panel</name>
+						<packageName></packageName>
+						<script>GUI = BlackMUDlet.GUI
+Enemies = GUI.Enemies
+
+Enemies.maxSize = 8
+Enemies.gaugePadding = 2
+Enemies.gaugeHeight = 22
+Enemies.gauges = Enemies.gauges or {}
+
+function Enemies.buildPanel(parent)
+
+  Enemies.panel = Geyser.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.panel",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    },
+    parent
+  )
+  
+  for i = 1, Enemies.maxSize do
+    Enemies.gauges[i] = Geyser.Gauge:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.gauge" .. i,
+      x = Enemies.gaugePadding, 
+      y = Enemies.gaugePadding + (Enemies.gaugePadding + Enemies.gaugeHeight) * (i - 1), 
+      width = -Enemies.gaugePadding, 
+      height = Enemies.gaugeHeight,
+    },
+    Enemies.panel)
+
+    Enemies.gauges[i]:setFontSize(GUI.Utils.gaugeFontSize)
+    
+    Enemies.gauges[i].front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
+    Enemies.gauges[i].back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
+    Enemies.gauges[i].text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
+    
+    Enemies.gauges[i].text:setClickCallback([[Enemies.onClick(]] .. i .. [[)]])
+  
+  end
+  
+  Enemies.update()
+  
+  registerNamedEventHandler("BlackMUDlet", "GUI.Enemies", "gmcp.Char.Enemies", Enemies.update)
+  
+end
+
+
+function Enemies.onClick(i)
+
+  -- make sure gmcp data exists
+  if gmcp and gmcp.Char and gmcp.Char.Enemies and gmcp.Char.Enemies[i] then
+    
+    target = gmcp.Char.Enemies[i].name or gmcp.Char.Enemies[i].target
+    desc = gmcp.Char.Enemies[i].desc
+    local count = 0
+    
+    for k,v in ipairs(gmcp.Char.Enemies) do
+      
+      if v.desc == desc then 
+        count = count + 1
+      end
+      
+      if k == i then
+        break
+      end
+      
+    end
+    
+    send("kill " .. count .. "." .. target)
+  
+  end
+end
+
+
+
+function Enemies.update()
+
+  if gmcp and gmcp.Char and gmcp.Char.Enemies and table.size(gmcp.Char.Enemies) &gt; 0 then
+  
+    local e = gmcp.Char.Enemies
+    
+    for i = 1, Enemies.maxSize do
+      
+      if e[i] then -- if Enemies[i] exists then populate gauges[i]
+        local desc = e[i].desc
+  
+--        if e[i].target then -- show who we're attacking
+--          desc = "⚔️  " .. desc
+--        end
+        -- TODO: try this instead of above: (e[i].target and "⚔️  " or "") .. e[i].desc
+        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc)
+        Enemies.gauges[i]:show()
+     
+      else -- hide unused gauges
+        Enemies.gauges[i]:hide()
+        --Enemies.gauges[i]:setValue(0, 100, "")
+      end
+      
+    end
+  
+  else
+   
+    Enemies.gauges[1]:show()
+    Enemies.gauges[1]:setValue(0, 100, "Target: None")
+    
+    for i = 2, Enemies.maxSize do
+      Enemies.gauges[i]:hide()
+      Enemies.gauges[i]:setValue(0, 100, "")
+    end
+
+  end
+
+end
+
+
+function Enemies.buildWindow()
+
+-- The window for the status bar
+  Enemies.window = Enemies.window or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Enemies.window", 
+      titleText = "Enemies",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    }
+  )
+  Enemies.buildPanel(Enemies.window)
+  
+end
+</script>
+						<eventHandlerList />
+					</Script>
+				</ScriptGroup>
 				<Script isActive="yes" isFolder="no">
-					<name>Build Character Info  Panel</name>
+					<name>Build Character Info Panel</name>
 					<packageName></packageName>
 					<script>
 local GUI = BlackMUDlet.GUI
 local Info = GUI.Info
+
+
+
+local headerStyle = [[
+    color: white;
+    background-color: ]] .. GUI.Colors.grey .. [[;
+    padding: 2px;
+    margin: 0px;
+  ]]
+
+
+local attWeight    = 0.75
+local buffsWeight  = 1.0
+local groupWeight  = 0.75
+local combatWeight = 0.5
+
+local headerHeight = 20
 
 
 function Info.buildPanel(parent)
@@ -3820,26 +3996,151 @@ function Info.buildPanel(parent)
     x = 0, y = 0, width = "100%", height = "100%",
   },
   Info.panel)
+
+  
+  
+  -- Character Attributes
+  Info.attHeader = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Info.attHeader",
+      x = 0, y = 0,
+      width = "100%", height = headerHeight,
+      v_policy = Geyser.Fixed,
+    },
+    Info.vbox
+  )
+  Info.attHeader:setStyleSheet(headerStyle)
+  Info.attHeader:echo("[-] Attributes")
+  Info.attHeader:setClickCallback(Info.clickHandler, "Attributes")
     
   
   GUI.Attributes.buildPanel(Info.vbox)
-  --GUI.Attributes.panel.v_policy = Geyser.Fixed
-  --local w,h = calcFontSize(GUI.Utils.uiFontSize)
-  --GUI.Attributes.panel.height = 17 * h
-  GUI.Attributes.panel.v_stretch_factor = 0.75
+  GUI.Attributes.panel.v_stretch_factor = attWeight
+  
+  
+  
+    -- Buffs
+  Info.buffsHeader = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Info.buffsHeader",
+      x = 0, y = 0,
+      width = "100%", height = headerHeight,
+      v_policy = Geyser.Fixed,
+    },
+    Info.vbox
+  )
+  Info.buffsHeader:setStyleSheet(headerStyle)
+  Info.buffsHeader:echo("[-] Spells and Conditions")
+  Info.buffsHeader:setClickCallback(Info.clickHandler, "Buffs")
   
   GUI.Buffs.buildPanel(Info.vbox)
+  GUI.Group.panel.v_stretch_factor = buffsWeight
+  
+  
+  
+  -- Group Info
+  Info.groupHeader = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Info.groupHeader",
+      x = 0, y = 0,
+      width = "100%", height = headerHeight,
+      v_policy = Geyser.Fixed,
+    },
+    Info.vbox
+  )
+  Info.groupHeader:setStyleSheet(headerStyle)
+  Info.groupHeader:echo("[-] Group")
+  Info.groupHeader:setClickCallback(Info.clickHandler, "Group")
   
   GUI.Group.buildPanel(Info.vbox)
-  GUI.Group.panel.v_stretch_factor = 0.75
-  --GUI.Group.panel.v_policy = Geyser.Fixed
-  --GUI.Group.panel.height = 16 * h
+  GUI.Group.panel.v_stretch_factor = groupWeight
   
+  
+  
+  -- Combat Info
+  Info.combatHeader = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Info.combatHeader",
+      x = 0, y = 0,
+      width = "100%", height = headerHeight,
+      v_policy = Geyser.Fixed,
+    },
+    Info.vbox
+  )
+  Info.combatHeader:setStyleSheet(headerStyle)
+  Info.combatHeader:echo("[+] Combat")
+  Info.combatHeader:setClickCallback(Info.clickHandler, "Combat")
+  
+  GUI.Enemies.buildPanel(Info.vbox)
+  GUI.Enemies.panel.v_stretch_factor = 0 -- start collapsed
+  GUI.Enemies.panel:hide()
+  
+
+
   Info.vbox:organize()
+  
+  GUI.Attributes.console:set_constraints({x=0, y=0, width="100%", height="90%"})
+  GUI.Attributes.console:set_constraints({x=0, y=0, width="100%", height="100%"})
 
 end
 
-</script>
+
+-- handles clicks on the various panel headers
+function Info.clickHandler(header)
+
+  if header == "Attributes" then
+    if GUI.Attributes.panel.v_stretch_factor == attWeight then
+      GUI.Attributes.panel.v_stretch_factor = 0
+      Info.attHeader:echo("[+] Attributes")
+    else
+      GUI.Attributes.panel.v_stretch_factor = attWeight
+      Info.attHeader:echo("[-] Attributes")
+    end
+    
+  elseif header == "Buffs" then
+    if GUI.Buffs.panel.v_stretch_factor == buffsWeight then
+      GUI.Buffs.panel.v_stretch_factor = 0
+      Info.buffsHeader:echo("[+] Spells and Conditions")
+    else
+      GUI.Buffs.panel.v_stretch_factor = buffsWeight
+      Info.buffsHeader:echo("[-] Spells and Conditions")
+    end
+  
+  elseif header == "Group" then
+    if GUI.Group.panel.v_stretch_factor == groupWeight then
+      GUI.Group.panel.v_stretch_factor = 0
+      Info.groupHeader:echo("[+] Group")
+    else
+      GUI.Group.panel.v_stretch_factor = groupWeight
+      Info.groupHeader:echo("[-] Group")
+    end
+  
+  elseif header == "Combat" then
+    if GUI.Enemies.panel.v_stretch_factor == combatWeight then
+      GUI.Enemies.panel.v_stretch_factor = 0
+      Info.combatHeader:echo("[+] Combat")
+      GUI.Enemies.panel:hide()
+    else
+      GUI.Enemies.panel.v_stretch_factor = combatWeight
+      Info.combatHeader:echo("[-] Combat")
+      GUI.Enemies.panel:show()
+    end
+  end
+  
+  Info.vbox:organize()
+  
+  -- mini consoles and vbox:organize don't seem to get along very well
+  -- this was the easiest way to force a re-render
+  GUI.Attributes.console:set_constraints({x=0, y=0, width="100%", height="90%"})
+  GUI.Attributes.console:set_constraints({x=0, y=0, width="100%", height="100%"})
+  
+  GUI.Buffs.console:set_constraints({x=0, y=0, width="100%", height="90%"})
+  GUI.Buffs.console:set_constraints({x=0, y=0, width="100%", height="100%"})
+  
+  GUI.Group.console:set_constraints({x=0, y=0, width="100%", height="90%"})
+  GUI.Group.console:set_constraints({x=0, y=0, width="100%", height="100%"})
+  
+end</script>
 					<eventHandlerList />
 				</Script>
 			</ScriptGroup>
@@ -3954,7 +4255,7 @@ function GUI.buildUI()
   GUI.Info.window = GUI.Info.window or Adjustable.Container:new(
     {
       name = "BlackMUDlet.GUI.Info.window",
-      titleText = "Character Information",
+      titleText = "Character Info",
       adjLabelstyle = GUI.defaultWindowStyle,
       titleTxtColor = "white",
     }
@@ -4090,147 +4391,6 @@ end
 </script>
 				<eventHandlerList />
 			</Script>
-			<ScriptGroup isActive="yes" isFolder="yes">
-				<name>Enemy List</name>
-				<packageName></packageName>
-				<script>BlackMUDlet.GUI.Enemies = BlackMUDlet.GUI.Enemies or {}</script>
-				<eventHandlerList />
-				<Script isActive="yes" isFolder="no">
-					<name>Build Enemies Panel</name>
-					<packageName></packageName>
-					<script>GUI = BlackMUDlet.GUI
-Enemies = GUI.Enemies
-
-Enemies.maxSize = 8
-Enemies.gaugePadding = 2
-Enemies.gaugeHeight = 25
-Enemies.gauges = Enemies.gauges or {}
-
-function Enemies.buildPanel(parent)
-
-  Enemies.panel = Geyser.Container:new(
-    {
-      name = "BlackMUDlet.GUI.Enemies.panel",
-      x = 0, y = 0,
-      width = "100%", height = "100%",
-    },
-    parent
-  )
-  
-  for i = 1, Enemies.maxSize do
-    Enemies.gauges[i] = Geyser.Gauge:new(
-    {
-      name = "BlackMUDlet.GUI.Enemies.gauge" .. i,
-      x = Enemies.gaugePadding, 
-      y = Enemies.gaugePadding + (Enemies.gaugePadding + Enemies.gaugeHeight) * (i - 1), 
-      width = -Enemies.gaugePadding, 
-      height = Enemies.gaugeHeight,
-    },
-    Enemies.panel)
-
-    Enemies.gauges[i]:setFontSize(GUI.Utils.gaugeFontSize)
-    
-    Enemies.gauges[i].front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
-    Enemies.gauges[i].back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
-    Enemies.gauges[i].text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
-    
-    Enemies.gauges[i].text:setClickCallback([[Enemies.onClick(]] .. i .. [[)]])
-  
-  end
-  
-  Enemies.update()
-  
-  registerNamedEventHandler("BlackMUDlet", "GUI.Enemies", "gmcp.Char.Enemies", Enemies.update)
-  
-end
-
-
-function Enemies.onClick(i)
-
-  -- make sure gmcp data exists
-  if gmcp and gmcp.Char and gmcp.Char.Enemies and gmcp.Char.Enemies[i] then
-    
-    target = gmcp.Char.Enemies[i].name or gmcp.Char.Enemies[i].target
-    desc = gmcp.Char.Enemies[i].desc
-    local count = 0
-    
-    for k,v in ipairs(gmcp.Char.Enemies) do
-      
-      if v.desc == desc then 
-        count = count + 1
-      end
-      
-      if k == i then
-        break
-      end
-      
-    end
-    
-    send("glance " .. count .. "." .. target)
-  
-  end
-end
-
-
-
-function Enemies.update()
-
-  if gmcp and gmcp.Char and gmcp.Char.Enemies and table.size(gmcp.Char.Enemies) &gt; 0 then
-  
-    local e = gmcp.Char.Enemies
-    
-    for i = 1, Enemies.maxSize do
-      
-      if e[i] then -- if Enemies[i] exists then populate gauges[i]
-        local desc = e[i].desc
-  
---        if e[i].target then -- show who we're attacking
---          desc = "⚔️  " .. desc
---        end
-        -- TODO: try this instead of above: (e[i].target and "⚔️  " or "") .. e[i].desc
-        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc)
-        Enemies.gauges[i]:show()
-     
-      else -- hide unused gauges
-        Enemies.gauges[i]:hide()
-        --Enemies.gauges[i]:setValue(0, 100, "")
-      end
-      
-    end
-  
-  else
-   
-    Enemies.gauges[1]:show()
-    Enemies.gauges[1]:setValue(0, 100, "Target: None")
-    
-    for i = 2, Enemies.maxSize do
-      Enemies.gauges[i]:hide()
-      Enemies.gauges[i]:setValue(0, 100, "")
-    end
-
-  end
-
-end
-
-
-function Enemies.buildWindow()
-
--- The window for the status bar
-  Enemies.window = Enemies.window or Adjustable.Container:new(
-    {
-      name = "BlackMUDlet.GUI.Enemies.window", 
-      titleText = "Enemies",
-      adjLabelstyle = GUI.defaultWindowStyle,
-      titleTxtColor = "white",
-    }
-  )
-  Enemies.buildPanel(Enemies.window)
-  
-end
-</script>
-					<eventHandlerList />
-				</Script>
-			</ScriptGroup>
 		</ScriptGroup>
 		<ScriptGroup isActive="yes" isFolder="yes">
 			<name>Mapper</name>
@@ -4304,7 +4464,7 @@ Mapper.supported_areamodes = {
 }
 
 Mapper.areaModeHelp = {
-  auto = "Mapper will automatically place rooms in designated area map",
+  auto = "Mapper will automatically place rooms in provided area map",
   keep = "Mapper will keep new rooms in current area/map"
 }
 
@@ -4549,7 +4709,7 @@ function Mapper.deleteAreaName(name, force)
     return
   end
   
-  if table.size(getAreaRooms(getAreaTable()[name])) &gt; 0 and (force == nil or force == false) then
+  if table.size(getAreaRooms(getAreaTable()[name])) &gt; 0 and (force == nil or force == false or force == "false") then
     BlackMUDlet.echo("Area \"" .. name .. "\" is not empty, use force option to force deletion.")
     return
   end
@@ -5088,7 +5248,8 @@ BlackMUDlet.GUI.echo("Coloring based on environment")
   updateMap()
 end
 
---- Redraws symbols for specialson the map based on stored spec
+
+--- Redraws symbols for specials on the map based on stored spec
 function mapUtils.updateSymbols()
 BlackMUDlet.GUI.echo("Updating symbols")
   for id,name in pairs(getRooms()) do
@@ -5099,7 +5260,6 @@ BlackMUDlet.GUI.echo("Updating symbols")
   end
   updateMap()
 end
-
 
 
 --- Set FIXME user data for red rooms
@@ -5329,6 +5489,11 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysInstall", "sysInstall",
 --- code to run when entering the game
 -- called on onEnterGame, or after initialization if it appears we're already in game
 function BlackMUDlet.onEnterGame()
+
+  if initialized == false then 
+    BlackMUDlet.initialize()
+  end
+
   BlackMUDlet.GUI.onEnterGame()
   BlackMUDlet.Mapper.onEnterGame()
   
