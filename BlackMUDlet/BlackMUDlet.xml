@@ -4034,7 +4034,7 @@ function Info.buildPanel(parent)
   Info.buffsHeader:setClickCallback(Info.clickHandler, "Buffs")
   
   GUI.Buffs.buildPanel(Info.vbox)
-  GUI.Group.panel.v_stretch_factor = buffsWeight
+  GUI.Buffs.panel.v_stretch_factor = buffsWeight
   
   
   
