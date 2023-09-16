@@ -1326,7 +1326,7 @@ function BlackMUDlet.GUI.initialize(config)
   if not GUI.Config.initialized then
     GUI.resetLayout()
     GUI.buildUI() -- rebuild now that windows are correctly sized
-    GUI.WorldInfo.emco:switchTab("Help") -- show the help window on init
+    GUI.WorldInfo.emco:switchTab("UI Help") -- show the help window on init
     GUI.Config.initialized = true
   end
   
@@ -2855,7 +2855,6 @@ function GUI.Mapper.buildPanel(parent)
   )
   Mapper.mapModeButton:setStyleSheet(buttonStyle)
   Mapper.mapModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map mode")
-  Mapper.mapModeButton:echo("Map Mode: ")
   Mapper.mapModeButton:setToolTip("How the Mapper handles incoming room data (e.g., turn mapping on/off)")
   
   
@@ -2934,6 +2933,9 @@ end
 
 -- simple handler for mouse clicks on the button bar
 function Mapper.handleClick(button)
+
+  -- if the Mapper hasn't been initialzed yet then it isn't safe to mess with its config
+  if table.size(BlackMUDlet.Mapper.Config) &lt; 4 then return end
 
   if button == "map mode" then    
     local next = getNext(BlackMUDlet.Mapper.supported_mapmodes, BlackMUDlet.Mapper.Config.mapmode)
