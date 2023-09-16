@@ -5030,7 +5030,7 @@ end
 
 
 --- handle the current gmcp room info
-local function handleGmcpRoomData()
+function Mapper.handleGmcpRoomData()
 
   if Mapper.Config.mapmode == "off" then
     return
@@ -5078,7 +5078,7 @@ local function handleGmcpRoomData()
 end
 
 -- automatically call the gmcp handler on each gmcp.Room update
-registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.gmcpMapper", "gmcp.Room", handleGmcpRoomData)
+registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.gmcpMapper", "gmcp.Room", Mapper.handleGmcpRoomData)
 
 
 
