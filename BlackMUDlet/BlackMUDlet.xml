@@ -3014,7 +3014,7 @@ end</script>
 						<eventHandlerList />
 					</Script>
 				</ScriptGroup>
-				<ScriptGroup isActive="yes" isFolder="yes">
+				<ScriptGroup isActive="no" isFolder="yes">
 					<name>Item Database</name>
 					<packageName></packageName>
 					<script>BlackMUDlet.GUI.ItemDB = BlackMUDlet.GUI.ItemDB or {}</script>
@@ -3168,14 +3168,14 @@ function EventLog.buildPanel(parent)
     parent)
   
   EventLog.console:clear()
-  EventLog.console:enableCommandLine()
-  EventLog.console:setCmdAction(EventLog.cecho)
+--  EventLog.console:enableCommandLine()
+--  EventLog.console:setCmdAction(EventLog.cecho)
   EventLog.console:enableAutoWrap()
   EventLog.console:enableScrollBar()
   EventLog.console:setFontSize(GUI.Utils.uiFontSize)
   
   EventLog.echo(
-    "&lt;LightBlue&gt;Input log entries using the input box below, or from a trigger using:"
+    "&lt;LightBlue&gt;Add custom entries from a trigger using:"
     .. "\n"
     .. "\n\t&lt;white&gt;&lt;i&gt; BlackMUDlet.GUI.EventLog.echo(\"log message\")"
     .. "\n"
@@ -3268,9 +3268,9 @@ function WorldInfo.buildPanel(parent)
       consoles = {
         "Mapper",
         "World Map",
-        "Item Database",
+--        "Item Database",
         "Event Log",
-        "Help",
+        "UI Help",
         "GMCP",
       },    
       inactiveTabCSS = GUI.inactiveTabCSS,
@@ -3283,8 +3283,7 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.emco:enableAutoWrap()
   
   WorldInfo.emco:load()
-  --WorldInfo.emco:reset()
-  
+    
   
   -- add mapper
   GUI.Mapper.buildPanel(WorldInfo.emco.mc.Mapper)
@@ -3302,31 +3301,24 @@ function WorldInfo.buildPanel(parent)
   
   -- This doesn't preserve aspect ratio, doesn't seem to be an easy way to do so
   WorldInfo.imageLabel:setStyleSheet([[border-image: url(]]..getMudletHomeDir()..[[/BlackMUDlet/images/Balric.jpg);]])
-  
+
+-- Item DB removed, doesn't really fit with AoD changes
+--[[  
   -- add itemDB
   GUI.ItemDB.buildPanel(GUI.WorldInfo.emco.mc["Item Database"])
-  
+]]--  
+
   -- add Activity Log
   GUI.EventLog.buildPanel(GUI.WorldInfo.emco.mc["Event Log"])
  
- --[[   
-  -- Add "other" tab
-  WorldInfo.emco:clear("Other")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;TBD Content")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;Could add inventory panel, help, guides, etc.")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;")
-  WorldInfo.emco:cecho("Other", "\n&lt;LightBlue&gt;Would be neat if Mudlet supported an embedded text editor or webpage")
-]]--  
-
   
   -- Populate Help tab
-  WorldInfo.emco:clear("Help")
-  WorldInfo.emco.mc.Help:enableScrollBar()
-  WorldInfo.emco.mc.Help:enableAutoWrap()
-  WorldInfo.emco.mc.Help:setFontSize(GUI.Utils.uiFontSize)
-  WorldInfo.emco.mc.Help:cecho(GUI.Help.help)
+  WorldInfo.emco:clear("UI Help")
+  WorldInfo.emco.mc["UI Help"]:enableScrollBar()
+  WorldInfo.emco.mc["UI Help"]:enableAutoWrap()
+  WorldInfo.emco.mc["UI Help"]:setFontSize(GUI.Utils.uiFontSize)
+  WorldInfo.emco.mc["UI Help"]:cecho(GUI.Help.help)
+
   
   -- Populate GMCP tab
   WorldInfo.emco.mc.GMCP:setFontSize(8)
@@ -3383,6 +3375,7 @@ registerNamedEventHandler("BlackMUDlet",
                           "GUI.WorldInfo.upToDate", 
                           "BlackMUDlet.Updater.upToDate", 
                           GUI.WorldInfo.handleUpToDate)
+
 
 
 
@@ -3866,6 +3859,7 @@ Enemies.gaugePadding = 2
 Enemies.gaugeHeight = 22
 Enemies.gauges = Enemies.gauges or {}
 
+
 function Enemies.buildPanel(parent)
 
   Enemies.panel = Geyser.Container:new(
@@ -3889,7 +3883,6 @@ function Enemies.buildPanel(parent)
     Enemies.panel)
 
     Enemies.gauges[i]:setFontSize(GUI.Utils.gaugeFontSize)
-    
     Enemies.gauges[i].front:setStyleSheet(GUI.Utils.getGaugeFgCSS(GUI.Colors.red))
     Enemies.gauges[i].back:setStyleSheet(GUI.Utils.getGaugeBgCSS(GUI.Colors.darkRed))
     Enemies.gauges[i].text:setStyleSheet(GUI.Utils.getGaugeTextCSS())
@@ -3903,6 +3896,7 @@ function Enemies.buildPanel(parent)
   registerNamedEventHandler("BlackMUDlet", "GUI.Enemies", "gmcp.Char.Enemies", Enemies.update)
   
 end
+
 
 
 function Enemies.onClick(i)
@@ -3943,8 +3937,16 @@ function Enemies.update()
       
       if e[i] then -- if Enemies[i] exists then populate gauges[i]
         local desc = e[i].desc
+        
+        -- add icon to our current target
+        local txt = (e[i].target and "⚔️  " or "") .. e[i].desc
+        
+        -- add enemy target if fighting someone else
+        if gmcp.Char.Base.name ~= e[i].fighting then 
+          txt = txt .. " [-&gt;" .. e[i].fighting .. "]"
+        end
 
-        Enemies.gauges[i]:setValue(e[i].health, 100, (e[i].target and "⚔️  " or "") .. e[i].desc .. " [-&gt;" .. e[i].fighting .. "]")
+        Enemies.gauges[i]:setValue(e[i].health, 100, txt)
         Enemies.gauges[i]:show()
      
       else -- hide unused gauges
@@ -3956,10 +3958,10 @@ function Enemies.update()
   
   else
    
-    Enemies.gauges[1]:show()
-    Enemies.gauges[1]:setValue(0, 100, "Target: None")
+--    Enemies.gauges[1]:show()
+--    Enemies.gauges[1]:setValue(0, 100, "Target: None")
     
-    for i = 2, Enemies.maxSize do
+    for i = 1, Enemies.maxSize do
       Enemies.gauges[i]:hide()
       Enemies.gauges[i]:setValue(0, 100, "")
     end
@@ -5379,6 +5381,7 @@ function Mapper.onEnterGame()
     disableTrigger("generic_mapper")
     BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
     -- disable aliases too? I'd like to keep "map areas" though, maybe others?
+    -- alternatively, just disable the script entirely, which will take effect next profile load
   end
 end
 
@@ -5503,6 +5506,11 @@ function BlackMUDlet.initialize()
     -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
     if gmcp and gmcp.Room then
       BlackMUDlet.onEnterGame()
+    end
+    
+    if not io.exists(BlackMUDlet.packagePath .. "profileicon") 
+       and io.exists(BlackMUDlet.packagePath .. "resources/profileicon") then
+      downloadFile(getMudletHomeDir() .. "/profileicon", BlackMUDlet.packagePath .. "resources/profileicon")
     end
   
     initialized = true
