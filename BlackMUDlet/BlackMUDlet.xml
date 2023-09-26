@@ -404,7 +404,8 @@ local ignoreList = [[
 				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>System</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white&gt;" .. matches[1] .. "\n")</script>
+					<script>
+BlackMUDlet.GUI.Communication.emco:cecho("Other", matches[1] .. "\n")</script>
 					<triggerType>0</triggerType>
 					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
@@ -420,6 +421,88 @@ local ignoreList = [[
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Wiz</name>
+					<script>
+if matches[2] ~= "Syslog" then
+  BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;green&gt;::&lt;white&gt;" .. matches[2] .. "&lt;green&gt;::" .. matches[3] .. "\n")
+end
+  </script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^::(\w+)::(.+)$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+			</TriggerGroup>
+			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+				<name>Status bar</name>
+				<script></script>
+				<triggerType>0</triggerType>
+				<conditonLineDelta>0</conditonLineDelta>
+				<mStayOpen>0</mStayOpen>
+				<mCommand></mCommand>
+				<packageName></packageName>
+				<mFgColor>#ff0000</mFgColor>
+				<mBgColor>#ffff00</mBgColor>
+				<mSoundFile></mSoundFile>
+				<colorTriggerFgColor>#000000</colorTriggerFgColor>
+				<colorTriggerBgColor>#000000</colorTriggerBgColor>
+				<regexCodeList />
+				<regexCodePropertyList />
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Mana Bar On</name>
+					<script> BlackMUDlet.GUI.Vitals.drawManaBar()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>You will now get all stats in the prompt.</string>
+						<string>Mana added in prompt.</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
+						<integer>3</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Mana Bar Off</name>
+					<script> BlackMUDlet.GUI.Vitals.hideManaBar()</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>Mana removed from prompt.</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>3</integer>
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
@@ -571,104 +654,6 @@ BlackMUDlet.GUI.Group.update()</script>
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
-			<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-				<name>Status bar</name>
-				<script></script>
-				<triggerType>0</triggerType>
-				<conditonLineDelta>0</conditonLineDelta>
-				<mStayOpen>0</mStayOpen>
-				<mCommand></mCommand>
-				<packageName></packageName>
-				<mFgColor>#ff0000</mFgColor>
-				<mBgColor>#ffff00</mBgColor>
-				<mSoundFile></mSoundFile>
-				<colorTriggerFgColor>#000000</colorTriggerFgColor>
-				<colorTriggerBgColor>#000000</colorTriggerBgColor>
-				<regexCodeList />
-				<regexCodePropertyList />
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Mana Bar On</name>
-					<script> BlackMUDlet.GUI.Vitals.drawManaBar()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>You will now get all stats in the prompt.</string>
-						<string>Mana added in prompt.</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>3</integer>
-						<integer>3</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Mana Bar Off</name>
-					<script> BlackMUDlet.GUI.Vitals.hideManaBar()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>Mana removed from prompt.</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>3</integer>
-					</regexCodePropertyList>
-				</Trigger>
-			</TriggerGroup>
-		</TriggerGroup>
-		<TriggerGroup isActive="yes" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-			<name>Imm Extensions</name>
-			<script></script>
-			<triggerType>0</triggerType>
-			<conditonLineDelta>0</conditonLineDelta>
-			<mStayOpen>0</mStayOpen>
-			<mCommand></mCommand>
-			<packageName></packageName>
-			<mFgColor>#ff0000</mFgColor>
-			<mBgColor>#ffff00</mBgColor>
-			<mSoundFile></mSoundFile>
-			<colorTriggerFgColor>#000000</colorTriggerFgColor>
-			<colorTriggerBgColor>#000000</colorTriggerBgColor>
-			<regexCodeList />
-			<regexCodePropertyList />
-			<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-				<name>Wiz</name>
-				<script>
-if matches[2] ~= "Syslog" then
-  BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;green&gt;::&lt;white&gt;" .. matches[2] .. "&lt;green&gt;:: " .. matches[3] .. "\n")
-end
-  </script>
-				<triggerType>0</triggerType>
-				<conditonLineDelta>0</conditonLineDelta>
-				<mStayOpen>0</mStayOpen>
-				<mCommand></mCommand>
-				<packageName></packageName>
-				<mFgColor>#ff0000</mFgColor>
-				<mBgColor>#ffff00</mBgColor>
-				<mSoundFile></mSoundFile>
-				<colorTriggerFgColor>#000000</colorTriggerFgColor>
-				<colorTriggerBgColor>#000000</colorTriggerBgColor>
-				<regexCodeList>
-					<string>^::(\w+)::(.+)$</string>
-				</regexCodeList>
-				<regexCodePropertyList>
-					<integer>1</integer>
-				</regexCodePropertyList>
-			</Trigger>
 		</TriggerGroup>
 		<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 			<name>Enter the game</name>
@@ -1717,8 +1702,8 @@ local function makeLabeledGauge(gaugeName, gaugeLabel, fgColor, bgColor, parent)
     },
     container)
   
-  -- Dumb workaround to detect emoji labels
-  -- #"HP:" = 3, #"💗" &gt; 4 due to unicode silliness
+  -- Dumb workaround to detect emoji labels and make them bigger
+  -- #"HP:" = 3, but #"💗" &gt; 4 due to unicode silliness
   if #gaugeLabel &lt; 4 then
     label:setFontSize(GUI.Utils.gaugeFontSize)
   else
@@ -2207,6 +2192,7 @@ condition["bleeding awfully from big wounds"] = 0
 ]]--
 
 -- Averages
+-- This was previously used before precise HP was available
 local condition = {}
 condition["excellent"] = 100
 condition["few scratches"] = 97.5
@@ -2697,6 +2683,18 @@ local Communication = GUI.Communication
 
 local EMCO = require("BlackMUDlet.emco")
 
+
+Communication.tabNames = {
+  "All",
+  "Local",
+  "Private",
+  "Group",
+  "Global",
+  "OOC",
+  "Other",
+}
+
+
 function Communication.buildPanel(parent)
 
   Communication.emco = Communication.emco or EMCO:new(
@@ -2706,18 +2704,10 @@ function Communication.buildPanel(parent)
       y = 0,
       width = "100%",
       height = "100%",
+      consoles = Communication.tabNames,
       allTab = true,
       allTabName = "All",
       gap = 4,
-      consoles = {
-        "All",
-        "Local",
-        "Private",
-        "Group",
-        "Global",
-        "OOC",
-        "Other",
-      },
       inactiveTabCSS = GUI.inactiveTabCSS,
       activeTabCSS = GUI.activeTabCSS,
     },
@@ -2732,8 +2722,26 @@ function Communication.buildPanel(parent)
   
   -- Loading after setting defaults, so user customization can overwrite
   Communication.emco:load()
+  Communication.updateTabs() -- fix tabs to match script, if needed
  
 end
+
+
+
+-- Updates the EMCO console list to match what the script specifies
+-- Needed to gracefully handled emco:load() when tabs have changed in the script
+function Communication.updateTabs()
+  -- explicitly remove any tabs we don't want so that the labels get hidden
+  for _,v in ipairs(Communication.emco.consoles) do
+    if not table.contains(Communication.tabNames, v) then
+      Communication.emco:removeTab(v)
+    end
+  end
+  -- overwrite the consoles
+  Communication.emco.consoles = table.deepcopy(Communication.tabNames)
+  Communication.emco:reset()  
+end
+
 
 
 function Communication.toggleGag(s)
@@ -3254,8 +3262,17 @@ end</script>
 local GUI = BlackMUDlet.GUI
 local WorldInfo = GUI.WorldInfo
 
-
 local EMCO = require("BlackMUDlet.emco")
+
+
+WorldInfo.tabNames = {
+  "Mapper",
+  "World Map",
+  "Event Log",
+  "UI Help",
+  "GMCP",
+}
+
 
 function WorldInfo.buildPanel(parent)  
 
@@ -3267,14 +3284,7 @@ function WorldInfo.buildPanel(parent)
       width = "100%",
       height = "100%",
       gap = 4,
-      consoles = {
-        "Mapper",
-        "World Map",
---        "Item Database",
-        "Event Log",
-        "UI Help",
-        "GMCP",
-      },    
+      consoles = tabNames,
       inactiveTabCSS = GUI.inactiveTabCSS,
       activeTabCSS = GUI.activeTabCSS,
     },
@@ -3285,6 +3295,7 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.emco:enableAutoWrap()
   
   WorldInfo.emco:load()
+  WorldInfo.updateTabs() -- if the loaded EMCO has different tabs, overwrite that
     
   
   -- add mapper
@@ -3304,11 +3315,6 @@ function WorldInfo.buildPanel(parent)
   -- This doesn't preserve aspect ratio, doesn't seem to be an easy way to do so
   WorldInfo.imageLabel:setStyleSheet([[border-image: url(]]..getMudletHomeDir()..[[/BlackMUDlet/images/Balric.jpg);]])
 
--- Item DB removed, doesn't really fit with AoD changes
---[[  
-  -- add itemDB
-  GUI.ItemDB.buildPanel(GUI.WorldInfo.emco.mc["Item Database"])
-]]--  
 
   -- add Activity Log
   GUI.EventLog.buildPanel(GUI.WorldInfo.emco.mc["Event Log"])
@@ -3330,8 +3336,24 @@ function WorldInfo.buildPanel(parent)
 end
 
 
+-- Updates the EMCO console list to match what the script specifies
+-- Needed to gracefully handled emco:load() when tabs have changed in the script
+function WorldInfo.updateTabs()
+  -- explicitly remove any tabs we don't want so that the labels get hidden
+  for _,v in ipairs(WorldInfo.emco.consoles) do
+    if not table.contains(WorldInfo.tabNames, v) then
+      WorldInfo.emco:removeTab(v)
+    end
+  end
+  -- overwrite the consoles
+  WorldInfo.emco.consoles = table.deepcopy(WorldInfo.tabNames)
+  WorldInfo.emco:reset()  
+end
 
-function GUI.WorldInfo.handleGmcpUpdate(...)
+
+
+-- Update the GMCP tab with incoming GMCP data
+function WorldInfo.handleGmcpUpdate(...)
 
   WorldInfo.emco:clear("GMCP")
     
@@ -3339,12 +3361,12 @@ function GUI.WorldInfo.handleGmcpUpdate(...)
 
 end
 
-registerNamedEventHandler("BlackMUDlet", "GUI.gmcpUpdate", "gmcp.General.Time", GUI.WorldInfo.handleGmcpUpdate)
+registerNamedEventHandler("BlackMUDlet", "GUI.gmcpUpdate", "gmcp.General.Time", WorldInfo.handleGmcpUpdate)
 
 
 
-
-function GUI.WorldInfo.handleUpdateAvailable()
+-- Add an update tab when update is available
+function WorldInfo.handleUpdateAvailable()
 
   WorldInfo.emco:addTab("Update!")
   WorldInfo.emco:clear("Update!")
@@ -3363,10 +3385,12 @@ end
 registerNamedEventHandler("BlackMUDlet", 
                           "GUI.WorldInfo.updateAvailable", 
                           "BlackMUDlet.Updater.updateAvailable", 
-                          GUI.WorldInfo.handleUpdateAvailable)
+                          WorldInfo.handleUpdateAvailable)
 
 
-function GUI.WorldInfo.handleUpToDate()
+
+-- remove the update tab when no longer needed
+function WorldInfo.handleUpToDate()
   -- If the Update! tab is visible, remove it
   if WorldInfo.emco.mc["Update!"] then
     WorldInfo.emco:removeTab("Update!")
@@ -3376,7 +3400,7 @@ end
 registerNamedEventHandler("BlackMUDlet", 
                           "GUI.WorldInfo.upToDate", 
                           "BlackMUDlet.Updater.upToDate", 
-                          GUI.WorldInfo.handleUpToDate)
+                          WorldInfo.handleUpToDate)
 
 
 
@@ -3421,7 +3445,7 @@ function Attributes.buildPanel(parent)
     parent
   )
   
-  Attributes.console = Geyser.MiniConsole:new(
+  Attributes.console = Attributes.console or Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Attributes.console",
       x = 0, y = 0,
@@ -3571,7 +3595,7 @@ function Buffs.buildPanel(parent)
     parent
   )
   
-  Buffs.console = Geyser.MiniConsole:new(
+  Buffs.console = Buffs.console or Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Buffs.console",
       x = 0, y = 0,
@@ -3630,6 +3654,7 @@ debuffs["poison"] = true
 debuffs["silence"] = true
 debuffs["weakness"] = true
 debuffs["web"] = true
+debuffs["sleep"] = true
 
 
 function Buffs.update()
@@ -3640,7 +3665,6 @@ function Buffs.update()
     local Spells = table.deepcopy(gmcp.Char.Spells)
     
     Buffs.console:clear()
---    Buffs.console:cechoLink("Affecting Spells:\n", [[send("attribute", false)]], "", true)
     Buffs.console:cecho("\n")
     
     local watchList = table.deepcopy(GUI.Config.spellWatch)
@@ -3677,8 +3701,7 @@ function Buffs.update()
       end
     end
     
-
-    if watchList ~= {} then
+    if watchList and watchList ~= {} then
       
       Buffs.console:cecho("\n")
       Buffs.console:cecho("Missing:\n")
@@ -3691,9 +3714,8 @@ function Buffs.update()
           "",
           true
         )
-      end     
- 
-    end
+      end    
+    end   
   end  
 end
 
@@ -3728,7 +3750,7 @@ function Group.buildPanel(parent)
     parent
   )
   
-  Group.console = Geyser.MiniConsole:new(
+  Group.console = Group.console or Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Group.console",
       x = 0, y = 0,
@@ -3846,7 +3868,7 @@ end
 					</Script>
 				</ScriptGroup>
 				<ScriptGroup isActive="yes" isFolder="yes">
-					<name>Enemy List</name>
+					<name>Combat</name>
 					<packageName></packageName>
 					<script>BlackMUDlet.GUI.Enemies = BlackMUDlet.GUI.Enemies or {}</script>
 					<eventHandlerList />
@@ -3874,7 +3896,7 @@ function Enemies.buildPanel(parent)
   )
   
   for i = 1, Enemies.maxSize do
-    Enemies.gauges[i] = Geyser.Gauge:new(
+    Enemies.gauges[i] = Enemies.gauges[i] or Geyser.Gauge:new(
     {
       name = "BlackMUDlet.GUI.Enemies.gauge" .. i,
       x = Enemies.gaugePadding, 
@@ -4034,7 +4056,7 @@ function Info.buildPanel(parent)
   
   
   -- Character Attributes
-  Info.attHeader = Geyser.Label:new(
+  Info.attHeader = Info.attHeader or Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.attHeader",
       x = 0, y = 0,
@@ -4054,7 +4076,7 @@ function Info.buildPanel(parent)
   
   
     -- Buffs
-  Info.buffsHeader = Geyser.Label:new(
+  Info.buffsHeader = Info.buffsHeader or Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.buffsHeader",
       x = 0, y = 0,
@@ -4073,7 +4095,7 @@ function Info.buildPanel(parent)
   
   
   -- Group Info
-  Info.groupHeader = Geyser.Label:new(
+  Info.groupHeader = Info.groupHeader or Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.groupHeader",
       x = 0, y = 0,
@@ -4092,7 +4114,7 @@ function Info.buildPanel(parent)
   
   
   -- Combat Info
-  Info.combatHeader = Geyser.Label:new(
+  Info.combatHeader = Info.combatHeader or Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.combatHeader",
       x = 0, y = 0,
