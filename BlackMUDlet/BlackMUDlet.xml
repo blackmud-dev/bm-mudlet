@@ -2722,7 +2722,7 @@ function Communication.buildPanel(parent)
   
   -- Loading after setting defaults, so user customization can overwrite
   --Communication.emco:load()
-  Communication.updateTabs() -- fix tabs to match script, if needed
+  --Communication.updateTabs() -- fix tabs to match script, if needed
  
 end
 
@@ -3295,7 +3295,7 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.emco:enableAutoWrap()
   
   --WorldInfo.emco:load()
-  WorldInfo.updateTabs() -- if the loaded EMCO has different tabs, overwrite that
+  --WorldInfo.updateTabs() -- if the loaded EMCO has different tabs, overwrite that
     
   
   -- add mapper
@@ -3445,7 +3445,7 @@ function Attributes.buildPanel(parent)
     parent
   )
   
-  Attributes.console = Attributes.console or Geyser.MiniConsole:new(
+  Attributes.console = Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Attributes.console",
       x = 0, y = 0,
@@ -3595,7 +3595,7 @@ function Buffs.buildPanel(parent)
     parent
   )
   
-  Buffs.console = Buffs.console or Geyser.MiniConsole:new(
+  Buffs.console = Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Buffs.console",
       x = 0, y = 0,
@@ -3750,7 +3750,7 @@ function Group.buildPanel(parent)
     parent
   )
   
-  Group.console = Group.console or Geyser.MiniConsole:new(
+  Group.console = Geyser.MiniConsole:new(
     {
       name = "BlackMUDlet.GUI.Group.console",
       x = 0, y = 0,
@@ -4056,7 +4056,7 @@ function Info.buildPanel(parent)
   
   
   -- Character Attributes
-  Info.attHeader = Info.attHeader or Geyser.Label:new(
+  Info.attHeader = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.attHeader",
       x = 0, y = 0,
@@ -4076,7 +4076,7 @@ function Info.buildPanel(parent)
   
   
     -- Buffs
-  Info.buffsHeader = Info.buffsHeader or Geyser.Label:new(
+  Info.buffsHeader = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.buffsHeader",
       x = 0, y = 0,
@@ -4095,7 +4095,7 @@ function Info.buildPanel(parent)
   
   
   -- Group Info
-  Info.groupHeader = Info.groupHeader or Geyser.Label:new(
+  Info.groupHeader = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.groupHeader",
       x = 0, y = 0,
@@ -4114,7 +4114,7 @@ function Info.buildPanel(parent)
   
   
   -- Combat Info
-  Info.combatHeader = Info.combatHeader or Geyser.Label:new(
+  Info.combatHeader = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Info.combatHeader",
       x = 0, y = 0,
@@ -4322,7 +4322,7 @@ function GUI.buildUI()
   registerNamedEventHandler("BlackMUDlet", "GUI.windowReposition", "AdjustableContainerReposition", resizeHandler)
   registerNamedEventHandler("BlackMUDlet", "GUI.windowRepositionFinish", "AdjustableContainerRepositionFinish", resizeFinishedHandler)
   registerNamedEventHandler("BlackMUDlet", "GUI.sysMainWindowResize", "sysWindowResizeEvent", mainWindowResizeHandler)
-  
+
 end
 
 
@@ -4354,7 +4354,7 @@ function GUI.resetLayout()
   
   if GUI.WorldInfo.window then
     GUI.WorldInfo.window:show()
-    GUI.WorldInfo.window:move(x, 2)
+    GUI.WorldInfo.window:move(defaultW, 2)
     GUI.WorldInfo.window:resize(totalW - defaultW, totalH - math.floor(hDivider * totalH))
     GUI.WorldInfo.window:lockContainer("border")
   end
@@ -4370,6 +4370,7 @@ function GUI.resetLayout()
   end
 ]]--
 
+  -- new layout, place panel floating on right hand side
   if GUI.Info.window then
     local infoWidth = 230
     GUI.Info.window:show()
@@ -5544,17 +5545,17 @@ function BlackMUDlet.initialize()
     BlackMUDlet.GUI.initialize(BlackMUDlet.Config.GUI)
     BlackMUDlet.Mapper.initialize(BlackMUDlet.Config.Mapper)
         
-    -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
-    if gmcp and gmcp.Room then
-      BlackMUDlet.onEnterGame()
-    end
-    
     if not io.exists(BlackMUDlet.packagePath .. "profileicon") 
        and io.exists(BlackMUDlet.packagePath .. "resources/profileicon") then
       downloadFile(getMudletHomeDir() .. "/profileicon", BlackMUDlet.packagePath .. "resources/profileicon")
     end
   
     initialized = true
+    
+    -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
+    if gmcp and gmcp.Room then
+      BlackMUDlet.onEnterGame()
+    end
     
   end
   
