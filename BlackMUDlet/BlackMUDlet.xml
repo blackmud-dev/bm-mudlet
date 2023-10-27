@@ -1379,9 +1379,9 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
     &lt;white&gt;ui help&lt;reset&gt;:  show this screen
     &lt;white&gt;ui about&lt;reset&gt;: information about this package
     &lt;white&gt;ui hide&lt;reset&gt;:  hide all UI panels
-    &lt;white&gt;ui show&lt;reset&gt;:  rebuild, reset, and show all UI panels
     &lt;white&gt;ui reset&lt;reset&gt;: reset the layout to default
     &lt;white&gt;ui build&lt;reset&gt;: rebuild the UI from source after script changes
+    &lt;white&gt;ui show&lt;reset&gt;:  rebuild, reset, and show all UI panels
   
   &lt;LightBlue&gt;Communication:
     &lt;white&gt;ui gag &lt;i&gt;&lt;text&gt;&lt;reset&gt;: gags (or un-gags) messages containing the specified text
@@ -1413,8 +1413,8 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
 
 GUI.Help.about = [[&lt;LightBlue&gt;
 ********************************************************************************
-BlackMUDlet UI
-
+&lt;white&gt;BlackMUDlet UI
+&lt;LightBlue&gt;
   Author: yetanotherkevin (aka Donal)
   
   Acknowledgements:
@@ -2721,7 +2721,7 @@ function Communication.buildPanel(parent)
   Communication.emco:enableScrollbars()
   
   -- Loading after setting defaults, so user customization can overwrite
-  Communication.emco:load()
+  --Communication.emco:load()
   Communication.updateTabs() -- fix tabs to match script, if needed
  
 end
@@ -3284,7 +3284,7 @@ function WorldInfo.buildPanel(parent)
       width = "100%",
       height = "100%",
       gap = 4,
-      consoles = tabNames,
+      consoles = WorldInfo.tabNames,
       inactiveTabCSS = GUI.inactiveTabCSS,
       activeTabCSS = GUI.activeTabCSS,
     },
@@ -3294,7 +3294,7 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.emco:setFontSize(GUI.Utils.uiFontSize)
   WorldInfo.emco:enableAutoWrap()
   
-  WorldInfo.emco:load()
+  --WorldInfo.emco:load()
   WorldInfo.updateTabs() -- if the loaded EMCO has different tabs, overwrite that
     
   
@@ -3316,7 +3316,7 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.imageLabel:setStyleSheet([[border-image: url(]]..getMudletHomeDir()..[[/BlackMUDlet/images/Balric.jpg);]])
 
 
-  -- add Activity Log
+  -- add Event Log
   GUI.EventLog.buildPanel(GUI.WorldInfo.emco.mc["Event Log"])
  
   
@@ -4358,13 +4358,24 @@ function GUI.resetLayout()
     GUI.WorldInfo.window:resize(totalW - defaultW, totalH - math.floor(hDivider * totalH))
     GUI.WorldInfo.window:lockContainer("border")
   end
-  
+
+-- Old layout, anchor panel to left hand side
+--[[  
   if GUI.Info.window then
     GUI.Info.window:show()
     GUI.Info.window:move(0, 2)
     GUI.Info.window:resize(230, totalH - defaultH - 4)
     GUI.Info.window:attachToBorder("left")
     --GUI.Info.window:connectToBorder("bottom")
+  end
+]]--
+
+  if GUI.Info.window then
+    local infoWidth = 230
+    GUI.Info.window:show()
+    GUI.Info.window:move(defaultW - infoWidth - 22, 2)
+    GUI.Info.window:resize(infoWidth, totalH - defaultH - 4)
+    GUI.Info.window:attachToBorder("left")
   end
 
   -- Set the constraints to be percentages instead of absolutes
@@ -4520,7 +4531,7 @@ Mapper.supported_areamodes = {
 }
 
 Mapper.areaModeHelp = {
-  auto = "Mapper will automatically place rooms in provided area map",
+  auto = "Mapper will automatically place rooms in game-defined area/map",
   keep = "Mapper will keep new rooms in current area/map"
 }
 
@@ -4632,7 +4643,7 @@ end
 				<name>GMCP Mapper</name>
 				<packageName></packageName>
 				<script>
--- TODO: Wishlist item, but an Undo function would be amaizng. More of a Mudlet-level feature
+-- TODO: Turn off GMCP handler on uninstall
 
 -- TODO: Consider adding error and warn echoes in BlackMUDlet proper on top of info/echo
 
@@ -4658,8 +4669,6 @@ end
     -- manual editing seems fine
   -- a quick skim of the Mudlet map loading code suggests special exits aren't loaded at import?
 
--- TODO: Might want to track command inputs for enter and dirs, use as hint
-  -- this is tedious, hardest part of making the generic_mapper work
 
 -- TODO: environment-based weighting
 
@@ -5260,7 +5269,7 @@ end
 
 
 
---- add a "goto" option to mapper right click menu
+--- handle the "goto" option in mapper right click menu
 function mapUtils.goto()
 
   local selected = getMapSelection()
@@ -5393,8 +5402,8 @@ function Mapper.initialize(config)
   registerNamedEventHandler("BlackMUDlet", "Mapper.replaceRoom", "replaceRoom", BlackMUDlet.Mapper.replaceCurrentRoom)
 
   -- add a teleport option to the right click menu
-  addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: (Imm) Goto room")
-  registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
+  -- addMapEvent("mapUtils.goto", "mapGoto", nil, "BlackMUDlet: (Imm) Goto room")
+  -- registerNamedEventHandler("BlackMUDlet", "mapUtils.goto", "mapGoto", mapUtils.goto)
   
 end
 
@@ -5413,6 +5422,7 @@ end
 
 function Mapper.shutdown()
   -- do nothing
+  -- Mudlet will auto-save the map on profile close.
 end
 
 
@@ -5451,15 +5461,15 @@ Help.help = [[&lt;LightBlue&gt;
 
   &lt;LightBlue&gt;Map Mode&lt;reset&gt;: Specifies how the Mapper should handle incoming room data
     &lt;white&gt;ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;
-      &lt;white&gt;off&lt;reset&gt;: Do nothing, map will not follow or update
+         &lt;white&gt;off&lt;reset&gt;: Do nothing, map will not follow or update
       &lt;white&gt;follow&lt;reset&gt;: Map will position will follow in game movement for known rooms
       &lt;white&gt;update&lt;reset&gt;: Follow movement and update existing rooms, do not create new rooms
       &lt;white&gt;create&lt;reset&gt;: Update existing rooms and create new rooms when encountered
       
   &lt;LightBlue&gt;Create Mode&lt;reset&gt;: Behavior when creating new rooms that might not fit nicely on map
     &lt;white&gt;ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;
-      &lt;white&gt;skip&lt;reset&gt;: Do not create room if there is no space in the map
-      &lt;white&gt;warn&lt;reset&gt;: Skip and print a warning to the main console
+         &lt;white&gt;skip&lt;reset&gt;: Do not create room if there is no space in the map
+         &lt;white&gt;warn&lt;reset&gt;: Skip and print a warning to the main console
       &lt;white&gt;stretch&lt;reset&gt;: Shift all rooms in current map to make space for the new room
       &lt;white&gt;overlap&lt;reset&gt;: Create the new room on top of the existing room
   
@@ -5478,7 +5488,14 @@ Help.help = [[&lt;LightBlue&gt;
     &lt;white&gt;ui map removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, if empty
     &lt;white&gt;ui map force removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, even if non-empty
 
-&lt;LightBlue&gt;********************************************************************************
+&lt;LightBlue&gt;If you want to start mapping from an unmapped room:
+  1) Right click on a blank area of the map and switch to editing mode if needed
+  2) Right click again and select "Create new room"
+  3) Right click new room and choose "BlackMUDlet: Replace with current room"
+  4) Your newly placed room should be now be synced with your current location
+  5) Start exploring
+  
+********************************************************************************
 ]]
 
 
@@ -5593,7 +5610,9 @@ function BlackMUDlet.uninstall()
   BlackMUDlet.Mapper.uninstall()
   uninstallPackage(BlackMUDlet.packageName)
   
+  initialized = false
   BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
+
 end
 
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninstall", BlackMUDlet.uninstall)
