@@ -4376,6 +4376,7 @@ function GUI.resetLayout()
     GUI.Info.window:show()
     GUI.Info.window:move(defaultW - infoWidth - 22, 2)
     GUI.Info.window:resize(infoWidth, totalH - defaultH - 4)
+    GUI.Info.window:detach()
     GUI.Info.window:unlockContainer()
   end
 
