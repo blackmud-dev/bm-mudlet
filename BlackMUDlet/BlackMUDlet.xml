@@ -4376,7 +4376,7 @@ function GUI.resetLayout()
     GUI.Info.window:show()
     GUI.Info.window:move(defaultW - infoWidth - 22, 2)
     GUI.Info.window:resize(infoWidth, totalH - defaultH - 4)
-    GUI.Info.window:attachToBorder("left")
+    GUI.Info.window:unlockContainer()
   end
 
   -- Set the constraints to be percentages instead of absolutes
