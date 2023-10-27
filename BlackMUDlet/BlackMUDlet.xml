@@ -3896,7 +3896,7 @@ function Enemies.buildPanel(parent)
   )
   
   for i = 1, Enemies.maxSize do
-    Enemies.gauges[i] = Enemies.gauges[i] or Geyser.Gauge:new(
+    Enemies.gauges[i] = Geyser.Gauge:new(
     {
       name = "BlackMUDlet.GUI.Enemies.gauge" .. i,
       x = Enemies.gaugePadding, 
