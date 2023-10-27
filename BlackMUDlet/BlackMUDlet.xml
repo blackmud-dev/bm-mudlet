@@ -3800,7 +3800,7 @@ function Group.update()
   
     local group = gmcp.Char.Group
   
-    if table.size(Group.members) == 0 then
+    if table.size(group) == 0 then
       Group.console:cecho("\n None.")
     end
     
