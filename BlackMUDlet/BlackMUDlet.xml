@@ -770,7 +770,7 @@ BlackMUDlet.Updater.downloadUpdate()</script>
 			<script>BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName  = "BlackMUDlet"
-BlackMUDlet.version      = 4
+BlackMUDlet.version      = 5
 
 BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
 BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
