@@ -5486,7 +5486,7 @@ local initialized = initialized or false
 -- called on sysLoadEvent and sysInstall, but will only run once
 function BlackMUDlet.initialize(event, name)
 
-  if event == "sysInstall" and name ~= "BlackMUDlet" then return end
+  if event == "sysInstall" and name ~= BlackMUDlet.packageName then return end
 
   if initialized == false then
 
@@ -5569,11 +5569,17 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEve
 function BlackMUDlet.uninstall(event, name)
 
   -- don't trigger on uninstall event unless it was BlackMUDlet that was uninstalled
-  if event == "sysUninstall" and name ~= "BlackMUDlet" then return end
+  if event == "sysUninstall" and name ~= BlackMUDlet.packageName then return end
+  
+  -- prevent recursive calls since we might enter here via manual call and again via resulting event
+  stopNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall")
 
   BlackMUDlet.GUI.uninstall()
   BlackMUDlet.Mapper.uninstall()
-  uninstallPackage(BlackMUDlet.packageName)
+
+  if table.contains(getPackages(), BlackMUDlet.packageName) then
+    uninstallPackage(BlackMUDlet.packageName)
+  end
   
   initialized = false
   BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
