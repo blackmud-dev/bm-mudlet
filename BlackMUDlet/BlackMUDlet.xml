@@ -4811,7 +4811,7 @@ local function updateAreaName(info)
   if info == nil then return end
   
   -- update the room user data if necessary
-  if ifno.area ~= "" and info.area ~= getRoomUserData(info.num, "area") then
+  if info.area ~= "" and info.area ~= getRoomUserData(info.num, "area") then
     setRoomUserData(info.num, "area", info.area)
   end
   
