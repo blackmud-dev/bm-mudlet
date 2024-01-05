@@ -506,154 +506,6 @@ end
 					</regexCodePropertyList>
 				</Trigger>
 			</TriggerGroup>
-			<TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-				<name>Buffs</name>
-				<script></script>
-				<triggerType>0</triggerType>
-				<conditonLineDelta>0</conditonLineDelta>
-				<mStayOpen>0</mStayOpen>
-				<mCommand></mCommand>
-				<packageName></packageName>
-				<mFgColor>#ff0000</mFgColor>
-				<mBgColor>#ffff00</mBgColor>
-				<mSoundFile></mSoundFile>
-				<colorTriggerFgColor>#000000</colorTriggerFgColor>
-				<colorTriggerBgColor>#000000</colorTriggerBgColor>
-				<regexCodeList />
-				<regexCodePropertyList />
-				<Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Affecting Spell List</name>
-					<script>-- TODO: Replace this with gmcp when available
-
-BlackMUDlet.GUI.Buffs.affecting[matches[2]] = true
-BlackMUDlet.GUI.Buffs.update()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^Spell : '(.+)'$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="no" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Clear Spell Window</name>
-					<script>-- TODO: Replace this with gmcp when available
-
-BlackMUDlet.GUI.Buffs.affecting = {}
-BlackMUDlet.GUI.Buffs.update()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>Affecting Spells:</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>3</integer>
-					</regexCodePropertyList>
-				</Trigger>
-			</TriggerGroup>
-			<TriggerGroup isActive="no" isFolder="yes" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-				<name>Group</name>
-				<script></script>
-				<triggerType>0</triggerType>
-				<conditonLineDelta>0</conditonLineDelta>
-				<mStayOpen>0</mStayOpen>
-				<mCommand></mCommand>
-				<packageName></packageName>
-				<mFgColor>#ff0000</mFgColor>
-				<mBgColor>#ffff00</mBgColor>
-				<mSoundFile></mSoundFile>
-				<colorTriggerFgColor>#000000</colorTriggerFgColor>
-				<colorTriggerBgColor>#000000</colorTriggerBgColor>
-				<regexCodeList />
-				<regexCodePropertyList />
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Group Member</name>
-					<script>
-BlackMUDlet.GUI.Group.addMember(matches.name, matches.hp, matches.mv)
-BlackMUDlet.GUI.Group.update()
-</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^\s+(?&lt;name&gt;\w+)\s+[\(\w+\)]* HP:(?&lt;hp&gt;\d+)% MV:(?&lt;mv&gt;\d+)%$</string>
-						<string>^\s+- (?&lt;name&gt;(?:\w+ )+)\s+[\(\w+\)]* HP:(?&lt;hp&gt;\d+)% MV:(?&lt;mv&gt;\d+)%$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Clear Group Info</name>
-					<script>
-BlackMUDlet.GUI.Group.clearMembers()
-BlackMUDlet.GUI.Group.update()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>Your group consists of:</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>3</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>No Group</name>
-					<script>-- TODO: Replace this with gmcp when available
-
-BlackMUDlet.GUI.Group.clearMembers()
-BlackMUDlet.GUI.Group.update()</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>But you are a member of no group?!</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>3</integer>
-					</regexCodePropertyList>
-				</Trigger>
-			</TriggerGroup>
 		</TriggerGroup>
 		<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 			<name>Enter the game</name>
@@ -836,22 +688,6 @@ end</script>
 				<packageName></packageName>
 				<regex>^ui gag (.+)$</regex>
 			</Alias>
-			<Alias isActive="yes" isFolder="no">
-				<name>ItemDB Search</name>
-				<script>
-BlackMUDlet.GUI.WorldInfo.emco:switchTab("Item Database")
-
--- TODO: This should work, but it doesn't
---BlackMUDlet.GUI.ItemDB.console.printCmd(matches[2])
--- So, workaround:
-printCmdLine("BlackMUDlet.GUI.ItemDB.console", matches[2] or "")
-
-BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
-</script>
-				<command></command>
-				<packageName></packageName>
-				<regex>\/(?:id|item) ?(.+)?</regex>
-			</Alias>
 		</AliasGroup>
 		<AliasGroup isActive="yes" isFolder="yes">
 			<name>Mapper</name>
@@ -918,7 +754,9 @@ BlackMUDlet.GUI.ItemDB.handleInput(matches[2] or "")
 		</AliasGroup>
 		<Alias isActive="no" isFolder="no">
 			<name>Update UI</name>
-			<script>BlackMUDlet.Updater.downloadUpdate()</script>
+			<script>-- disabled by default unless an update is available
+
+BlackMUDlet.Updater.downloadUpdate()</script>
 			<command></command>
 			<packageName></packageName>
 			<regex>^ui update$</regex>
@@ -1059,11 +897,11 @@ GUI.Defaults = {
   initialized     = false,
   statusBarFormat = "compact",          
   groupAction     = "glance",
-  showManaBar     = "true",
-  showWimpyBar    = "false",
-  showTickNotice  = "true",
+  showManaBar     = true,
+  showWimpyBar    = false,
+  showTickNotice  = true,
   spellWatch      = {sanctuary = true,},
-  itemdb          = BlackMUDlet.packagePath .. "resources/itemdb.txt"
+  showLegend      = false,
 }
 
 -- TODO: font face isn't actually used anywhere
@@ -2813,7 +2651,8 @@ local buttonStyle = [[
 
 function GUI.Mapper.buildPanel(parent)
 
-  local buttonBarHeight = 25
+  local buttonHeight = 25
+  local buttonBarHeight = 2 * buttonHeight
 
   -- parent container
   Mapper.panel = Geyser.Container:new(
@@ -2841,15 +2680,39 @@ function GUI.Mapper.buildPanel(parent)
   )
   
   -- container for the UI buttons
-  Mapper.buttonBox = Geyser.HBox:new(
+  Mapper.buttonBox = Geyser.VBox:new(
     {
-      name = "BlackMUDlet.GUI.Mapper.panel",
+      name = "BlackMUDlet.GUI.Mapper.vbox",
       x = 0,
       y = -buttonBarHeight,
       width = "100%",
       height = buttonBarHeight,
     },
     Mapper.panel
+  )
+  
+  -- container for the top row of UI buttons
+  Mapper.buttonTop = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.buttonTop",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = buttonHeight,
+    },
+    Mapper.buttonBox
+  )
+  
+  -- container for the bottom row of UI buttons
+  Mapper.buttonBot = Geyser.HBox:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.buttonBot",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = buttonHeight,
+    },
+    Mapper.buttonBox
   )
   
   
@@ -2859,7 +2722,7 @@ function GUI.Mapper.buildPanel(parent)
       name = "BlackMUDlet.GUI.Mapper.mapModeButton",
       x = 0, y = 0, width = "100%", height = "100%",
     },
-    Mapper.buttonBox
+    Mapper.buttonTop
   )
   Mapper.mapModeButton:setStyleSheet(buttonStyle)
   Mapper.mapModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map mode")
@@ -2872,11 +2735,25 @@ function GUI.Mapper.buildPanel(parent)
       name = "BlackMUDlet.GUI.Mapper.createModeButton",
       x = 0, y = 0, width = "100%", height = "100%",
     },
-    Mapper.buttonBox
+    Mapper.buttonTop
   )
   Mapper.createModeButton:setStyleSheet(buttonStyle)
   Mapper.createModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "create mode")
   Mapper.createModeButton:setToolTip("How the Mapper handles the placement of overlapping rooms")
+  
+  
+  -- Legend toggle button
+  Mapper.legendButton = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.legendButton",
+      x = 0, y = 0, width = "100%", height = "100%",
+      h_stretch_factor = 0.5,
+    },
+    Mapper.buttonTop
+  )
+  Mapper.legendButton:setStyleSheet(buttonStyle)
+  Mapper.legendButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "toggle legend")
+  Mapper.legendButton:setToolTip("Toggle the legend")
   
   
   -- Exit mode button
@@ -2885,7 +2762,7 @@ function GUI.Mapper.buildPanel(parent)
       name = "BlackMUDlet.GUI.Mapper.exitModeButton",
       x = 0, y = 0, width = "100%", height = "100%",
     },
-    Mapper.buttonBox
+    Mapper.buttonBot
   )
   Mapper.exitModeButton:setStyleSheet(buttonStyle)
   Mapper.exitModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "exit mode")
@@ -2898,32 +2775,44 @@ function GUI.Mapper.buildPanel(parent)
       name = "BlackMUDlet.GUI.Mapper.areaModeButton",
       x = 0, y = 0, width = "100%", height = "100%",
     },
-    Mapper.buttonBox
+    Mapper.buttonBot
   )
   Mapper.areaModeButton:setStyleSheet(buttonStyle)
   Mapper.areaModeButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "area mode")
   Mapper.areaModeButton:setToolTip("In which area (map) the Mapper places newly created rooms")
-
   
---[[
+ 
   -- Help button
   Mapper.helpButton = Geyser.Label:new(
     {
       name = "BlackMUDlet.GUI.Mapper.helpButton",
       x = 0, y = 0, width = "100%", height = "100%",
+      h_stretch_factor = 0.5,
     },
-    Mapper.buttonBox
+    Mapper.buttonBot
   )
   Mapper.helpButton:setStyleSheet(buttonStyle)
   Mapper.helpButton:setClickCallback("BlackMUDlet.GUI.Mapper.handleClick", "map help")
-  Mapper.helpButton:echo("&lt;center&gt;Mapper Help")
-]]--  
+  Mapper.helpButton:setToolTip("Show Help")
 
 
-  -- This technically doesn't do anything unless the Mapper is already initialized
-  -- The Mapper will raise an event to make sure this is called at init
-  Mapper.update()
+  -- Window container for the Mapper legend
+  Mapper.legendWindow = Mapper.legendWindow or Adjustable.Container:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.legendWindow",
+      titleText = "Map Legend",
+      adjLabelstyle = GUI.defaultWindowStyle,
+      titleTxtColor = "white",
+    },
+    Mapper.panel
+  )
+
+  Mapper.buildLegend(Mapper.legendWindow)
+  local w,h = getLabelSizeHint("BlackMUDlet.GUI.Mapper.legendLabel")
+  Mapper.legendWindow:resize(w+25, h+25) -- bit of a hack to account for titlebar and window borders
+
   
+  Mapper.update()
   
   registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.GUI.Mapper", "BlackMUDlet.Mapper.configUpdate", Mapper.update)
     
@@ -2963,12 +2852,53 @@ function Mapper.handleClick(button)
   
   elseif button == "map help" then
     BlackMUDlet.Mapper.showHelp()
+    
+  elseif button == "toggle legend" then
+    GUI.Config.showLegend = not GUI.Config.showLegend
+    Mapper.update()
+  
   else
-    BlackMudlet.GUI.echo("Unknown Mapper button bar event received. This should never happen.")
+    BlackMUDlet.GUI.echo("Unknown Mapper button bar event received. This should never happen.")
   end
 
 end
-</script>
+
+
+function Mapper.buildLegend(parent)
+
+  Mapper.legendLabel = Geyser.Label:new(
+    {
+      name = "BlackMUDlet.GUI.Mapper.legendLabel",
+      x = 0,
+      y = 0,
+      width = "100%",
+      height = "100%",
+    },
+    parent
+  )
+  Mapper.legendLabel:setFontSize(GUI.Utils.uiFontSize)
+  
+  local output = ""
+  
+  for k,v in pairs(BlackMUDlet.Mapper.envColors) do
+  
+    if k == "Default" then 
+      k = "Unknown"
+    end
+    
+    output = output .. "&lt;"..v[1]..","..v[2]..","..v[3].."&gt;██&lt;255,255,255&gt; ".. k .."\n"
+    
+  end
+  
+  outout = output .. "\n"
+  
+  for k,v in pairs(BlackMUDlet.Mapper.specials) do
+    output = output .. v .. "  " .. k .. "\n"
+  end
+  
+  Mapper.legendLabel:decho(output)
+  
+end</script>
 						<eventHandlerList />
 					</Script>
 					<Script isActive="yes" isFolder="no">
@@ -2986,7 +2916,7 @@ local translate = {
   create  = "Create New Rooms",
   
   skip    = "Skip Room",
-  warn    = "Skip &amp; Warn",
+  warn    = "Skip Room &amp; Warn",
   stretch = "Stretch Map",
   overlap = "Place Anyway",
   
@@ -2994,7 +2924,7 @@ local translate = {
   rooms  = "Create Rooms",
   
   auto   = "Auto Area",
-  keep   = "Current Area"
+  keep   = "Keep in Current Area"
 }
 
 
@@ -3006,7 +2936,7 @@ function Mapper.update()
   local config = BlackMUDlet.Mapper.Config
 
   --Mapper.mapModeButton:setStyleSheet(buttonStyle)
-  Mapper.mapModeButton:echo("Mode: " .. translate[config.mapmode] or config.mapmode)
+  Mapper.mapModeButton:echo("Map Mode: " .. translate[config.mapmode] or config.mapmode)
   
 
   --Mapper.createModeButton:setStyleSheet(buttonStyle)
@@ -3014,11 +2944,22 @@ function Mapper.update()
   
   
   --Mapper.exitModeButton:setStyleSheet(buttonStyle)
-  Mapper.exitModeButton:echo("Exits: " .. translate[config.exitmode] or config.exitmode)
+  Mapper.exitModeButton:echo("Exit Mode: " .. translate[config.exitmode] or config.exitmode)
   
   
   --Mapper.areaModeButton:setStyleSheet(buttonStyle)
-  Mapper.areaModeButton:echo("Areas: " .. translate[config.areamode] or config.areamode)
+  Mapper.areaModeButton:echo("Area Mode: " .. translate[config.areamode] or config.areamode)
+
+  Mapper.legendButton:echo("&lt;center&gt;Toggle Legend")
+  
+  if GUI.Config.showLegend then
+    Mapper.legendWindow:show()
+    Mapper.legendWindow:restore()
+  else
+    Mapper.legendWindow:hide()
+  end
+    
+  Mapper.helpButton:echo("&lt;center&gt;Map Help")
 
 end</script>
 						<eventHandlerList />
@@ -3227,11 +3168,11 @@ function EventLog.update()
     if dGold &lt; 0 then
       EventLog.cecho("&lt;yellow&gt;Gold lost: " .. GUI.Utils.commaNum(-dGold))
     elseif dGold &gt; 0 then
-      EventLog.cecho("&lt;LightBlue&gt;Gold gained: " .. dGold)
+      EventLog.cecho("&lt;LightBlue&gt;Gold gained: " .. GUI.Utils.commaNum(dGold))
     end
 
     if dExp &lt; 0 then
-      EventLog.cecho("&lt;yellow&gt;Experience lost: " .. GUI.Utils.commaNum(dExp))
+      EventLog.cecho("&lt;yellow&gt;Experience lost: " .. GUI.Utils.commaNum(-dExp))
     elseif dExp &gt; 0 then
       EventLog.cecho("&lt;LightBlue&gt;Experience gained: " .. GUI.Utils.commaNum(dExp))
     end
@@ -3806,25 +3747,30 @@ function Group.update()
     
     for _, member in ipairs(group) do
     
-      local name = member.name or member.leader
-      
-      local output
-      output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
-        name, 
-        string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
-        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.HP_Per, 100),
-        member.HP_Per,
-        string.rep(' ', 3 - #tostring(member.HP_Per)), -- pad hp to 3 digits for consistent spacing
-        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.MV_Per, 100),
-        member.MV_Per
-      )
-  
-      Group.console:dechoLink(
-        output,                                                       -- link text
-        [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
-        "",                                                           -- hint text
-        true                                                          -- preserve font style
-      )
+      if member.HP_Per and member.MV_Per then
+    
+        local name = member.name or member.leader
+        
+        local output
+        output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+          name, 
+          string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
+          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.HP_Per, 100),
+          member.HP_Per,
+          string.rep(' ', 3 - #tostring(member.HP_Per)), -- pad hp to 3 digits for consistent spacing
+          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.MV_Per, 100),
+          member.MV_Per
+        )
+    
+        Group.console:dechoLink(
+          output,                                                       -- link text
+          [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
+          "",                                                           -- hint text
+          true                                                          -- preserve font style
+        )
+      else
+        Group.console.echo("\n" .. name)
+      end
     
     end
     
@@ -3839,23 +3785,28 @@ function Group.update()
     
     for _, charm in ipairs(charms) do
     
-      local output
-      output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
-        charm.charm, 
-        string.rep(' ', 11 - #charm.charm), -- pad name to a constant width (10 + 1 space) for alignment
-        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.health, 100),
-        charm.health,
-        string.rep(' ', 3 - #tostring(charm.health)), -- pad hp to 3 digits for consistent spacing
-        BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.movement, 100),
-        charm.movement
-      )
-      
-      Group.console:dechoLink(
-        output,                                                       -- link text
-        [[send("]] .. GUI.Config.groupAction .. " " .. charm.charm ..[[")]], -- action on click
-        "",                                                           -- hint text
-        true                                                          -- preserve font style
-      )
+      if charm.HP_Per and charm.MV_Per then
+    
+        local output
+        output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+          charm.charm, 
+          string.rep(' ', 11 - #charm.charm), -- pad name to a constant width (10 + 1 space) for alignment
+          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.health, 100),
+          charm.health,
+          string.rep(' ', 3 - #tostring(charm.health)), -- pad hp to 3 digits for consistent spacing
+          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.movement, 100),
+          charm.movement
+        )
+        
+        Group.console:dechoLink(
+          output,                                                       -- link text
+          [[send("]] .. GUI.Config.groupAction .. " " .. charm.charm ..[[")]], -- action on click
+          "",                                                           -- hint text
+          true                                                          -- preserve font style
+        )
+      else
+        Group.console.echo("\n" .. name)
+      end
     
     end
   end
@@ -3875,8 +3826,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Enemies Panel</name>
 						<packageName></packageName>
-						<script>GUI = BlackMUDlet.GUI
-Enemies = GUI.Enemies
+						<script>local GUI = BlackMUDlet.GUI
+local Enemies = GUI.Enemies
 
 Enemies.maxSize = 8
 Enemies.gaugePadding = 2
@@ -4644,7 +4595,9 @@ end
 			<Script isActive="yes" isFolder="no">
 				<name>GMCP Mapper</name>
 				<packageName></packageName>
-				<script>
+				<script>mudlet = mudlet or {}
+mudlet.mapper_script = true
+
 -- TODO: Turn off GMCP handler on uninstall
 
 -- TODO: Consider adding error and warn echoes in BlackMUDlet proper on top of info/echo
@@ -4858,26 +4811,30 @@ local function updateAreaName(info)
   if info == nil then return end
   
   -- update the room user data if necessary
-  if info.area ~= getRoomUserData(info.num, "area") then
+  if ifno.area ~= "" and info.area ~= getRoomUserData(info.num, "area") then
     setRoomUserData(info.num, "area", info.area)
   end
   
-  -- if auto area is turned on
+  -- if auto area is turned on, update the room's area on map
   if Mapper.Config.areamode == "auto" then
-   
-    -- getRoomAreaName expects an area ID, not a room ID
-    local current = getRoomAreaName(getRoomArea(info.num))
-    
-    -- check if we need to update the area
-    if current ~= info.area then
+  
+    if area == "" then
+      BlackMUDlet.GUI.echo("No area information available, keeping room in current area.")
+    else
+      -- getRoomAreaName expects an area ID, not a room ID
+      local current = getRoomAreaName(getRoomArea(info.num))
       
-      -- check if the area already exists
-      if not table.contains(getAreaTable(), info.area) then
-        Mapper.addAreaName(info.area)
+      -- check if we need to update the area
+      if current ~= info.area then
+        
+        -- check if the area already exists
+        if not table.contains(getAreaTable(), info.area) then
+          Mapper.addAreaName(info.area)
+        end
+        
+        -- update the area
+        setRoomArea(info.num, info.area)
       end
-      
-      -- update the area
-      setRoomArea(info.num, info.area)
     end
   end
 end 
@@ -4921,7 +4878,7 @@ local function updateExits(info)
           
           -- skip room creation if it doesn't fit on the map
           if Mapper.Config.createmode == "warn" then
-            BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. v .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
+            BlackMUDlet.GUI.echo("Could not place new room ".. v .. " of room " .. info.num .. "), another room already exists at " ..dx..","..dy..",".. dz)
             skip = true
           elseif Mapper.Config.createmode == "skip" then
             skip = true
@@ -5034,8 +4991,8 @@ local function tryCreateRoom(info)
         
 --        BlackMUDlet.GUI.echo("Attempting to create new room at " .. dx .. ", " .. dy .. ", " .. dz)
         
-        -- check if if a room already exists at the new position
-        if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
+      -- check if if a room already exists at the new position
+      if table.size(getRoomsByPosition(areaID, dx, dy, dz)) &gt; 0 then
           
         if Mapper.Config.createmode == "stretch" then
           -- shift rooms to make space
@@ -5044,7 +5001,7 @@ local function tryCreateRoom(info)
           
         -- skip room creation if it doesn't fit on the map
         if Mapper.Config.createmode == "warn" then
-          BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. dir .. "), another room already exists at " .. x .. ", " .. y .. ", " .. z)
+          BlackMUDlet.GUI.echo("Could not create room " .. info.num .. " (" .. dir .. "), another room already exists at " ..dx..","..dy..","..dz)
           return
         elseif Mapper.Config.createmode == "skip" then
           return
@@ -5527,7 +5484,9 @@ local initialized = initialized or false
 
 --- initialize BlackMUDlet and submodules
 -- called on sysLoadEvent and sysInstall, but will only run once
-function BlackMUDlet.initialize()
+function BlackMUDlet.initialize(event, name)
+
+  if event == "sysInstall" and name ~= "BlackMUDlet" then return end
 
   if initialized == false then
 
@@ -5607,13 +5566,19 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEve
 
 --- Clean up on uninstall, primarily making sure the main window is in a nice state
 -- called on sysUninstallPackage
-function BlackMUDlet.uninstall()
+function BlackMUDlet.uninstall(event, name)
+
+  -- don't trigger on uninstall event unless it was BlackMUDlet that was uninstalled
+  if event == "sysUninstall" and name ~= "BlackMUDlet" then return end
+
   BlackMUDlet.GUI.uninstall()
   BlackMUDlet.Mapper.uninstall()
   uninstallPackage(BlackMUDlet.packageName)
   
   initialized = false
   BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
+  
+  BlackMUDlet.GUI.echo("BlackMUDlet has been uninstalled. If this was not part of an update, please reload your profile to complete the uninstall.")
 
 end
 
@@ -5666,7 +5631,7 @@ function Updater.handleVersion()
   if io.exists(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile) then
     
     local file = io.open(BlackMUDlet.downloadPath .. BlackMUDlet.versionFile)
-    ver = tonumber(file:read("*all"))
+    local ver = tonumber(file:read("*all"))
  
     if ver &gt; BlackMUDlet.version then
       BlackMUDlet.echo("Update found! Type &lt;white&gt;ui update &lt;LightBlue&gt;to install")
