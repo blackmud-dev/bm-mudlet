@@ -403,9 +403,31 @@ local ignoreList = [[
 					</regexCodePropertyList>
 				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Pray Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) offers this prayer: ".+"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>System</name>
 					<script>
-BlackMUDlet.GUI.Communication.emco:cecho("Other", matches[1] .. "\n")</script>
+--BlackMUDlet.GUI.Communication.emco:cecho("Other", matches[1] .. "\n")
+
+BlackMUDlet.GUI.WorldInfo.handleSysLog(matches[1] .. "\n")</script>
 					<triggerType>0</triggerType>
 					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
@@ -3345,6 +3367,21 @@ registerNamedEventHandler("BlackMUDlet",
 
 
 
+-- Creates a SysLog tab, if needed, and echoes the corresponding message
+function WorldInfo.handleSysLog(msg)
+
+  if not WorldInfo.emco.mc["SysLog"] then
+    WorldInfo.emco:addTab("SysLog")
+    WorldInfo.emco.mc["SysLog"]:enableScrollBar()
+    WorldInfo.emco.mc["SysLog"]:enableAutoWrap()
+  end
+  
+  WorldInfo.emco:echo("SysLog", getTime(true, "hh:mm:ss") .. " " .. msg)
+
+end
+
+
+
 
 -- Tab Change Handlers (not used, for now)
 
@@ -3785,12 +3822,12 @@ function Group.update()
     
     for _, charm in ipairs(charms) do
     
-      if charm.HP_Per and charm.MV_Per then
+      if charm.health and charm.movement then
     
         local output
         output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
-          charm.charm, 
-          string.rep(' ', 11 - #charm.charm), -- pad name to a constant width (10 + 1 space) for alignment
+          string.sub(charm.charm, 1, 11), -- truncate name to 10 characters if needed
+          string.rep(' ', 11 - #charm.charm), -- pad name to a constant width (10 + 1 space) for alignment, trim if needed
           BlackMUDlet.GUI.Utils.getBadnessLevel(100 - charm.health, 100),
           charm.health,
           string.rep(' ', 3 - #tostring(charm.health)), -- pad hp to 3 digits for consistent spacing
@@ -3805,7 +3842,7 @@ function Group.update()
           true                                                          -- preserve font style
         )
       else
-        Group.console.echo("\n" .. name)
+        Group.console.echo("\n" .. charm.charm)
       end
     
     end
@@ -4878,7 +4915,7 @@ local function updateExits(info)
           
           -- skip room creation if it doesn't fit on the map
           if Mapper.Config.createmode == "warn" then
-            BlackMUDlet.GUI.echo("Could not place new room ".. v .. " of room " .. info.num .. "), another room already exists at " ..dx..","..dy..",".. dz)
+            BlackMUDlet.GUI.echo("Could not place new room ".. v .. " of room " .. info.num .. ", another room already exists at " ..dx..","..dy..",".. dz)
             skip = true
           elseif Mapper.Config.createmode == "skip" then
             skip = true
@@ -4898,10 +4935,13 @@ local function updateExits(info)
         end
       end
       
-      -- add the exit line if the room exists, or a stub if not
+      -- add the exit line if the room exists, or a stub if no exit exists
       if roomExists(info.exits[v]) then
         -- add an exit leading to the identified room
         setExit(info.num, info.exits[v], v)
+      elseif getRoomExits(info.num)[v] then
+        -- Do nothing, an exit already exists.
+        -- We probably can't see the room, so don't replace the exit with a stub
       else
         setExitStub(info.num, v, true)
       end
@@ -5064,7 +5104,9 @@ function Mapper.handleGmcpRoomData()
     centerview(info.num)
     
     -- un-highlight the room if it's highlighted
-    unHighlightRoom(info.num)
+    if getRoomName(info.num) ~= "Unknown" then
+      unHighlightRoom(info.num)
+    end
   end
 
 end
