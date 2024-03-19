@@ -587,6 +587,20 @@ BlackMUDlet.GUI.buildUI()</script>
 				<regex>^ui help$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
+				<name>Show Mudlet Tips</name>
+				<script>BlackMUDlet.GUI.showMudlet()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui mudlet$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Show UI About</name>
+				<script>BlackMUDlet.GUI.showAbout()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^ui about$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
 				<name>Toggle Wimpy Bar</name>
 				<script>
 if matches[2] == "on" then 
@@ -654,13 +668,6 @@ BlackMUDlet.GUI.showUI()</script>
 				<regex>^ui show$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
-				<name>About UI</name>
-				<script>BlackMUDlet.GUI.showAbout()</script>
-				<command></command>
-				<packageName></packageName>
-				<regex>^ui about$</regex>
-			</Alias>
-			<Alias isActive="yes" isFolder="no">
 				<name>Add Tracked Spell</name>
 				<script>BlackMUDlet.GUI.Buffs.updateSpellWatch(matches[2])</script>
 				<command></command>
@@ -704,8 +711,8 @@ end</script>
 				<regex>^ui gaglist clear$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
-				<name>Gag String</name>
-				<script>BlackMUDlet.GUI.Communication.toggleGag(matches[2])</script>
+				<name>Add Gag String</name>
+				<script>BlackMUDlet.GUI.Communication.toggleGag(matches[2], true)</script>
 				<command></command>
 				<packageName></packageName>
 				<regex>^ui gag (.+)$</regex>
@@ -722,58 +729,128 @@ end</script>
 				<script>BlackMUDlet.Mapper.setAreaMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui areamode (\w+)$</regex>
+				<regex>^map areamode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set createmode</name>
 				<script>BlackMUDlet.Mapper.setCreateMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui createmode (\w+)$</regex>
+				<regex>^map createmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set exitmode</name>
 				<script>BlackMUDlet.Mapper.setExitMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui exitmode (\w+)$</regex>
+				<regex>^map exitmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Set mapmode</name>
 				<script>BlackMUDlet.Mapper.setMapMode(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui mapmode (\w+)$</regex>
+				<regex>^map mapmode (\w+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Map help</name>
 				<script>BlackMUDlet.Mapper.showHelp()</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui map help$</regex>
+				<regex>^map help$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Add area</name>
 				<script>BlackMUDlet.Mapper.addAreaName(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui map addarea (.+)$</regex>
+				<regex>^map addarea (.+)$</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Remove empty area</name>
 				<script>BlackMUDlet.Mapper.deleteAreaName(matches[2])</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui map removearea (.+)</regex>
+				<regex>^map removearea (.+)</regex>
 			</Alias>
 			<Alias isActive="yes" isFolder="no">
 				<name>Remove non-empty area</name>
 				<script>BlackMUDlet.Mapper.deleteAreaName(matches[2], true)</script>
 				<command></command>
 				<packageName></packageName>
-				<regex>^ui map force removearea (.+)</regex>
+				<regex>^map force removearea (.+)</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>List Map Areas</name>
+				<script>
+BlackMUDlet.Mapper.Utils.echoAreaList()</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map areas$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>List Area Rooms</name>
+				<script>
+BlackMUDlet.Mapper.Utils.echoRoomList(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map rooms (.+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Speedwalk to room</name>
+				<script>-- start a speedwalk to the given room number, if possible
+-- same effect as double clicking the room on the map
+
+BlackMUDlet.Mapper.Utils.startSpeedWalk(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map goto (\d+)$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Get path to room</name>
+				<script>
+local result = BlackMUDlet.Mapper.Utils.getSpeedWalkPath(matches[2], matches[3])
+
+BlackMUDlet.echo("Computed path: " .. result)</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map path (\d+) ?(\d+)?$</regex>
+			</Alias>
+			<Alias isActive="yes" isFolder="no">
+				<name>Find rooms</name>
+				<script>
+BlackMUDlet.Mapper.Utils.findRoomsByName(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map find (.+)$</regex>
+			</Alias>
+			<Alias isActive="no" isFolder="no">
+				<name>Show room</name>
+				<script>-- center the map on the provided room
+-- disabled because there's no good way to undo it
+-- unintuitive if I want to, say, `map show 123` followed by `map goto 123`
+-- will revisit in the future
+
+centerview(matches[2])</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^map show (\d+)$</regex>
 			</Alias>
 		</AliasGroup>
+		<Alias isActive="yes" isFolder="no">
+			<name>Speedwalk path</name>
+			<script>speedwalk(string.gsub(matches[2], "(%a)", "%1 "), false, 0.25, true)</script>
+			<command></command>
+			<packageName></packageName>
+			<regex>^\.([0-9neswdu]+)$</regex>
+		</Alias>
+		<Alias isActive="yes" isFolder="no">
+			<name>Speedwalk path (reverse)</name>
+			<script>speedwalk(string.gsub(matches[2], "(%a)", "%1 "), true, 0.25, true)</script>
+			<command></command>
+			<packageName></packageName>
+			<regex>^~([0-9neswdu]+)$</regex>
+		</Alias>
 		<Alias isActive="no" isFolder="no">
 			<name>Update UI</name>
 			<script>-- disabled by default unless an update is available
@@ -803,10 +880,13 @@ BlackMUDlet.mapFile      = BlackMUDlet.packageName .. "_starter.map"
 BlackMUDlet.updateUrl    = "https://github.com/blackmud-dev/bm-mudlet/raw/main/"
 
 
-
+-- The invidual submodules manage their own configs, but BlackMUDlet itself
+-- takes care of saving / loading the stored package config. So outside of
+-- saving and loading, the values here are not respected by the submodules.
 BlackMUDlet.Config = BlackMUDlet.Config or {}
 BlackMUDlet.Config.GUI = BlackMUDlet.Config.GUI or {}
 BlackMUDlet.Config.Mapper = BlackMUDlet.Config.Mapper or {}
+
 </script>
 			<eventHandlerList />
 		</Script>
@@ -861,6 +941,7 @@ end
 -- http://lua-users.org/wiki/FormattingNumbers
 function Utils.commaNum(amount)
   local formatted = amount
+  local k = 0
   while true do  
     formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
     if (k==0) then
@@ -917,7 +998,8 @@ GUI.Config = GUI.Config or {}
 -- EMCO tabbed windows use EMCO save/load functionality
 GUI.Defaults = {
   initialized     = false,
-  statusBarFormat = "compact",          
+  statusBarFormat = "compact",
+  gags            = {},
   groupAction     = "glance",
   showManaBar     = true,
   showWimpyBar    = false,
@@ -950,7 +1032,7 @@ GUI.Colors.deepPurple      = "#512da8"
 GUI.Colors.darkDeepPurple  = "#070039"
 GUI.Colors.lightDeepPurple = "#8559da"
 
--- These colors pulled from blackmud.com
+-- These colors pulled from the old blackmud.com
 GUI.Colors.darkGrey        = "#212121"
 GUI.Colors.grey            = "#808080"
 GUI.Colors.lightGrey       = "#d2d2d2"
@@ -1000,7 +1082,7 @@ GUI.Utils.translate["You are floating."]                         = "Floating"
 
 -- TODO: Geyser.StyleSheet would allow inheritance, should pivot to that
 
--- For Adjustable windows (the main panels)
+-- For Adjustable windows (the main UI panels/containers)
 GUI.defaultWindowStyle = [[
     font-family: ]] .. GUI.Utils.font .. [[;
     font-size: ]] .. GUI.Utils.uiFontSize .. [[px;
@@ -1083,7 +1165,6 @@ local GUI = BlackMUDlet.GUI
 
 
 -- Convenience functions for echoing UI-related messages
-
 function GUI.cecho(m)
   cecho("\n&lt;LightBlue&gt;[&lt;white&gt;UI&lt;LightBlue&gt;]: " .. m)
 end
@@ -1100,7 +1181,8 @@ function GUI.error(m)
 end
 
 
--- Simple utility function to shorten a number using k, m, or b suffix
+
+--- Shorten a number using k, m, or b suffix
 function GUI.Utils.shortenNum(n)
   if math.abs(n) &gt;= 10^9 then
     return string.format("%.1fb", n / 10^9)
@@ -1114,7 +1196,8 @@ function GUI.Utils.shortenNum(n)
 end
 
 
--- Add commas to a long number
+
+--- Add commas to a long number
 -- http://lua-users.org/wiki/FormattingNumbers
 function GUI.Utils.commaNum(amount)
   local formatted = amount
@@ -1128,8 +1211,8 @@ function GUI.Utils.commaNum(amount)
 end
 
 
+--- returns a &lt;r,g,b&gt; tag for decho representing a danger level
 -- modified from https://gist.github.com/demonnic/bf50cd8c80a0d96766478143251561b2
--- returns a &lt;r,g,b&gt; tag for decho representing a danger level
 function GUI.Utils.getBadnessLevel(num, max)
   local halfWay = (max+1) / 2
   local stepSize = 255 / (halfWay - 1)
@@ -1154,14 +1237,14 @@ end</script>
 				<script>
 local GUI = BlackMUDlet.GUI
 
-
+-- 
 function BlackMUDlet.GUI.initialize(config)
   
   GUI.Config = table.update(GUI.Defaults, config or {})
   
   -- build the UI
   -- Adjustable.Container windows save their position across restarts
-  -- EMCO panel settings are loaded in builders as needed
+  -- EMCO panel settings are handled in builders as appropriate
   GUI.buildUI()
   
   -- run once code goes here
@@ -1175,7 +1258,7 @@ function BlackMUDlet.GUI.initialize(config)
     GUI.Config.initialized = true
   end
   
-  -- In Mudlet 4.16 this isn't safe to call multiple times
+  -- In Mudlet 4.16 this may not be safe to call multiple times
   -- https://github.com/Mudlet/Mudlet/issues/6318
   -- Adds the "connect" menu to all adjustable containers
   -- This modifies all Adjustable.Container windows, not just this package
@@ -1216,20 +1299,22 @@ GUI.Help = GUI.Help or {}
 
 GUI.Help.welcome = [[&lt;LightBlue&gt;
 ********************************************************************************
-BlackMUDlet UI is installed:
+BlackMUDlet GUI is installed:
   Type &lt;white&gt;ui help &lt;LightBlue&gt;and &lt;white&gt;ui about &lt;LightBlue&gt;for more information
   Type &lt;white&gt;ui reset &lt;LightBlue&gt;to reset the layout if things look weird
   Type &lt;white&gt;ui hide &lt;LightBlue&gt;to hide the UI (&lt;white&gt;ui show &lt;LightBlue&gt;to bring it back)
+  
+  New to Mudlet? Type &lt;white&gt;ui mudlet&lt;LightBlue&gt; for some basic guidance.
 ********************************************************************************
 ]]
 
 
 GUI.Help.help = [[&lt;LightBlue&gt;
 ********************************************************************************
-&lt;white&gt;BlackMUDlet UI
+&lt;white&gt;BlackMUDlet UI&lt;LightBlue&gt;
 
-&lt;LightBlue&gt;This UI is a work in progress and will probably malfunction in many scenarios. 
-Feel free to report bugs or feedback to yetanotherkevin on the BlackMUD Discord.
+Welcome to BlackMUDlet. This UI is a work in progress and will probably malfunction
+in many scenarios. Feel free to report bugs or feedback the BlackMUD Discord.
 
 All panels are anchored to the Communication window by default and may be resized 
 using the mouse. Right click on the border of a window for more options. Windows 
@@ -1261,11 +1346,10 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
   &lt;LightBlue&gt;Group:
     &lt;white&gt;ui groupaction &lt;i&gt;&lt;action&gt;&lt;reset&gt;: set action when clicking on group member
     
-  &lt;LightBlue&gt;Mapper: (see &lt;white&gt;ui map help&lt;LightBlue&gt; for more details)
-    &lt;white&gt; ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;: Map creation mode
-    &lt;white&gt; ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;: How to handle overlapping rooms
-    &lt;white&gt; ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;: Create placeholder rooms or exit stubs in new rooms
-    &lt;white&gt; ui areamode &lt;i&gt;auto | keep&lt;reset&gt;: Auto place new rooms in correct area or keep in current area
+  &lt;LightBlue&gt;Mapper: A mapping script is included as part of the package.
+    See &lt;white&gt;map help&lt;LightBlue&gt; for more details
+    
+  &lt;LightBlue&gt;Navigation: The NumPad may be used for movement (see Mudlet Keybindings menu)
 &lt;LightBlue&gt;    
 ********************************************************************************
 ]]
@@ -1273,15 +1357,39 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
 
 GUI.Help.about = [[&lt;LightBlue&gt;
 ********************************************************************************
-&lt;white&gt;BlackMUDlet UI
+&lt;white&gt;BlackMUDlet GUI
 &lt;LightBlue&gt;
-  Author: yetanotherkevin (aka Donal)
+  Author: yetanotherkevin (aka Donal / Turas)
   
   Acknowledgements:
   
     This package uses demonnic's MDK and the Embeddable Multi-Console Object 
         https://github.com/demonnic/MDK
     
+********************************************************************************
+]]
+
+
+GUI.Help.mudlet = [[&lt;LightBlue&gt;
+********************************************************************************
+New users to Mudlet may wish to tweak some settings:
+
+  - Fonts: You can adjust the default console font size or face:
+      &lt;white&gt;Options -&gt; Preferences -&gt; Main display -&gt; Font&lt;LightBlue&gt;
+	
+  - Default Colors: You can override ANSI colors (such as dark blue)
+      &lt;white&gt;Options -&gt; Preferences -&gt; Color view&lt;LightBlue&gt;
+	
+  - Command Separator: The default command separator is &lt;white&gt;;;&lt;LightBlue&gt;
+      &lt;white&gt;Options -&gt; Preferences -&gt; Input Line -&gt; Command separator&lt;LightBlue&gt;
+      Note: Spaces after the command separator matter for aliases
+      &lt;white&gt;take meat;; eat meat&lt;LightBlue&gt; will include the leading space in the second command
+      
+  - You can disable the auto-install of the server package:
+      &lt;white&gt; Options -&gt; Preferences -&gt; General &gt; Miscellaneous&lt;LightBlue&gt;
+      
+Feel free to ask further questions on the BlackMUD or Mudlet Discord Servers
+
 ********************************************************************************
 ]]
 
@@ -1299,7 +1407,10 @@ end
 function GUI.showAbout()
   cecho(GUI.Help.about)
 end
-</script>
+
+function GUI.showMudlet()
+  cecho(GUI.Help.mudlet)
+end</script>
 				<eventHandlerList />
 			</Script>
 			<ScriptGroup isActive="yes" isFolder="yes">
@@ -2580,9 +2691,17 @@ function Communication.buildPanel(parent)
   Communication.emco:enableAutoWrap()
   Communication.emco:enableScrollbars()
   
+  -- hack to force EMCO to redraw, fixes stylesheets not being applied on load
+  Communication.emco:reset()
+  
   -- Loading after setting defaults, so user customization can overwrite
   --Communication.emco:load()
   --Communication.updateTabs() -- fix tabs to match script, if needed
+  
+  -- The EMCO save/load functionality doesn't work nicely with changing tabs
+  -- Didn't want to use the hacky approach commented out above
+  -- As a workaround the gag list is stored in the GUI config and loaded
+  Communication.loadGagList()
  
 end
 
@@ -2603,8 +2722,20 @@ function Communication.updateTabs()
 end
 
 
+-- loads and populates the gag list from the config
+function Communication.loadGagList()
 
-function Communication.toggleGag(s)
+  if GUI.Config.gags then
+    for k,v in pairs(GUI.Config.gags) do
+      Communication.emco:addGag(k)
+    end
+  end
+
+end
+
+
+-- adds/removes the given string from the gaglist
+function Communication.toggleGag(s, verbose)
   
   local emco = Communication.emco
   
@@ -2614,21 +2745,30 @@ function Communication.toggleGag(s)
     return
   elseif table.contains(emco.gags, s) then
     emco:removeGag(s)
-    GUI.cecho("Removed \"" .. s .. "\" from gag list\n")
+    GUI.Config.gags[s] = nil
+    if verbose then
+      GUI.cecho("Removed \"" .. s .. "\" from gag list\n")
+    end
   else
     emco:addGag(s)
-    GUI.cecho("Adding \"" .. s .. "\" to gag list\n")
+    GUI.Config.gags[s] = true
+    if verbose then
+      GUI.cecho("Added \"" .. s .. "\" to gag list\n")
+    end
   end
   
 end
 
 
+-- clears the gag list
 function Communication.clearGags()
   Communication.emco.gags = {}
+  GUI.Config.gags = {}
   GUI.cecho("Gag list cleared")
 end
 
 
+-- lists the current gags
 function Communication.showGags()
 
   GUI.cecho("Current gag list:")
@@ -2858,15 +2998,15 @@ function Mapper.handleClick(button)
 
   if button == "map mode" then    
     local next = getNext(BlackMUDlet.Mapper.supported_mapmodes, BlackMUDlet.Mapper.Config.mapmode)
-    BlackMUDlet.Mapper.setMapMode(next)    
+    BlackMUDlet.Mapper.setMapMode(next) 
   
   elseif button == "create mode" then
     local next = getNext(BlackMUDlet.Mapper.supported_createmodes, BlackMUDlet.Mapper.Config.createmode)
-    BlackMUDlet.Mapper.setCreateMode(next)    
+    BlackMUDlet.Mapper.setCreateMode(next)
   
   elseif button == "exit mode" then 
     local next = getNext(BlackMUDlet.Mapper.supported_exitmodes, BlackMUDlet.Mapper.Config.exitmode)
-    BlackMUDlet.Mapper.setExitMode(next)    
+    BlackMUDlet.Mapper.setExitMode(next)  
   
   elseif button == "area mode" then
     local next = getNext(BlackMUDlet.Mapper.supported_areamodes, BlackMUDlet.Mapper.Config.areamode)
@@ -2912,7 +3052,7 @@ function Mapper.buildLegend(parent)
     
   end
   
-  outout = output .. "\n"
+  output = output .. "\n"
   
   for k,v in pairs(BlackMUDlet.Mapper.specials) do
     output = output .. v .. "  " .. k .. "\n"
@@ -2934,18 +3074,18 @@ local Mapper = GUI.Mapper
 local translate = {
   off     = "Mapper Off",
   follow  = "Follow Movement",
-  update  = "Update Existing",
-  create  = "Create New Rooms",
+  update  = "&lt;white:blue&gt;&lt;b&gt;Update Existing",
+  create  = "&lt;white:DarkGreen&gt;&lt;b&gt;Create New Rooms",
   
   skip    = "Skip Room",
   warn    = "Skip Room &amp; Warn",
-  stretch = "Stretch Map",
-  overlap = "Place Anyway",
+  stretch = "&lt;yellow&gt;&lt;b&gt;Stretch Map",
+  overlap = "&lt;red&gt;&lt;b&gt;Place Anyway",
   
   stubs  = "Create Stubs",
   rooms  = "Create Rooms",
   
-  auto   = "Auto Area",
+  auto   = "&lt;LightBlue&gt;Auto Area",
   keep   = "Keep in Current Area"
 }
 
@@ -2958,25 +3098,26 @@ function Mapper.update()
   local config = BlackMUDlet.Mapper.Config
 
   --Mapper.mapModeButton:setStyleSheet(buttonStyle)
-  Mapper.mapModeButton:echo("Map Mode: " .. translate[config.mapmode] or config.mapmode)
+  Mapper.mapModeButton:cecho("&lt;white&gt;Map Mode: &lt;b&gt;" .. translate[config.mapmode] or config.mapmode)
   
 
   --Mapper.createModeButton:setStyleSheet(buttonStyle)
-  Mapper.createModeButton:echo("Room Overlap: " .. translate[config.createmode] or config.createmode)
+  Mapper.createModeButton:cecho("&lt;white&gt;Room Overlap: &lt;b&gt;" .. translate[config.createmode] or config.createmode)
   
   
   --Mapper.exitModeButton:setStyleSheet(buttonStyle)
-  Mapper.exitModeButton:echo("Exit Mode: " .. translate[config.exitmode] or config.exitmode)
+  Mapper.exitModeButton:cecho("&lt;white&gt;Exit Mode: &lt;b&gt;" .. translate[config.exitmode] or config.exitmode)
   
   
   --Mapper.areaModeButton:setStyleSheet(buttonStyle)
-  Mapper.areaModeButton:echo("Area Mode: " .. translate[config.areamode] or config.areamode)
+  Mapper.areaModeButton:cecho("&lt;white&gt;Area Mode: &lt;b&gt;" .. translate[config.areamode] or config.areamode)
 
   Mapper.legendButton:echo("&lt;center&gt;Toggle Legend")
   
   if GUI.Config.showLegend then
     Mapper.legendWindow:show()
     Mapper.legendWindow:restore()
+    Mapper.legendWindow:raise()
   else
     Mapper.legendWindow:hide()
   end
@@ -2984,139 +3125,6 @@ function Mapper.update()
   Mapper.helpButton:echo("&lt;center&gt;Map Help")
 
 end</script>
-						<eventHandlerList />
-					</Script>
-				</ScriptGroup>
-				<ScriptGroup isActive="no" isFolder="yes">
-					<name>Item Database</name>
-					<packageName></packageName>
-					<script>BlackMUDlet.GUI.ItemDB = BlackMUDlet.GUI.ItemDB or {}</script>
-					<eventHandlerList />
-					<Script isActive="yes" isFolder="no">
-						<name>Build ItemDB Panel</name>
-						<packageName></packageName>
-						<script>
-local GUI = BlackMUDlet.GUI
-local ItemDB = GUI.ItemDB
-
-
-function ItemDB.buildPanel(parent)
-
-  ItemDB.console = Geyser.MiniConsole:new(
-    {
-      name = "BlackMUDlet.GUI.ItemDB.console",
-      x = 0, y = 0, width = "100%", height = "100%",
-    },
-    parent)
-  
-  ItemDB.loadDB(GUI.Config.itemdb)
-    
-  ItemDB.console:enableCommandLine()
-  ItemDB.console:setCmdAction(ItemDB.handleInput)
-  ItemDB.console:enableAutoWrap()
-  ItemDB.console:enableScrollBar()
-  ItemDB.console:setFontSize(GUI.Utils.uiFontSize)
-    
-  ItemDB.handleInput("")
-  printCmdLine(ItemDB.console.name, "Search...")
-
-end
-
-
-function ItemDB.loadDB(path)
-
-  if io.exists(path) then
-    local file = io.open(path)
-    ItemDB.db = file:read("*all")
-    -- strip carriage returns, if present
-    ItemDB.db = string.gsub(ItemDB.db, "\r\n", "\n")
-    io.close(file)
-  else
-    ItemDB.db = "\n\n&lt;red&gt;Failed to load " .. path .. "\n"
-  end
-  
-end
-
-
--- Handler for the Item DB command line
-function ItemDB.handleInput(query)
-
-  ItemDB.console:clear()
-
-  if query == "" then
-    ItemDB.console:cecho("&lt;LightBlue&gt;" .. ItemDB.db)
-    ItemDB.console:cecho("\n\n&lt;white&gt;Use the search bar below to filter items.")
-    ItemDB.console:cecho("\n\n&lt;white&gt;Or, use &lt;i&gt;/id itemname&lt;/i&gt; or &lt;i&gt;/item itemname&lt;/i&gt; from the main window.")
-    ItemDB.console:cecho("\n\n&lt;white&gt;Use an empty search to clear results.\n\n")
-  else
-    local result = ItemDB.itemLookup(query, 100)
-    
-    -- highlight matches in white
-    result = string.gsub(result, 
-                         string.genNocasePattern(string.gsub(query, "%-", "%%-")), -- handle dashes properly
-                         function(match) 
-                           return "&lt;white&gt;"..match.."&lt;LightBlue&gt;" 
-                         end
-                        )
-            
-    -- print search results
-    ItemDB.console:cecho("&lt;LightBlue&gt;" .. result)
-    
-    -- append reset instructions as clickable link
-    ItemDB.console:cechoLink("\n&lt;white&gt;Click here or empty search to clear.\n\n",
-      [[BlackMUDlet.GUI.ItemDB.handleInput("")]],
-      "",
-      true      
-    )
-  end
-
-end
-
-
--- Returns any block of text between blank lines that contains the target string
--- Will return early if maxMatches is reached
-function ItemDB.itemLookup(target, maxMatches)
-
-  local count = 0
-  local result = ""
-  
-  local db = ItemDB.db
-  
-  maxMatches = maxMatches or 100
-
-  -- Find first character after blank line
-  local itemStart = string.find(db, "\n\n") + 2
-    
-  while itemStart &lt; string.len(db) do
-  
-    local itemEnd = string.find(db, "\n\n", itemStart + 1)
-    
-    if itemEnd == nil then break end -- eof
-    
-    local item = string.sub(db, itemStart, itemEnd)
-         
-    -- case-insensitive search 
-    -- dashes are a "magic character" in patterns, so replace them appropriately
-    if string.find(item:upper(), string.gsub(target:upper(), "%-", "%%-")) then
-        count = count + 1
-        result = result .. "\n" .. item
-    end
-    
-    itemStart = itemEnd + 2
-    
-    if(count == maxMatches) then 
-      result = result .. "\nMax matches reached."
-      break
-    end
-  
-  end
-  
-  result = result .. "\n"..count.." items found matching \""..target.."\".\n\n"
-  
-  return result
-
-end
-</script>
 						<eventHandlerList />
 					</Script>
 				</ScriptGroup>
@@ -3179,7 +3187,8 @@ function EventLog.update()
 
   -- these checks seem like overkill, but there was a consistent case where
   -- gmcpCache was updated but did not contain Char.Worth, which caused the 
-  -- function to crash and never refresh gmcpCache with correct data.  
+  -- function to crash and never refresh gmcpCache with correct data.
+  -- TODO: Revisit this and clean up  
   if gmcpCache and gmcpCache.Char and gmcpCache.Char.Worth and gmcpCache.Char.Base
      and gmcp and gmcp.Char and gmcp.Char.Worth and gmcp.Char.Base then
         
@@ -3219,7 +3228,7 @@ end</script>
 					</Script>
 				</ScriptGroup>
 				<Script isActive="yes" isFolder="no">
-					<name>Build WorldInfo  Panel</name>
+					<name>Build WorldInfo Panel</name>
 					<packageName></packageName>
 					<script>
 local GUI = BlackMUDlet.GUI
@@ -3257,6 +3266,10 @@ function WorldInfo.buildPanel(parent)
   WorldInfo.emco:setFontSize(GUI.Utils.uiFontSize)
   WorldInfo.emco:enableAutoWrap()
   
+  -- hack to force EMCO to redraw, fixes stylesheets not being applied on load
+  WorldInfo.emco:reset()
+  
+  -- saving and loading doesn't play nicely with changing tabs, disabling for now
   --WorldInfo.emco:load()
   --WorldInfo.updateTabs() -- if the loaded EMCO has different tabs, overwrite that
     
@@ -3384,11 +3397,12 @@ end
 
 
 -- Tab Change Handlers (not used, for now)
+-- leaving this in for future reference if needed
 
 --registerNamedEventHandler("BlackMUDlet", "GUI.tabChange", "EMCO tab change", GUI.WorldInfo.handleTabChange)
 
 function GUI.WorldInfo.handleTabChange(event, name, oldTab, tabName)
-  --echo(name .. " - ")
+  --echo("\n" .. name .. " - ")
   --echo(oldTab .. " - ")
   --echo(tabName .. "\n")
 end</script>
@@ -3472,11 +3486,11 @@ local Attributes = GUI.Attributes
 local function statString(curr, base)
 
   if curr &lt; base then 
-    return "&lt;yellow&gt;" .. curr .. " (" .. (curr - base) .. ")&lt;reset&gt;"
+    return "&lt;yellow&gt;" .. ((curr &lt; 10) and " " or "") .. curr .. " (" .. (curr - base) .. ")&lt;reset&gt;"
   elseif curr &gt; base then 
-    return "&lt;green&gt;" .. curr .. " (+" .. (curr - base) .. ")&lt;reset&gt;"
+    return "&lt;green&gt;" .. ((curr &lt; 10) and " " or "") .. curr .. " (+" .. (curr - base) .. ")&lt;reset&gt;"
   else 
-   return curr .. "     "
+   return ((curr &lt; 10) and " " or "") .. curr .. "     "
   end
   
 end
@@ -3637,6 +3651,11 @@ debuffs["sleep"] = true
 
 function Buffs.update()
 
+  local watchList = table.deepcopy(GUI.Config.spellWatch)
+
+  Buffs.console:clear()
+  Buffs.console:cecho("\n")
+
   if gmcp and gmcp.Char and gmcp.Char.Spells then
     
     -- deep copy so we can sort without messing up gmcp table
@@ -3644,8 +3663,6 @@ function Buffs.update()
     
     Buffs.console:clear()
     Buffs.console:cecho("\n")
-    
-    local watchList = table.deepcopy(GUI.Config.spellWatch)
     
     if table.size(Spells) == 0 then
       Buffs.console:cecho("  None.\n")
@@ -3678,23 +3695,22 @@ function Buffs.update()
         watchList[spell.name] = nil
       end
     end
-    
-    if watchList and watchList ~= {} then
-      
-      Buffs.console:cecho("\n")
-      Buffs.console:cecho("Missing:\n")
-      Buffs.console:cecho("\n")
-     
-      for k,v in pairs(watchList) do
-        local color = (k == "sanctuary" and "&lt;red&gt;") or "&lt;yellow&gt;"
-        Buffs.console:cechoLink(color .. " " .. k .. "\n",
-          [[send("cast ']] .. k .. [[' me")]],
-          "",
-          true
-        )
-      end    
-    end   
   end  
+  
+  if watchList and watchList ~= {} then
+    Buffs.console:cecho("\n")
+    Buffs.console:cecho("Missing:\n")
+    Buffs.console:cecho("\n")
+     
+    for k,v in pairs(watchList) do
+      local color = (k == "sanctuary" and "&lt;red&gt;") or "&lt;yellow&gt;"
+      Buffs.console:cechoLink(color .. " " .. k .. "\n",
+        [[send("cast ']] .. k .. [[' me")]],
+        "",
+        true
+      )
+    end    
+  end   
 end
 
 </script>
@@ -3818,7 +3834,10 @@ function Group.update()
   
     local charms = gmcp.Char.Charms
     
-    Group.console:echo("\nCharms:")
+    if #charms &gt; 0 then
+      --Group.console:cecho("\nCharms:")
+      Group.console:cecho("\n")
+    end
     
     for _, charm in ipairs(charms) do
     
@@ -4216,6 +4235,15 @@ local function resizeHandler(eventName, containerName, width, height, x, y, mous
     GUI.WorldInfo.window:move(x, 2)
     GUI.WorldInfo.window:resize(width, totalH - height)
 
+  elseif containerName == "BlackMUDlet.GUI.WorldInfo.window"
+        and GUI.WorldInfo.window.locked
+        and GUI.Communication.window.locked
+        and mouseAction then
+    
+    local totalW, totalH = getMainWindowSize()
+    GUI.Communication.window:move(x, height)
+    GUI.Communication.window:resize(width, totalH - height)
+    
   end
 
 end
@@ -4225,7 +4253,7 @@ end
 -- Might be redundant, but doesn't hurt
 local function resizeFinishedHandler(eventName, containerName, width, height, x, y)
   
- if containerName == "BlackMUDlet.GUI.Communication.window" 
+  if containerName == "BlackMUDlet.GUI.Communication.window" 
     and GUI.WorldInfo.window.locked
     and GUI.Communication.window.locked then
   
@@ -4236,6 +4264,16 @@ local function resizeFinishedHandler(eventName, containerName, width, height, x,
     -- Pin the comms window to the bottom again
     GUI.Communication.window:move(x, totalH - height)
 
+  elseif containerName == "BlackMUDlet.GUI.WorldInfo.window"
+        and GUI.WorldInfo.window.locked
+        and GUI.Communication.window.locked
+        and mouseAction then
+    
+    local totalW, totalH = getMainWindowSize()
+    GUI.Communication.window:move(x, height)
+    GUI.Communication.window:resize(width, totalH - height)
+    
+    GUI.WorldInfo.window:move(x, 2)
   end  
     
 end
@@ -4319,6 +4357,8 @@ function GUI.resetLayout()
   -- default status bar size
   local defaultW = 1100
   local defaultH = GUI.StatusBar.defaultHeight[GUI.Config.statusBarFormat]
+  
+  -- default ratio between WorldInfo and Communication
   local hDivider = 0.33
 
   local totalW, totalH = getMainWindowSize()
@@ -4344,6 +4384,7 @@ function GUI.resetLayout()
     GUI.WorldInfo.window:show()
     GUI.WorldInfo.window:move(defaultW, 2)
     GUI.WorldInfo.window:resize(totalW - defaultW, totalH - math.floor(hDivider * totalH))
+    --GUI.WorldInfo.window:attachToBorder("right")
     GUI.WorldInfo.window:lockContainer("border")
   end
 
@@ -4531,7 +4572,7 @@ Mapper.areaModeHelp = {
 Mapper.envColors = {}
 Mapper.envColors["Default"]       = color_table.ansi_red
 Mapper.envColors["Air"]           = color_table.azure
-Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
+--Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
 Mapper.envColors["City"]          = color_table.light_grey
 Mapper.envColors["Desert"]        = color_table.pale_goldenrod
 Mapper.envColors["Field"]         = color_table.lawn_green
@@ -4549,7 +4590,7 @@ Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
 Mapper.envIds = {}
 Mapper.envIds["Default"]       = 257 -- used if no environment data available
 Mapper.envIds["Air"]           = 300
-Mapper.envIds["CHARM"]         = 301 -- this one feels inconsistent, mistake?
+--Mapper.envIds["CHARM"]         = 301 -- in-game bug, to be removed
 Mapper.envIds["City"]          = 302
 Mapper.envIds["Desert"]        = 303
 Mapper.envIds["Field"]         = 304
@@ -4642,7 +4683,6 @@ mudlet.mapper_script = true
 -- TODO: Refactor room creation in handleExits. Duplicate code there and tryCreateRoom()
   
 -- TODO: Door keywords in GMCP data, but no info on lock status
-  -- the imm exit command does show this info
   -- could request a doors_locked entry too, but not sure what other games do
   -- current script will already pick up the keyword "locked" if ever added
 
@@ -4658,42 +4698,30 @@ mudlet.mapper_script = true
     -- probably worth matching IRE mud behaviors?
   -- special exits are somewhat sparse in the world too:
     -- dracolich, citadel, gralners, cavaliers, khast, vylar's library, ancient library
-    -- manual editing seems fine
+    -- but more are being added...
+    -- manual editing seems fine for now
   -- a quick skim of the Mudlet map loading code suggests special exits aren't loaded at import?
+    -- will need to verify this
 
+-- TODO: environment-based weighting?
+  -- could see if weight could be added to GMCP to match base move cost
+  -- tricky to use in practice due to levitate, mounts, swim, boats, etc.
 
--- TODO: environment-based weighting
-
--- TODO: figure out vision fail (how mud/gmcp will handle it?)
-  -- imms currently get reliable gmcp data in dark rooms, not sure about mortals
-  
 -- TODO: description capture?
   -- this is only easy if gmcp updates and console updates are strictly in sync
+  -- not planned for now
     
--- TODO: core mapping stuff in one script, extensions in another
-
 -- TODO: verbosity options for console outputs
 
 -- TODO: write a "highlight path" function?
 
 -- TODO: Imm-only translation table for area name to zone number
 
--- TODO: clickable links in echos (centerview or goto?)
-
 -- TODO: Symbols are pretty tiny outside of GridMode. Maybe override colors too?
 
--- TODO: potentially needed options
-  -- verbosity
-  -- auto color based on environment?
-  -- auto symbol
-  -- auto add symbols/colors for special properties?
-  
--- TODO: potentially needed aliases (can use generic_mapper for some?)
-  -- create/remove area (with confirm for non-empty area?)
-  -- list zones ("map areas" from generic_mapper)
+-- TODO: potentially needed aliases
   -- add portal? might be best done in the editor or automatically
   -- find room
-  -- get path?
   -- color tools? Color by zone, environment, room name, user defined, etc.
 
 local Mapper = BlackMUDlet.Mapper
@@ -4923,6 +4951,7 @@ local function updateExits(info)
           
         end
         
+        -- we have room, or we made room, and we're ready to place the new room
         if skip == false then
           -- create the room and put it in the correct spot
           addRoom(info.exits[v])
@@ -4935,7 +4964,7 @@ local function updateExits(info)
         end
       end
       
-      -- add the exit line if the room exists, or a stub if no exit exists
+      -- add the exit line if the room exists, or a stub if no exit exists (or if we can't see the room)
       if roomExists(info.exits[v]) then
         -- add an exit leading to the identified room
         setExit(info.num, info.exits[v], v)
@@ -4968,14 +4997,14 @@ local function updateDoors(info)
 
     if info.doors_closed[k] then
       if string.find(info.doors_closed[k], "locked") then
-        setDoor(info.num, dir, 3)
+        setDoor(info.num, dir, 3)    -- locked door
       else
-        setDoor(info.num, dir, 2)
+        setDoor(info.num, dir, 2)    -- unlocked door
       end
     elseif info.doors_opened[k] then
-      setDoor(info.num, dir, 1)
+      setDoor(info.num, dir, 1)      -- opened door
     else
-      setDoor(info.num, dir, 0)
+      setDoor(info.num, dir, 0)      -- no door
     end
   
   end
@@ -4995,6 +5024,7 @@ end
 
 
 --- update room special properties
+-- currently assumes only a single spec per room
 local function updateSpec(info)
 
   if info == nil then return end
@@ -5083,7 +5113,7 @@ function Mapper.handleGmcpRoomData()
     tryCreateRoom(info)
   end
 
-  -- will currently only extend the map from a known room
+  -- will currently only extend the map from a known room (which might be the room we just created)
   if roomExists(info.num) then
   
     if Mapper.Config.mapmode == "update" or Mapper.Config.mapmode == "create" then
@@ -5103,7 +5133,7 @@ function Mapper.handleGmcpRoomData()
     -- center the map on the current room 
     centerview(info.num)
     
-    -- un-highlight the room if it's highlighted
+    -- un-highlight the room if it's highlighted and known
     if getRoomName(info.num) ~= "Unknown" then
       unHighlightRoom(info.num)
     end
@@ -5172,61 +5202,408 @@ function Mapper.highlightUnknown()
       Mapper.markUnknown(id)
     end
   end
+end</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>Mapper Utils</name>
+				<packageName></packageName>
+				<script>
+local Mapper = BlackMUDlet.Mapper
+
+Mapper.Utils = Mapper.Utils or {}
+local Utils = Mapper.Utils
+
+
+-- track if we're currently speedwalking
+Utils.speedwalking = Utils.speedwalking or false
+
+-- caches for in-progress speedwalking data because Mudlet can overwrite it
+Utils.speedWalkPath = Utils.speedWalkPath or {}
+Utils.speedWalkDir = Utils.speedWalkDir or {}
+Utils.speedWalkWeight = Utils.speedWalkWeight or {}
+
+
+-- translation table from short_dir or long_dir to long_dir for safe GMCP table lookup
+-- Mudlet-provided paths use [n,e,s,w,up,down]
+-- BlackMUD GMCP uses [north, east, south, west, up, down]
+local long_dir = {
+  n     = "north",
+  e     = "east",
+  s     = "south",
+  w     = "west",
+  u     = "up",
+  d     = "down",
+  north = "north",
+  east  = "east",
+  south = "south",
+  west  = "west",
+  up    = "up",
+  down  = "down",
+}
+  
+
+
+--- global doSpeedWalk handler called automatically by Mudlet on certain actions
+-- use Utils.startSpeedWalk(roomId) if you want to start a speedwalk manually
+function doSpeedWalk()
+
+  -- if someone started a speedwalk while we were already speedwalking
+  if Utils.speedwalking then
+    -- clean up the old speedwalk
+    stopSpeedWalk()
+  end
+  
+  -- bail early if there's nowhere to go
+  if #speedWalkDir == 0 then
+    stopSpeedWalk()
+    return
+  end
+  
+  -- otherwise, we're good to go
+  Utils.speedwalking = true
+
+  -- cache the tables so we can clean up room highlighting if needed
+  Utils.speedWalkPath = table.deepcopy(speedWalkPath)
+  Utils.speedWalkDir = table.deepcopy(speedWalkDir)
+  Utils.speedwalkWeight = table.deepcopy(speedWalkWeight)
+
+  -- colors for path highlighting
+  local r,g,b = unpack(color_table.yellow)
+  local br,bg,bb = unpack(color_table.green)
+
+  -- highlight the proposed path
+  for k,v in pairs(Utils.speedWalkPath) do
+    highlightRoom(v, r, g, b, br, bg, bb, 1, 200, 200)
+  end
+  
+  -- start listening for room updates
+  registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Mapper.speedwalk", "gmcp.Room.Info", Utils.stepSpeedWalk)
+  
+  -- and take the first step
+  -- note that doors and special exits won't be handled for the first step
+  -- could factor out a doNextMove() function, I suppose, but this works for now
+  send(speedWalkDir[1])
+
 end
 
 
 
+--- Processes the next move in the speedwalk queue
+-- Assumes vision / populated GMCP data for all rooms on the path
+-- Will abort the speedwalk if an unexpected room is encountered
+function Utils.stepSpeedWalk()
+  
+  -- if we're not speedwalking, bail
+  if Utils.speedwalking == false then
+    stopSpeedWalk()
+    return
+  end
+  
+  -- if there's no path available then bail out
+  if #speedWalkDir == 0 then
+    stopSpeedWalk()
+    return
+  end
+  
+  -- quick hack for now, pause speedwalk if we can't see into next room
+  if speedWalkDir[2] and tonumber(gmcp.Room.Info.exits[long_dir[speedWalkDir[2]]]) == 0 then
+    tempTimer(0.2, 
+      function() 
+        BlackMUDlet.echo("Unable to see into next room (" .. long_dir[speedWalkDir[2]] .. "), pausing speedwalk.") 
+      end
+    )
+    return
+  end
+  
+  if tonumber(gmcp.Room.Info.num) == tonumber(speedWalkPath[1]) then
+    -- pop the front of the speedwalk queues/caches
+    table.remove(Utils.speedWalkPath, 1)
+    table.remove(speedWalkPath, 1)
+    table.remove(Utils.speedWalkDir, 1)
+    table.remove(speedWalkDir, 1)
+    table.remove(Utils.speedWalkWeight, 1)
+    table.remove(speedWalkWeight, 1)
+  else
+    tempTimer(0.2, function() BlackMUDlet.echo("Unexpected room encountered, aborting speedwalk.") end)
+    stopSpeedWalk()
+    return
+  end
+  
+  -- if we've arrived at our destination
+  if #speedWalkDir == 0 then
+    stopSpeedWalk()
+    return
+  end
 
---- Map Utils
--- TODO: Figure out what's universal, what's imm-only, and what's personal toy
-  -- refactor accordingly
+  local next = speedWalkDir[1]
+    
+  -- gmcp data uses long dir names (north), speedWalkDirs uses short dir names (n)
+  -- TODO: This is probable unreachable unless you can see through doors.
+  --       Early abort above on vision fail will above. Will revisit later.
+  --       Opening a door triggers a GMCP update and the speedwalker doesn't like that.
+  if gmcp.Room.Info.doors_closed[long_dir[next]] then
+    -- parse out the first keyword in the list
+    local keyword = gmcp.Room.Info.doors_closed[long_dir[next]]:match("^([%w]+)")
+    send("open " .. keyword .. " " .. next)
+    return
+  end
+  
+  -- sanity check, are we moving into the room we expect?
+  if tonumber(gmcp.Room.Info.exits[long_dir[next]]) ~= tonumber(speedWalkPath[1]) then
+    
+    tempTimer(0.2, function() BlackMUDlet.echo("Unexpected room encountered, aborting speedwalk.\n") end)
+    stopSpeedWalk()
+    return
+  end
+  
+  -- move to the next room, after a slight delay
+  tempTimer(0.20, function() send(next) end)
+  
+end
 
-mapUtils = mapUtils or {}
 
---- prints the currently known environments to the screen
-function mapUtils.getEnvironments()
+
+--- Used to manually start a speedwalk to a given room, if possible
+function Utils.startSpeedWalk(roomId)
+  
+  -- getPath can return 2 or 3 results depending on the error
+  -- param 2 can be a length/weight or an error message if room not found
+  -- param 3 is an error message iff room exists but a path cannot be found
+  result, err1, err2 = getPath(getPlayerRoom(), roomId)
+  
+  if result then
+    doSpeedWalk()    
+  else
+    BlackMUDlet.error(err2 or err1)
+  end
+
+end
+
+
+
+--- Override the global Mudlet function to stop a speedwalk
+-- Unhighlights remaining rooms in the cached path
+function stopSpeedWalk()
+  for k,v in pairs(Utils.speedWalkPath) do
+    unHighlightRoom(v)
+  end
+  Utils.speedwalking = false
+  stopNamedEventHandler("BlackMUDlet", "BlackMUDlet.Mapper.speedwalk")
+end
+
+
+-- Mudlet also has global pause and result speedwalk events (and maybe functions?)
+-- The above function also isn't hooked into the stopSpeedWalk event
+-- There's no apparent need to use these for now, but a pause/play/stop UI widget is pos
+
+
+--- This function was copied from the "generic_mapper" script with slight modifications
+-- Lists all areas in the loaded map as a clickable list
+-- Clicking on an area name will list all rooms in that area
+function Utils.echoAreaList()
+    local totalroomcount = 0
+    local rlist = getAreaTableSwap()
+    local listcolor, othercolor = "LightBlue","white"
+
+    -- count the amount of rooms in an area, taking care to count the room in the 0th
+    -- index as well if there is one
+    -- saves the total room count on the side as well
+    local function countrooms(areaid)
+        local allrooms = getAreaRooms(areaid) or {}
+        local areac = (#allrooms or 0) + (allrooms[0] and 1 or 0)
+        totalroomcount = totalroomcount + areac
+        return areac
+    end
+
+    local getAreaRooms, cecho, fg, echoLink, format = getAreaRooms, cecho, fg, echoLink, string.format
+    cecho(format("&lt;%s&gt;List of all areas we know of (click to view room list):\n",listcolor))
+    for id = 1,table.maxn(rlist) do
+        if rlist[id] then
+            cecho(format("&lt;%s&gt;%7d ", othercolor, id))
+            fg(listcolor)
+            echoLink(format("%-40s (%d rooms)",rlist[id],countrooms(id)), 'BlackMUDlet.Mapper.Utils.echoRoomList("'..id..'", true)',
+                "View the room list for "..rlist[id], true)
+            echo("\n")
+        end
+    end
+    cecho(string.format("&lt;%s&gt;Total amount of rooms in this map: %s\n", listcolor, totalroomcount))
+end
+
+
+--- This function was copied from the "generic_mapper" script with slight modifications
+-- Lists all the rooms in a given area 
+-- Clicking on a room number will trigger a speedwalk to that room
+function Utils.echoRoomList(areaname, exact)
+    local areaid, msg, multiples
+    local listcolor, othercolor = "LightBlue","white"
+    if tonumber(areaname) then
+        areaid = tonumber(areaname)
+        msg = getAreaTableSwap()[areaid]
+    else
+        areaid, msg, multiples = getAreaTable()[areaname], "", {} -- 
+    end
+    if areaid then
+        local roomlist, endresult = getAreaRooms(areaid) or {}, {}
+
+        -- obtain a room list for each of the room IDs we got
+        local getRoomName = getRoomName
+        for _, id in pairs(roomlist) do
+            endresult[id] = getRoomName(id)
+        end
+        roomlist[#roomlist+1], roomlist[0] = roomlist[0], nil
+        -- sort room IDs so we can display them in order
+        table.sort(roomlist)
+
+        local echoLink, format, fg, echo = echoLink, string.format, fg, cecho
+        -- now display something half-decent looking
+        cecho(format("\n&lt;%s&gt;List of all rooms in &lt;%s&gt;%s&lt;%s&gt; (areaID &lt;%s&gt;%s&lt;%s&gt; - &lt;%s&gt;%d&lt;%s&gt; rooms):\n",
+            listcolor, othercolor, msg, listcolor, othercolor, areaid, listcolor, othercolor, #roomlist, listcolor))
+        -- use pairs, as we can have gaps between room IDs
+        for _, roomid in pairs(roomlist) do
+            local roomname = endresult[roomid]
+            cechoLink(format("&lt;%s&gt;%7s",othercolor,roomid), 'BlackMUDlet.Mapper.Utils.startSpeedWalk('..roomid..')',
+                format("Go to %s (%s)", roomid, tostring(roomname)), true)
+            cecho(format("&lt;%s&gt;: &lt;%s&gt;%s&lt;%s&gt;\n", othercolor, listcolor, roomname, othercolor))
+        end
+    elseif not areaid and #multiples &gt; 0 then
+        local allareas, format = getAreaTable(), string.formatui 
+        local function countrooms(areaname)
+            local areaid = allareas[areaname]
+            local allrooms = getAreaRooms(areaid) or {}
+            local areac = (#allrooms or 0) + (allrooms[0] and 1 or 0)
+            return areac
+        end
+        BlackMUDlet.echo("For which area would you want to list rooms for?")
+        for _, areaname in ipairs(multiples) do
+            echo("  ")
+            setUnderline(true)
+            cechoLink(format("&lt;%s&gt;%-40s (%d rooms)", othercolor, areaname, countrooms(areaname)),
+                'BlackMUDlet.Mapper.Utils.echoRoomList("'..areaname..'", true)', "Click to view the room list for "..areaname, true)
+            setUnderline(false)
+            echo("\n")
+        end
+    else
+       BlackMUDlet.echo(string.format("Don't know of any area named '%s'.", areaname),false,true)
+    end
+    resetFormat()
+end
+
+
+
+-- Returns a speedwalk path between two rooms, if it exists
+-- If only one param is provided, will begin at the player's current room
+function Utils.getSpeedWalkPath(startRoom, endRoom)
+  
+  -- calling getPath() will overwrite the current speedwalk path, so stopping it just in case
+  stopSpeedWalk()
+
+  local path = ""
+  
+  -- if only one arg, find path from current room
+  if endRoom == nil then
+    endRoom = startRoom
+    startRoom = getPlayerRoom()
+  end
+
+  local exists, err1, err2 = getPath(startRoom, endRoom)
+  
+  local length = #speedWalkDir
+
+  if exists then
+     
+    local i = 1
+    local currentDir = speedWalkDir[1]
+    local currentCount = 0
+     
+    while speedWalkDir[i] ~= nil do 
+     
+      currentCount = currentCount + 1
+      
+      local door = getDoors(speedWalkPath[i])[speedWalkDir[i+1]]
+      
+      if door or speedWalkDir[i+1] ~= currentDir then
+         
+        if currentCount &gt; 1 then path = path..currentCount end
+         
+        if currentDir == "down" then path = path.."d" 
+        elseif currentDir == "up" then path = path.."u" 
+        else path = path..currentDir end
+         
+        if door then path = path.." (door) " end
+         
+        currentDir = speedWalkDir[i+1]
+        currentCount = 0 
+      end
+      
+      i = i + 1
+      
+    end     
+  end
+  
+  return (path ~= "") and path or (err2 or err1)
+  
+end
+
+
+
+--- Prints the currently known environments to the screen
+-- Intended to help track down unhandled environments in the map
+function Utils.getEnvironments()
   
   local envs = {}
-  
-  BlackMUDlet.GUI.echo("Known Environments:")
   
   for id,name in pairs(getRooms()) do
     
     env = getRoomUserData(id, "environment")
     
     if not envs[env] then
-      envs[env] = true
-      BlackMUDlet.GUI.echo("  " .. env)
---      if env == "CHARM" then
---        BlackMUDlet.GUI.echo("CHARM room: " .. id .. " " .. name)
---      end
+      envs[env] = 0
     end
+    envs[env] = envs[env] + 1
   end  
+
+  BlackMUDlet.GUI.echo("Known Environments:")
+  
+  for env,count in pairs(envs) do
+    BlackMUDlet.GUI.echo("  " .. env .. " (" .. count .. " rooms)")
+  end
 end
 
 
 
---- prints the currently known spec properties to the screen
-function mapUtils.getSpecs()
+--- Prints the currently known spec properties to the screen
+-- Intended to help identify unhandled spec properties in current map
+function Utils.getSpecs()
   
   local specs = {}
-  
-  BlackMUDlet.GUI.echo("Known specials:")
   
   for id,name in pairs(getRooms()) do
     
     spec = getRoomUserData(id, "spec")
     
     if not specs[spec] then
-      specs[spec] = true
-      BlackMUDlet.GUI.echo("  " .. spec)
+      specs[spec] = 0
     end
+    
+    specs[spec] = specs[spec] + 1
   end  
+
+  BlackMUDlet.GUI.echo("Known specials:")
+  
+  for spec, count in pairs(specs) do
+    if spec ~= "" then
+      BlackMUDlet.GUI.echo("  " .. spec .. " (" .. count .. " rooms)")
+    end
+  end
+  
 end
 
 
--- prints the currently known areas to the screen
-function mapUtils.getAreas()
+
+--- Prints the currently known areas to the screen
+-- Legacy, use Utils.echoAreaList()
+function Utils.getAreas()
   
   local areas = {}
   
@@ -5246,8 +5623,11 @@ function mapUtils.getAreas()
 end
 
 
--- prints the currently known areas to the screen
-function mapUtils.getRoomsByArea(target)
+
+--- Prints the currently known areas to the screen
+-- This uses the RoomUserData area, which is mud-provided
+-- Legacy, better to use Utils.echoRoomList(areaname)
+function Utils.getRoomsByArea(target)
   
   if target == nil then
     BlackMUDlet.GUI.echo("area is nil")
@@ -5270,8 +5650,8 @@ end
 
 
 
---- handle the "goto" option in mapper right click menu
-function mapUtils.goto()
+--- Helper function for Imm-only "goto" functionality
+function Utils.goto()
 
   local selected = getMapSelection()
   
@@ -5288,22 +5668,25 @@ end
 
 
 
---- List any room with the name "Unknown"
-function mapUtils.listUnfinished()
-  BlackMUDlet.GUI.echo("Listing Unknown and unfinished rooms")
+--- List any room with the name "Unknown" or with exit stubs
+-- Helps you find any gaps in your map
+function Utils.listUnfinished()
+  BlackMUDlet.echo("Listing Unknown and unfinished rooms")
   for id,name in pairs(getRooms()) do
     if name == "Unknown" then
-      BlackMUDlet.GUI.echo("  Unknown room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
+      BlackMUDlet.echo("  Unknown room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
     end
     if #getExitStubs(id) &gt; 0 then
-      BlackMUDlet.GUI.echo("  Stubs found in room " .. id)
+      BlackMUDlet.echo("  Exit stubs found in room " .. id)
     end
   end
 end
 
 
+
 --- Recolors the map based on stored environment string
-function mapUtils.colorByEnv()
+-- This cannot be undone, but is useful if you change the color definitions
+function Utils.colorByEnv()
 BlackMUDlet.GUI.echo("Coloring based on environment")
   for id,name in pairs(getRooms()) do
     local env = getRoomUserData(id, "environment")
@@ -5315,8 +5698,10 @@ BlackMUDlet.GUI.echo("Coloring based on environment")
 end
 
 
+
 --- Redraws symbols for specials on the map based on stored spec
-function mapUtils.updateSymbols()
+-- This cannot be undone, but useful to update symbols if changed
+function Utils.updateSymbols()
 BlackMUDlet.GUI.echo("Updating symbols")
   for id,name in pairs(getRooms()) do
     local spec = getRoomUserData(id, "spec")
@@ -5328,9 +5713,12 @@ BlackMUDlet.GUI.echo("Updating symbols")
 end
 
 
---- Set FIXME user data for red rooms
--- don't call this unless you know what you're doing
-function mapUtils.setFixMe()
+
+--- Set FIXME user data for red-colored rooms
+-- Helper function to flag a room as needing fixing in the local map
+-- Adds a FIXME userdata entry for all rooms colored red(265)
+-- Not intended for general use, used by builders to flag and list problem rooms
+function Utils.setFixMe()
 BlackMUDlet.GUI.echo("Setting FIXME room user data for red rooms")
   for id,name in pairs(getRooms()) do
     if getRoomEnv(id) == 265 then
@@ -5341,13 +5729,17 @@ BlackMUDlet.GUI.echo("Setting FIXME room user data for red rooms")
 end
 
 
-function mapUtils.getFixMe(highlight)
-  mapUtils.fixMe = {}
+--- List the rooms in the map with FIXME set
+-- Helper function to list all rooms with a local FIXME flag
+-- Set highlight to true to highlight rooms on map
+-- Not intnded for general use, used by builders to flag and list problem rooms
+function Utils.getFixMe(highlight)
+  Utils.fixMe = {}
   BlackMUDlet.GUI.echo("Getting FIXME rooms")
   for id,name in pairs(getRooms()) do
     if getRoomUserData(id, "FIXME") == "true" then
       BlackMUDlet.GUI.echo("  FIXME room at " .. id .. " (" .. getRoomAreaName(getRoomArea(id)) .. ")")
-      mapUtils.fixMe[id] = name
+      Utils.fixMe[id] = name
       if highlight then
         local r,g,b = unpack(color_table.red)
         local br,bg,bb = unpack(color_table.blue)
@@ -5357,16 +5749,35 @@ function mapUtils.getFixMe(highlight)
       end
     end
   end
-  BlackMUDlet.GUI.echo(table.size(mapUtils.fixMe) .. " tagged rooms found and stored in mapUtils.fixMe")
+  BlackMUDlet.GUI.echo(table.size(Utils.fixMe) .. " tagged rooms found and stored in BlackMUDlet.Mapper.Utils.fixMe")
 end
-</script>
-				<eventHandlerList />
-			</Script>
-			<Script isActive="yes" isFolder="no">
-				<name>GMCP Mapper Utils</name>
-				<packageName></packageName>
-				<script>
-</script>
+
+
+function Utils.findRoomsByName(target)
+
+  BlackMUDlet.cecho("Searching for rooms containing &lt;white&gt;" .. target)
+  cecho(string.format("\n&lt;white&gt;&lt;i&gt;%6s:&lt;LightBlue&gt; %s (%s / %s)\n", "id", "roomname", "map area", "game area"))
+  
+  local count = 0
+  
+  for id,name in pairs(getRooms()) do
+  
+    if string.find(string.lower(name), string.lower(target)) then
+    
+      local area = getRoomAreaName(getRoomArea(id))
+      local userarea = getRoomUserData(id, "area")
+      
+      count = count + 1
+
+      cecho(string.format("\n&lt;white&gt;%6s:&lt;LightBlue&gt; %s (%s / %s)", id, name, area, userarea))
+    end
+  
+  end
+  
+  echo("\n")
+  BlackMUDlet.echo(count .. " rooms found.")
+  
+end</script>
 				<eventHandlerList />
 			</Script>
 			<Script isActive="yes" isFolder="no">
@@ -5387,7 +5798,7 @@ function Mapper.initialize(config)
 
   -- if no map, load the default
   if #getRooms() == 0 then
-    BlackMUDlet.echo("No map found, loading default map...")
+    BlackMUDlet.echo("No map found, loading default map...\n")
     loadMap(BlackMUDlet.packagePath .. "resources/" .. BlackMUDlet.mapFile)
     Mapper.handleGmcpRoomData() -- reprocess any current GMCP data to update map
   end
@@ -5399,7 +5810,7 @@ function Mapper.initialize(config)
   Mapper.highlightUnknown()
   
   -- add a replace room option to the right click menu
-  addMapEvent("Mapper.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Replace with current room")
+  addMapEvent("Mapper.replaceRoom", "replaceRoom", nil, "BlackMUDlet: Populate with current room")
   registerNamedEventHandler("BlackMUDlet", "Mapper.replaceRoom", "replaceRoom", BlackMUDlet.Mapper.replaceCurrentRoom)
 
   -- add a teleport option to the right click menu
@@ -5411,12 +5822,7 @@ end
 
  -- onEnterGame
 function Mapper.onEnterGame()
-    if isActive("generic_mapper", "trigger") then
-    disableTrigger("generic_mapper")
-    BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
-    -- disable aliases too? I'd like to keep "map areas" though, maybe others?
-    -- alternatively, just disable the script entirely, which will take effect next profile load
-  end
+  -- nothing to do
 end
 
 
@@ -5429,8 +5835,7 @@ end
 
 
 function Mapper.uninstall()
-  -- we shut these off at init, so assume they should be turned back on
-  enableTrigger("generic_mapper")
+
 end
 
 </script>
@@ -5461,40 +5866,53 @@ Help.help = [[&lt;LightBlue&gt;
   in "generic_mapper" script.
 
   &lt;LightBlue&gt;Map Mode&lt;reset&gt;: Specifies how the Mapper should handle incoming room data
-    &lt;white&gt;ui mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;
+    &lt;white&gt;map mapmode &lt;i&gt;off | follow | update | create&lt;reset&gt;
          &lt;white&gt;off&lt;reset&gt;: Do nothing, map will not follow or update
-      &lt;white&gt;follow&lt;reset&gt;: Map will position will follow in game movement for known rooms
+      &lt;white&gt;follow&lt;reset&gt;: Map position will follow in game movement for known rooms
       &lt;white&gt;update&lt;reset&gt;: Follow movement and update existing rooms, do not create new rooms
       &lt;white&gt;create&lt;reset&gt;: Update existing rooms and create new rooms when encountered
       
   &lt;LightBlue&gt;Create Mode&lt;reset&gt;: Behavior when creating new rooms that might not fit nicely on map
-    &lt;white&gt;ui createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;
+    &lt;white&gt;map createmode &lt;i&gt;skip | warn | stretch | overlap&lt;reset&gt;
          &lt;white&gt;skip&lt;reset&gt;: Do not create room if there is no space in the map
          &lt;white&gt;warn&lt;reset&gt;: Skip and print a warning to the main console
       &lt;white&gt;stretch&lt;reset&gt;: Shift all rooms in current map to make space for the new room
       &lt;white&gt;overlap&lt;reset&gt;: Create the new room on top of the existing room
   
   &lt;LightBlue&gt;Exit Mode&lt;reset&gt;: Behavior when encountering exits to unmapped rooms
-    &lt;white&gt;ui exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;
+    &lt;white&gt;map exitmode &lt;i&gt;stubs | rooms&lt;reset&gt;
       &lt;white&gt;stubs&lt;reset&gt;: Create an exit stub for each unmapped exit
       &lt;white&gt;rooms&lt;reset&gt;: Create a highlighted placeholder room connected to each unmapped exit
   
   &lt;LightBlue&gt;Area Mode&lt;reset&gt;: Controls the automatic placement of rooms into different areas/maps
-    &lt;white&gt;ui areamode &lt;i&gt;auto | keep&lt;reset&gt;
+    &lt;white&gt;map areamode &lt;i&gt;auto | keep&lt;reset&gt;
       &lt;white&gt;auto&lt;reset&gt;: Automatically place updated rooms into their MUD-specified area
       &lt;white&gt;keep&lt;reset&gt;: Keep updated rooms in the existing area
       
   &lt;LightBlue&gt;Map Management&lt;reset&gt;
-    &lt;white&gt;ui map addarea &lt;i&gt;areaname&lt;reset&gt;: Add a new area with the specified name
-    &lt;white&gt;ui map removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, if empty
-    &lt;white&gt;ui map force removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, even if non-empty
+    &lt;white&gt;map addarea &lt;i&gt;areaname&lt;reset&gt;: Add a new area with the specified name
+    &lt;white&gt;map removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, if empty
+    &lt;white&gt;map force removearea &lt;i&gt;areaname&lt;reset&gt;: Remove the specified area, even if non-empty
+    
+  &lt;LightBlue&gt;Map Info/Utils/Helpers&lt;reset&gt;
+    &lt;white&gt;map areas&lt;reset&gt;: List the current areas in the map
+    &lt;white&gt;map rooms &lt;i&gt;areaname&lt;reset&gt;: List the rooms in the specified area
+    &lt;white&gt;map find &lt;i&gt;name&lt;reset&gt;: List all mapped room names containing the target name
+    &lt;white&gt;map goto &lt;i&gt;room#&lt;reset&gt;: Will attempt to speedwalk to the given room #
+    &lt;white&gt;map path &lt;i&gt;room#&lt;reset&gt;: Compute a speedwalk path from current room to destination
+    &lt;white&gt;map path &lt;i&gt;start# end#&lt;reset&gt;: Compute a speedwalk path between the two provided rooms
+    &lt;white&gt;.&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path (e.g. &lt;white&gt;&lt;i&gt;.3n8w&lt;reset&gt;)
+    &lt;white&gt;~&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path in reverse (e.g. &lt;white&gt;&lt;i&gt;~3n8w&lt;reset&gt; -&gt; &lt;white&gt;&lt;i&gt;.8e3s&lt;reset&gt;)
 
-&lt;LightBlue&gt;If you want to start mapping from an unmapped room:
-  1) Right click on a blank area of the map and switch to editing mode if needed
-  2) Right click again and select "Create new room"
-  3) Right click new room and choose "BlackMUDlet: Replace with current room"
-  4) Your newly placed room should be now be synced with your current location
-  5) Start exploring
+&lt;LightBlue&gt;If you want to start mapping from an unmapped room:&lt;reset&gt;
+  1) Right click on a blank area of the map and switch to editing mode, if needed
+  2) Ensure no rooms are currently selected
+  3) Right click again and select "&lt;white&gt;Create new room here&lt;reset&gt;"
+  4) Right click new room and choose "&lt;white&gt;BlackMUDlet: Populate with current room&lt;reset&gt;"
+  5) Your newly placed room should be now be synced with your current location
+  6) Start exploring (make sure Map Mode is set to &lt;white&gt;create new rooms&lt;reset&gt;)
+
+&lt;LightBlue&gt;Use the commands above and the right click menus to edit your map as needed.
   
 ********************************************************************************
 ]]
@@ -5512,11 +5930,6 @@ end
 			<name>Package Manager</name>
 			<packageName></packageName>
 			<script>
--- Using this was causing problem, not sure why?
--- Everything was broken unless BlackMUDlet.Config used over Config
---local Config = BlackMUDlet.Config
-
-
 
 -- track status to avoid double init on module install+load
 -- should this be non-local?
@@ -5551,8 +5964,15 @@ function BlackMUDlet.initialize(event, name)
        and io.exists(BlackMUDlet.packagePath .. "resources/profileicon") then
       downloadFile(getMudletHomeDir() .. "/profileicon", BlackMUDlet.packagePath .. "resources/profileicon")
     end
-  
+    
     initialized = true
+    
+    --Check if the generic_mapper package is installed and if so uninstall it
+    if table.contains(getPackages(),"generic_mapper") then
+      BlackMUDlet.echo("Uninstalling generic_mapper package to avoid conflicts. Uninstall will not be complete until profile is reloaded.\n")
+      uninstallPackage("generic_mapper")
+    end
+
     
     -- using this as a hint that we're already in game, so we won't receive the onEnterGame event
     if gmcp and gmcp.Room then
@@ -5599,7 +6019,7 @@ function BlackMUDlet.shutdown()
   
   BlackMUDlet.GUI.shutdown()
   BlackMUDlet.Mapper.shutdown()
-
+  
 end
 
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysExitEvent", "sysExitEvent", BlackMUDlet.shutdown)
@@ -5619,6 +6039,7 @@ function BlackMUDlet.uninstall(event, name)
   BlackMUDlet.GUI.uninstall()
   BlackMUDlet.Mapper.uninstall()
 
+  -- if we entered this function manually, then we need to uninstall ourselves
   if table.contains(getPackages(), BlackMUDlet.packageName) then
     uninstallPackage(BlackMUDlet.packageName)
   end
@@ -5626,7 +6047,10 @@ function BlackMUDlet.uninstall(event, name)
   initialized = false
   BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
   
-  BlackMUDlet.GUI.echo("BlackMUDlet has been uninstalled. If this was not part of an update, please reload your profile to complete the uninstall.")
+  BlackMUDlet.echo("Stopping BlackMUDlet event handlers")
+  stopAllNamedEventHandlers("BlackMUDlet")
+  
+  BlackMUDlet.echo("BlackMUDlet has been uninstalled. If this was not part of an update, please reload your profile to complete the uninstall.")
 
 end
 
@@ -5794,11 +6218,11 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 			<command></command>
 			<keyCode>-1</keyCode>
 			<keyModifier>0</keyModifier>
-			<Key isActive="no" isFolder="no">
+			<Key isActive="yes" isFolder="no">
 				<name>Southwest</name>
 				<packageName></packageName>
-				<script></script>
-				<command>southwest</command>
+				<script>sendAll("south", "west")</script>
+				<command></command>
 				<keyCode>49</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
@@ -5810,11 +6234,11 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 				<keyCode>50</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
-			<Key isActive="no" isFolder="no">
+			<Key isActive="yes" isFolder="no">
 				<name>Southeast</name>
 				<packageName></packageName>
-				<script></script>
-				<command>southeast</command>
+				<script>sendAll("south", "east")</script>
+				<command></command>
 				<keyCode>51</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
@@ -5842,11 +6266,11 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 				<keyCode>54</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
-			<Key isActive="no" isFolder="no">
+			<Key isActive="yes" isFolder="no">
 				<name>Northwest</name>
 				<packageName></packageName>
-				<script></script>
-				<command>northwest</command>
+				<script>sendAll("north", "west")</script>
+				<command></command>
 				<keyCode>55</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
@@ -5858,11 +6282,11 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 				<keyCode>56</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
-			<Key isActive="no" isFolder="no">
+			<Key isActive="yes" isFolder="no">
 				<name>Northeast</name>
 				<packageName></packageName>
-				<script></script>
-				<command>northeast</command>
+				<script>sendAll("north", "east")</script>
+				<command></command>
 				<keyCode>57</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
@@ -5896,6 +6320,22 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 				<script></script>
 				<command>down</command>
 				<keyCode>43</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>Score</name>
+				<packageName></packageName>
+				<script></script>
+				<command>score</command>
+				<keyCode>48</keyCode>
+				<keyModifier>536870912</keyModifier>
+			</Key>
+			<Key isActive="yes" isFolder="no">
+				<name>Attributes</name>
+				<packageName></packageName>
+				<script></script>
+				<command>att</command>
+				<keyCode>46</keyCode>
 				<keyModifier>536870912</keyModifier>
 			</Key>
 		</KeyGroup>
