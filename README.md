@@ -9,8 +9,8 @@ BlackMUDlet is a [BlackMUD](https://www.blackmud.com) client package for the [Mu
 
 BlackMUDlet consists of two primary components:
 
-1. [BlackMUDlet UI](https://github.com/blackmud-dev/bm-mudlet/wiki/Home/_edit#blackmudlet-ui): A User Interface for displaying game-related information on a series of informational panels.
-1. [BlackMUDlet Mapper](https://github.com/blackmud-dev/bm-mudlet/wiki/Home/_edit#blackmudlet-mapper): A mapping script to enable mapping using Mudlet's built-in mapping tools.
+1. [BlackMUDlet UI](https://github.com/blackmud-dev/bm-mudlet/wiki#blackmudlet-ui): A User Interface for displaying game-related information on a series of informational panels.
+1. [BlackMUDlet Mapper](https://github.com/blackmud-dev/bm-mudlet/wiki#blackmudlet-mapper): A mapping script to enable mapping using Mudlet's built-in mapping tools.
 
 Several methods for interacting with the UI, game, and map data are also included within the package.
 
