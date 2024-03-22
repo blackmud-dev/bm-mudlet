@@ -1,7 +1,7 @@
 
 # BlackMUDlet
 
-BlackMUDlet is a [BlackMUD](www.blackmud.com) client package for the [Mudlet](https://www.mudlet.org/) MUD client.
+BlackMUDlet is a [BlackMUD](https://www.blackmud.com) client package for the [Mudlet](https://www.mudlet.org/) MUD client.
 
 <p align="center">
   <img width="600" src="https://raw.githubusercontent.com/blackmud-dev/bm-mudlet/main/screenshot/blackmudlet.png">
