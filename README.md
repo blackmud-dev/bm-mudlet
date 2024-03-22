@@ -16,4 +16,4 @@ Several methods for interacting with the UI, game, and map data are also include
 
 BlackMUDlet is powered by the Generic MUD Communication Protocol (GMCP), a JSON-based message format containing information sent directly from BlackMUD to the client outside of the usual game connection. This enables a reliable stream of game-related information without any complicated parsing of MUD output. The goal of BlackMUDlet is to integrate this stream of information into the Mudlet client via a basic UI such that any Mudlet user can benefit from it. BlackMUDlet explicitly avoids using this information to automate player actions.
 
-See [https://github.com/blackmud-dev/bm-mudlet/wiki/BlackMUDlet](https://github.com/blackmud-dev/bm-mudlet/wiki/BlackMUDlet) for more information.
+Visit the [Wiki](https://github.com/blackmud-dev/bm-mudlet/wiki) for more information.
