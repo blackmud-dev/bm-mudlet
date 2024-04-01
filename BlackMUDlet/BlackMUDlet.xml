@@ -5800,7 +5800,7 @@ function Mapper.initialize(config)
   raiseEvent("BlackMUDlet.Mapper.configUpdate")
 
   -- if no map, load the default
-  if #getRooms() == 0 then
+  if table.size(getRooms()) == 0 then
     BlackMUDlet.echo("No map found, loading default map...\n")
     loadMap(BlackMUDlet.packagePath .. "resources/" .. BlackMUDlet.mapFile)
     Mapper.handleGmcpRoomData() -- reprocess any current GMCP data to update map
