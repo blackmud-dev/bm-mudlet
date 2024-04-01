@@ -5188,7 +5188,7 @@ function Mapper.replaceCurrentRoom()
   setRoomCoordinates(info.num, x, y, z)
   
   -- populate it with current room data
-  handleGmcpRoomData()  
+  Mapper.handleGmcpRoomData()  
   
   -- and delete the old placeholder room
   deleteRoom(selected.center)
