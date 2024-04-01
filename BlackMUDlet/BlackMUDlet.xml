@@ -1303,6 +1303,7 @@ BlackMUDlet GUI is installed:
   Type &lt;white&gt;ui help &lt;LightBlue&gt;and &lt;white&gt;ui about &lt;LightBlue&gt;for more information
   Type &lt;white&gt;ui reset &lt;LightBlue&gt;to reset the layout if things look weird
   Type &lt;white&gt;ui hide &lt;LightBlue&gt;to hide the UI (&lt;white&gt;ui show &lt;LightBlue&gt;to bring it back)
+  Visit https://github.com/blackmud-dev/bm-mudlet/wiki for additional information
   
   New to Mudlet? Type &lt;white&gt;ui mudlet&lt;LightBlue&gt; for some basic guidance.
 ********************************************************************************
@@ -1350,6 +1351,8 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
     See &lt;white&gt;map help&lt;LightBlue&gt; for more details
     
   &lt;LightBlue&gt;Navigation: The NumPad may be used for movement (see Mudlet Keybindings menu)
+  
+  Visit https://github.com/blackmud-dev/bm-mudlet/wiki for additional information
 &lt;LightBlue&gt;    
 ********************************************************************************
 ]]
@@ -1359,7 +1362,7 @@ GUI.Help.about = [[&lt;LightBlue&gt;
 ********************************************************************************
 &lt;white&gt;BlackMUDlet GUI
 &lt;LightBlue&gt;
-  Author: yetanotherkevin (aka Donal / Turas)
+  Created by yetanotherkevin (aka Donal / Turas)
   
   Acknowledgements:
   
@@ -1377,7 +1380,7 @@ New users to Mudlet may wish to tweak some settings:
   - Fonts: You can adjust the default console font size or face:
       &lt;white&gt;Options -&gt; Preferences -&gt; Main display -&gt; Font&lt;LightBlue&gt;
 	
-  - Default Colors: You can override ANSI colors (such as dark blue)
+  - Default Colors: You can override ANSI colors (such as dark blue):
       &lt;white&gt;Options -&gt; Preferences -&gt; Color view&lt;LightBlue&gt;
 	
   - Command Separator: The default command separator is &lt;white&gt;;;&lt;LightBlue&gt;
@@ -4573,15 +4576,15 @@ Mapper.envColors = {}
 Mapper.envColors["Default"]       = color_table.ansi_red
 Mapper.envColors["Air"]           = color_table.azure
 --Mapper.envColors["CHARM"]         = color_table.ansi_light_magenta
-Mapper.envColors["City"]          = color_table.light_grey
+Mapper.envColors["City"]          = color_table.dim_grey
 Mapper.envColors["Desert"]        = color_table.pale_goldenrod
-Mapper.envColors["Field"]         = color_table.lawn_green
+Mapper.envColors["Field"]         = color_table.green_yellow
 Mapper.envColors["Fire"]          = color_table.indian_red
 Mapper.envColors["Forest"]        = color_table.forest_green
 Mapper.envColors["Hills"]         = color_table.lime_green
 Mapper.envColors["In the ground"] = color_table.ansi_yellow
 Mapper.envColors["Inside"]        = color_table.pale_turquoise
-Mapper.envColors["Mountains"]     = color_table.dim_grey
+Mapper.envColors["Mountains"]     = color_table.light_grey
 Mapper.envColors["Underwater"]    = color_table.blue
 Mapper.envColors["Water NoSwim"]  = color_table.steel_blue
 Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
@@ -5913,7 +5916,7 @@ Help.help = [[&lt;LightBlue&gt;
   2) Ensure no rooms are currently selected
   3) Right click again and select "&lt;white&gt;Create new room here&lt;reset&gt;"
   4) Right click new room and choose "&lt;white&gt;BlackMUDlet: Populate with current room&lt;reset&gt;"
-  5) Your newly placed room should be now be synced with your current location
+  5) Your newly placed room should now be synced with your current location
   6) Start exploring (make sure Map Mode is set to &lt;white&gt;create new rooms&lt;reset&gt;)
 
 &lt;LightBlue&gt;Use the commands above and the right click menus to edit your map as needed.
