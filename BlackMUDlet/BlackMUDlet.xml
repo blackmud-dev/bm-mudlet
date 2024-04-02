@@ -5828,7 +5828,7 @@ function Mapper.onEnterGame()
   if isActive("generic_mapper", "trigger") then
     disableTrigger("generic_mapper")
     disableAlias("generic_mapper")
-    BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
+    --BlackMUDlet.echo("BlackMUDlet Mapper is installed, Mudlet's generic_mapper triggers have been disabled.")
   end
 end
 
