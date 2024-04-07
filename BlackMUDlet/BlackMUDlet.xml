@@ -3604,6 +3604,7 @@ function Buffs.buildPanel(parent)
   Buffs.update()
   
   registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.Char.Spells", GUI.Buffs.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.Char.Skills", GUI.Buffs.update)
   
 end
 
@@ -3663,6 +3664,7 @@ function Buffs.update()
     
     -- deep copy so we can sort without messing up gmcp table
     local Spells = table.deepcopy(gmcp.Char.Spells)
+    Spells = table.update(gmcp.Char.Skills)
     
     Buffs.console:clear()
     Buffs.console:cecho("\n")
