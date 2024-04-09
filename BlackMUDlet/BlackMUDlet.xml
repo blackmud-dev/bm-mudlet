@@ -3603,8 +3603,8 @@ function Buffs.buildPanel(parent)
   
   Buffs.update()
   
-  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.Char.Spells", GUI.Buffs.update)
-  registerNamedEventHandler("BlackMUDlet", "GUI.Buffs", "gmcp.Char.Skills", GUI.Buffs.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Spells", "gmcp.Char.Spells", GUI.Buffs.update)
+  registerNamedEventHandler("BlackMUDlet", "GUI.Skills", "gmcp.Char.Skills", GUI.Buffs.update)
   
 end
 
@@ -3663,19 +3663,25 @@ function Buffs.update()
   if gmcp and gmcp.Char and gmcp.Char.Spells then
     
     -- deep copy so we can sort without messing up gmcp table
-    local Spells = table.deepcopy(gmcp.Char.Spells)
-    Spells = table.update(gmcp.Char.Skills)
+    local spells = table.deepcopy(gmcp.Char.Spells) or {}
+    local skills = table.deepcopy(gmcp.Char.Skills) or {}
     
     Buffs.console:clear()
     Buffs.console:cecho("\n")
     
-    if table.size(Spells) == 0 then
+    if table.size(spells) + table.size(skills) == 0 then
       Buffs.console:cecho("  None.\n")
     end
     
-    table.sort(Spells, function(a,b) return a.duration &lt; b.duration end)
+    -- insert affecting skills into spell list
+    for _, skill in ipairs(skills) do
+      table.insert(spells, skill)
+    end
     
-    for _, spell in ipairs(Spells) do
+    -- sort spells by duration
+    table.sort(spells, function(a,b) return a.duration &lt; b.duration end)
+    
+    for _, spell in ipairs(spells) do
       
       local output = ""
 
@@ -3717,7 +3723,6 @@ function Buffs.update()
     end    
   end   
 end
-
 </script>
 						<eventHandlerList />
 					</Script>
