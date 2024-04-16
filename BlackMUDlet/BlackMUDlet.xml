@@ -1045,26 +1045,26 @@ GUI.Colors.gold            = "#cc9900"
 GUI.Utils.translate = {}
 
 -- Alignment
-GUI.Utils.translate["Your deeds are legendary, even in hell!"]   = "&lt;red&gt;Evilest&lt;reset&gt;"
-GUI.Utils.translate["Rape and murder are a way of life to you!"] = "&lt;red&gt;Eviler&lt;reset&gt;"
+GUI.Utils.translate["Your deeds are legendary, even in hell!"]   = "&lt;red&gt;Demonic&lt;reset&gt;"
+GUI.Utils.translate["Rape and murder are a way of life to you!"] = "&lt;red&gt;Devilish&lt;reset&gt;"
 GUI.Utils.translate["You are truly evil!"]                       = "&lt;red&gt;Evil&lt;reset&gt;"
-GUI.Utils.translate["You are tending toward evil."]              = "&lt;salmon&gt;Tending Evil&lt;reset&gt;"
+GUI.Utils.translate["You are tending toward evil."]              = "&lt;salmon&gt;Bad&lt;reset&gt;"
 GUI.Utils.translate["You feel balanced."]                        = "Balanced"
-GUI.Utils.translate["You are tending toward goodness."]          = "&lt;LightBlue&gt;Tending Good&lt;reset&gt;"
+GUI.Utils.translate["You are tending toward goodness."]          = "&lt;LightBlue&gt;Kind&lt;reset&gt;"
 GUI.Utils.translate["You are sweet, caring, all that crapola!"]  = "&lt;DeepSkyBlue&gt;Good&lt;reset&gt;"
-GUI.Utils.translate["You are a real goody-goody!"]               = "&lt;DeepSkyBlue&gt;Goody-Goody&lt;reset&gt;"
-GUI.Utils.translate["You are the epitome of righteousness!"]     = "&lt;DeepSkyBlue&gt;Righteous&lt;reset&gt;"
+GUI.Utils.translate["You are a real goody-goody!"]               = "&lt;DeepSkyBlue&gt;Angelic&lt;reset&gt;"
+GUI.Utils.translate["You are the epitome of righteousness!"]     = "&lt;DeepSkyBlue&gt;Divine&lt;reset&gt;"
 
 -- Entropy
-GUI.Utils.translate["The Lord of Chaos has touched your soul.  You seek only The Unmaking."] = "Unmaker"
+GUI.Utils.translate["The Lord of Chaos has touched your soul.  You seek only The Unmaking."] = "Anarchic"
 GUI.Utils.translate["You have no understanding of the concepts of law and order."]           = "Chaotic"
-GUI.Utils.translate["You casually disregard law and order."]                                 = "Somewhat Chaotic"
-GUI.Utils.translate["You are tending toward chaos."]                                         = "Tending Chaotic"
-GUI.Utils.translate["You feel entrophatically balanced."]                                    = "Balanced"
-GUI.Utils.translate["You are tending toward order."]                                         = "Tending Ordered"
-GUI.Utils.translate["You feel a strong need for order in the world."]                        = "Somewhat Ordered"
-GUI.Utils.translate["You feel the need to enforce law and order."]                           = "Ordered"
-GUI.Utils.translate["Phaet has touched your soul.  You seek only to prevent The Unmaking."]  = "Maker"
+GUI.Utils.translate["You casually disregard law and order."]                                 = "Unstable"
+GUI.Utils.translate["You are tending toward chaos."]                                         = "Frantic"
+GUI.Utils.translate["You feel entrophatically balanced."]                                    = "Neutral"
+GUI.Utils.translate["You are tending toward order."]                                         = "Abiding"
+GUI.Utils.translate["You feel a strong need for order in the world."]                        = "Orderly"
+GUI.Utils.translate["You feel the need to enforce law and order."]                           = "Lawful"
+GUI.Utils.translate["Phaet has touched your soul.  You seek only to prevent The Unmaking."]  = "Judge"
 
 -- Position
 GUI.Utils.translate["You are DEAD!"]                             = "DEAD!"
@@ -4723,8 +4723,6 @@ mudlet.mapper_script = true
     
 -- TODO: verbosity options for console outputs
 
--- TODO: write a "highlight path" function?
-
 -- TODO: Imm-only translation table for area name to zone number
 
 -- TODO: Symbols are pretty tiny outside of GridMode. Maybe override colors too?
@@ -4975,12 +4973,12 @@ local function updateExits(info)
       end
       
       -- add the exit line if the room exists, or a stub if no exit exists (or if we can't see the room)
-      if roomExists(info.exits[v]) then
+      if roomExists(info.exits[v] and info.exits[v] ~= 0) then
         -- add an exit leading to the identified room
         setExit(info.num, info.exits[v], v)
       elseif getRoomExits(info.num)[v] then
-        -- Do nothing, an exit already exists.
-        -- We probably can't see the room, so don't replace the exit with a stub
+        -- Do nothing, an exit already exists
+        -- We probably can't see the room, so don't replace the exit
       else
         setExitStub(info.num, v, true)
       end
@@ -5039,7 +5037,7 @@ local function updateSpec(info)
 
   if info == nil then return end
   
-  if info.spec then
+  if info.spec and Mapper.specials[info.spec] then
     setRoomUserData(info.num, "spec", info.spec)
     setRoomChar(info.num, Mapper.specials[info.spec] or "")
   end
@@ -5915,8 +5913,8 @@ Help.help = [[&lt;LightBlue&gt;
     &lt;white&gt;map goto &lt;i&gt;room#&lt;reset&gt;: Will attempt to speedwalk to the given room #
     &lt;white&gt;map path &lt;i&gt;room#&lt;reset&gt;: Compute a speedwalk path from current room to destination
     &lt;white&gt;map path &lt;i&gt;start# end#&lt;reset&gt;: Compute a speedwalk path between the two provided rooms
-    &lt;white&gt;.&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path (e.g. &lt;white&gt;&lt;i&gt;.3n8w&lt;reset&gt;)
-    &lt;white&gt;~&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path in reverse (e.g. &lt;white&gt;&lt;i&gt;~3n8w&lt;reset&gt; -&gt; &lt;white&gt;&lt;i&gt;.8e3s&lt;reset&gt;)
+    &lt;white&gt;.&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path (e.g., &lt;white&gt;&lt;i&gt;.3n8w&lt;reset&gt;)
+    &lt;white&gt;~&lt;i&gt;path&lt;reset&gt;: Force speedwalk the given path in reverse (e.g., &lt;white&gt;&lt;i&gt;~3n8w&lt;reset&gt; -&gt; &lt;white&gt;&lt;i&gt;.8e3s&lt;reset&gt;)
 
 &lt;LightBlue&gt;If you want to start mapping from an unmapped room:&lt;reset&gt;
   1) Right click on a blank area of the map and switch to editing mode, if needed
@@ -6221,6 +6219,17 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadDone", "
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", "sysDownloadError", onDownloadError)
 
 </script>
+			<eventHandlerList />
+		</Script>
+		<Script isActive="yes" isFolder="no">
+			<name>Changelog</name>
+			<packageName></packageName>
+			<script>
+BlackMUDlet.changelog = [[
+  - Updated mapper to preserve symbols in rooms while updating
+  - Updated entropy and align short strings to match game
+  - Add skills (e.g., search) to "Spells and Conditions" panel
+]]</script>
 			<eventHandlerList />
 		</Script>
 	</ScriptPackage>
