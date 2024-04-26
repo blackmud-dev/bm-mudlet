@@ -904,10 +904,19 @@ BlackMUDlet.Updater.downloadUpdate()</script>
 		<Script isActive="yes" isFolder="no">
 			<name>Config</name>
 			<packageName></packageName>
-			<script>BlackMUDlet = BlackMUDlet or {}
+			<script>-- Configuration information for the BlackMUDlet Package
+
+BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName  = "BlackMUDlet"
 BlackMUDlet.version      = 5
+
+-- To trigger an update prompt for users:
+  -- Update BlackMUDlet.changelog with a summary of changes
+  -- Increment the version number here
+  -- Set the value in BlackMUDlet.version to match the version on the server
+  -- Commit and push changes to main branch on GitHub
+  -- Users with an older version will be prompted to update when entering game
 
 BlackMUDlet.packagePath  = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. "/"
 BlackMUDlet.downloadPath = getMudletHomeDir() .. "/" .. BlackMUDlet.packageName .. " Downloads/"
@@ -916,7 +925,6 @@ BlackMUDlet.versionFile  = BlackMUDlet.packageName .. ".version"
 BlackMUDlet.configFile   = BlackMUDlet.packageName .. "_config.lua"
 BlackMUDlet.mapFile      = BlackMUDlet.packageName .. "_starter.map"
 BlackMUDlet.updateUrl    = "https://github.com/blackmud-dev/bm-mudlet/raw/main/"
-
 
 -- The invidual submodules manage their own configs, but BlackMUDlet itself
 -- takes care of saving / loading the stored package config. So outside of
@@ -931,7 +939,9 @@ BlackMUDlet.Config.Mapper = BlackMUDlet.Config.Mapper or {}
 		<Script isActive="yes" isFolder="no">
 			<name>Utils</name>
 			<packageName></packageName>
-			<script>
+			<script>-- Utility functions for the BlackMUDlet Package
+
+
 --BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.Utils = BlackMUDlet.Utils or {}
@@ -1022,7 +1032,8 @@ BlackMUDlet.GUI = BlackMUDlet.GUI or {}</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Config</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Configuration data for the UI, including fixed strings and style sheets
+
 local GUI = BlackMUDlet.GUI
 
 GUI.Utils = GUI.Utils or {}
@@ -1198,7 +1209,9 @@ end
 			<Script isActive="yes" isFolder="no">
 				<name>Utils</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Utility functions for the UI, mostly string and echo-related
+-- TODO: Refactor and harmonize with BlackMUDlet.Utils
+
 local GUI = BlackMUDlet.GUI
 
 
@@ -1272,7 +1285,8 @@ end</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Submodule Management</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Handlers for init/install, uninstall, saving, and loading for the UI
+
 local GUI = BlackMUDlet.GUI
 
 -- 
@@ -1329,7 +1343,9 @@ end
 			<Script isActive="yes" isFolder="no">
 				<name>Help</name>
 				<packageName></packageName>
-				<script>local GUI = BlackMUDlet.GUI
+				<script>-- Various help strings for the UI
+
+local GUI = BlackMUDlet.GUI
 
 GUI.Help = GUI.Help or {}
 
@@ -1398,15 +1414,19 @@ may be unlocked, moved or closed. If something goes wrong, try &lt;white&gt;ui r
 
 GUI.Help.about = [[&lt;LightBlue&gt;
 ********************************************************************************
-&lt;white&gt;BlackMUDlet GUI
+&lt;white&gt;BlackMUDlet UI
 &lt;LightBlue&gt;
   Created by yetanotherkevin (aka Donal / Turas)
   
   Acknowledgements:
   
-    This package uses demonnic's MDK and the Embeddable Multi-Console Object 
-        https://github.com/demonnic/MDK
-    
+    This package uses demonnic's MDK and the Embeddable Multi-Console Object
+        Available at: https://github.com/demonnic/MDK
+
+  Recent Changes:
+
+]] .. BlackMUDlet.changelog .. [[
+
 ********************************************************************************
 ]]
 
@@ -1467,7 +1487,8 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Build Time Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the Time panel on the status bar
+
 local GUI = BlackMUDlet.GUI
 local Time = GUI.Time
 
@@ -1551,7 +1572,8 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Update Time Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the state of the time panel based on current GMCP data
+
 local GUI = BlackMUDlet.GUI
 local Time = GUI.Time
 
@@ -1663,7 +1685,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Vitals Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the vitals panel on the status bar
+
 local GUI = BlackMUDlet.GUI
 local Vitals = GUI.Vitals
 
@@ -1951,7 +1974,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Update Vitals Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the vitals panel based on the current GMCP data
+
 local GUI = BlackMUDlet.GUI
 
 
@@ -2080,7 +2104,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Target Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the target panel on the status bar
+
 local GUI = BlackMUDlet.GUI
 local Target = GUI.Target
 
@@ -2181,11 +2206,13 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Update Target Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the target panel based on current GMCP data
+
 local GUI = BlackMUDlet.GUI
 local Target = GUI.Target
 
 -- Precise translations
+-- Legacy, GMCP data now contains percentages
 --[[
 local condition = {}
 condition["excellent"] = 100
@@ -2204,7 +2231,8 @@ condition["bleeding awfully from big wounds"] = 0
 ]]--
 
 -- Averages
--- This was previously used before precise HP was available
+-- Legacy, GMCP data now contains percentages
+--[[
 local condition = {}
 condition["excellent"] = 100
 condition["few scratches"] = 97.5
@@ -2219,6 +2247,7 @@ condition["bad condition"] = 20
 condition["awful condition"] = 10
 condition["nearly dead"] = 2.5
 condition["bleeding from awfully big wounds"] = 0
+]]--
 
 
 function GUI.Target.update()
@@ -2243,7 +2272,6 @@ function GUI.Target.update()
   end
 
   -- No target info available
-  --GUI.Target.targetLabel:echo("Target: None")
   GUI.Target.targetGauge:setValue(0, 1, "Target: None")
 
 end
@@ -2259,7 +2287,9 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Misc Info Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the misc info panel on the status bar
+-- Current just a text box for gold and alignment
+
 local GUI = BlackMUDlet.GUI
 local MiscInfo = GUI.MiscInfo
 
@@ -2304,7 +2334,8 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Update Misc Info Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Update the misc info panel based on the current GMCP data
+
 local GUI = BlackMUDlet.GUI
 
 
@@ -2358,7 +2389,14 @@ end
 				<Script isActive="yes" isFolder="no">
 					<name>Build Status Bar Panel</name>
 					<packageName></packageName>
-					<script>  
+					<script>-- Builders for the status bar. This currently consists of:
+  -- The Time Panel
+  -- The Vitals Panel
+  -- The Target Panel
+  -- The Misc Info Panel
+  -- an additional "topLabel" managed by the Status Bar itself
+    -- This shows the current position and mount info when applicable
+
 local GUI = BlackMUDlet.GUI
 local StatusBar = GUI.StatusBar
 
@@ -2613,7 +2651,10 @@ end</script>
 				<Script isActive="yes" isFolder="no">
 					<name>Update Status Bar Panel</name>
 					<packageName></packageName>
-					<script>
+					<script>-- Updates the status bar based on the current GMCP data
+  -- Individual sub panels update themselves
+  -- This handles the "topLabel"
+
 local GUI = BlackMUDlet.GUI
 local StatusBar = GUI.StatusBar
 
@@ -2689,7 +2730,9 @@ end</script>
 				<Script isActive="yes" isFolder="no">
 					<name>Build Communication Panel</name>
 					<packageName></packageName>
-					<script>
+					<script>-- Builders for the Communication panel
+  -- Includes some util functions for managing the gag list
+
 local GUI = BlackMUDlet.GUI
 local Communication = GUI.Communication
 
@@ -2736,6 +2779,7 @@ function Communication.buildPanel(parent)
   Communication.emco:reset()
   
   -- Loading after setting defaults, so user customization can overwrite
+  -- Disabled, see next comment
   --Communication.emco:load()
   --Communication.updateTabs() -- fix tabs to match script, if needed
   
@@ -2835,7 +2879,11 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Build Mapper Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the map panel on the UI (just the visuals)
+  -- Includes a button panel for changing config options
+  -- Includes handlers for clicking on these buttons
+  -- Includes a legend window visualizing environments and symbols
+
 local GUI = BlackMUDlet.GUI
 local Mapper = GUI.Mapper
 
@@ -3107,7 +3155,9 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Update Mapper Panel</name>
 						<packageName></packageName>
-						<script>local GUI = BlackMUDlet.GUI
+						<script>-- Update the Mapper UI buttons (not the map itself)
+
+local GUI = BlackMUDlet.GUI
 local Mapper = GUI.Mapper
 
 
@@ -3177,7 +3227,10 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Build Event Log Panel</name>
 						<packageName></packageName>
-						<script>local GUI = BlackMUDlet.GUI
+						<script>-- Builder for the Event Log tab
+  -- Just a simple console we can echo text to
+
+local GUI = BlackMUDlet.GUI
 local EventLog = GUI.EventLog
 
 function EventLog.buildPanel(parent)
@@ -3190,8 +3243,6 @@ function EventLog.buildPanel(parent)
     parent)
   
   EventLog.console:clear()
---  EventLog.console:enableCommandLine()
---  EventLog.console:setCmdAction(EventLog.cecho)
   EventLog.console:enableAutoWrap()
   EventLog.console:enableScrollBar()
   EventLog.console:setFontSize(GUI.Utils.uiFontSize)
@@ -3218,7 +3269,9 @@ EventLog.echo = EventLog.cecho</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Update Event Log Panel</name>
 						<packageName></packageName>
-						<script>local GUI = BlackMUDlet.GUI
+						<script>-- Updates the Event Log on each GMCP update if something interesting happened
+
+local GUI = BlackMUDlet.GUI
 local EventLog = GUI.EventLog
 
 local gmcpCache = gmcpCache or nil
@@ -3271,7 +3324,10 @@ end</script>
 				<Script isActive="yes" isFolder="no">
 					<name>Build WorldInfo Panel</name>
 					<packageName></packageName>
-					<script>
+					<script>-- Builders for the World Info panel, a series of tabbed panels
+  -- Simple tabs like Help and GMCP are handled here
+  -- This includes updaters for simple tabs
+
 local GUI = BlackMUDlet.GUI
 local WorldInfo = GUI.WorldInfo
 
@@ -3463,7 +3519,8 @@ end</script>
 					<Script isActive="yes" isFolder="no">
 						<name>Build Attributes Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the Attributes subpanel
+
 local GUI = BlackMUDlet.GUI
 local Attributes = GUI.Attributes
 
@@ -3491,6 +3548,7 @@ function Attributes.buildPanel(parent)
   Attributes.console:setFontSize(GUI.Utils.uiFontSize)
 
 -- You can place a Geyser Label on top of the console to hijack the scroll wheel
+-- I forget why this is disabled, so it probably didn't work
 --[[  
   Attributes.label = Geyser.Label:new(
     {
@@ -3519,11 +3577,13 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Update Attributes Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the Attributes subpanel based on current GMCP data
+
 local GUI = BlackMUDlet.GUI
 local Attributes = GUI.Attributes
 
 
+-- helper to color code +/- stat modifiers and keep stats+modifiers nice and evenly spaced
 local function statString(curr, base)
 
   if curr &lt; base then 
@@ -3608,7 +3668,10 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Buffs Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the Spells and Conditions subpanel
+  -- Includes helpers for toggling spell watch list
+
+
 local GUI = BlackMUDlet.GUI
 local Buffs = GUI.Buffs
 
@@ -3654,12 +3717,12 @@ function Buffs.updateSpellWatch(spell)
     GUI.Config.spellWatch = {}
     GUI.cecho("Spell watch list cleared")
   
-  -- if watched, unwatch
+  -- if watched, stop watching
   elseif GUI.Config.spellWatch[spell] then
     GUI.Config.spellWatch[spell] = nil
     GUI.cecho(spell .. " removed from spell watch list\n")
   
-  -- else, add
+  -- else, start watching
   else
     GUI.Config.spellWatch[spell] = true
     GUI.cecho(spell .. " added to spell watch list\n")
@@ -3676,7 +3739,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Update Buffs Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the Spells and Conditions subpanel with current GMCP data
+
 local GUI = BlackMUDlet.GUI
 local Buffs = GUI.Buffs
 
@@ -3693,6 +3757,7 @@ debuffs["sleep"] = true
 
 function Buffs.update()
 
+  -- deep copy so we can modify it
   local watchList = table.deepcopy(GUI.Config.spellWatch)
 
   Buffs.console:clear()
@@ -3711,7 +3776,7 @@ function Buffs.update()
       Buffs.console:cecho("  None.\n")
     end
     
-    -- insert affecting skills into spell list
+    -- insert affecting skills into spells table so we only have one table to process
     for _, skill in ipairs(skills) do
       table.insert(spells, skill)
     end
@@ -3727,7 +3792,7 @@ function Buffs.update()
         output = "&lt;i&gt;&lt;yellow&gt;"
       elseif watchList[spell.name] then
         output = "&lt;green&gt;"
-      elseif debuffs[spell.name] then
+      elseif debuffs[spell.name] then -- TODO: should this be first? Debuffs currently shown in yellow when expiring
         output = "&lt;red&gt;"
       end
       
@@ -3773,7 +3838,8 @@ end
 					<Script isActive="yes" isFolder="no">
 						<name>Build Group Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Builders for the Group subpanel
+
 local GUI = BlackMUDlet.GUI
 local Group = GUI.Group
 
@@ -3809,25 +3875,14 @@ function Group.buildPanel(parent)
   registerNamedEventHandler("BlackMUDlet", "GUI.Charms", "gmcp.Char.Charms", GUI.Group.update)
   
 end
-
-
-function GUI.Group.addMember(name, newHp, newMv)
-  Group.members[name] = {}
-  Group.members[name].hp = newHp
-  Group.members[name].mv = newMv
-end
-
-
-function GUI.Group.clearMembers()
-  Group.members = {}
-end
 </script>
 						<eventHandlerList />
 					</Script>
 					<Script isActive="yes" isFolder="no">
 						<name>Update Group Panel</name>
 						<packageName></packageName>
-						<script>
+						<script>-- Updates the Group subpanel based on current GMCP data
+
 local GUI = BlackMUDlet.GUI
 local Group = GUI.Group
 
@@ -3850,8 +3905,7 @@ function Group.update()
     
       local name = member.name or member.leader
       
-      -- hack, remove me when duplicate GMCP data is fixed
-      if name ~= oldname then
+      if name ~= oldname then -- hack, remove me when duplicate GMCP data is fixed
     
         if member.HP_Per and member.MV_Per then
       
@@ -4072,7 +4126,9 @@ end
 				<Script isActive="yes" isFolder="no">
 					<name>Build Character Info Panel</name>
 					<packageName></packageName>
-					<script>
+					<script>-- Builders for the Combat subpanel
+  -- Includes handlers to collapes/expand each subpanel
+
 local GUI = BlackMUDlet.GUI
 local Info = GUI.Info
 
@@ -4085,7 +4141,7 @@ local headerStyle = [[
     margin: 0px;
   ]]
 
-
+-- Vertical space is at a premium, so we can scale each subpanel
 local attWeight    = 0.75
 local buffsWeight  = 1.0
 local groupWeight  = 0.75
@@ -4259,7 +4315,9 @@ end</script>
 			<Script isActive="yes" isFolder="no">
 				<name>UI Management</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Layout manager for the UI
+
+
 local GUI = BlackMUDlet.GUI
 
 -- TODO: If these handlers stay, they should work on both comms and world info
@@ -4549,7 +4607,10 @@ BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Config</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Config data for the GMCP Mapper
+-- Includes helper functions to change config values, which raise events to enable UI sync
+
+
 local Mapper = BlackMUDlet.Mapper
 
 Mapper.Config = Mapper.Config or {}
@@ -4639,7 +4700,7 @@ Mapper.envColors["Water Swim"]    = color_table.deep_sky_blue
 Mapper.envIds = {}
 Mapper.envIds["Default"]       = 257 -- used if no environment data available
 Mapper.envIds["Air"]           = 300
---Mapper.envIds["CHARM"]         = 301 -- in-game bug, to be removed
+--Mapper.envIds["CHARM"]         = 301 -- in-game bug, to be removed, but don't want to disrupt numbering
 Mapper.envIds["City"]          = 302
 Mapper.envIds["Desert"]        = 303
 Mapper.envIds["Field"]         = 304
@@ -4661,6 +4722,9 @@ Mapper.specials["fountain"] = "⛲"
 Mapper.specials["godstone"] = "🗿"
 
 
+
+-- These functions should be used when changing the relevant config values
+-- They raise an event which allows the UI to be updated in tandem
 
 --- set the mapper creation mode
 function Mapper.setMapMode(mode)
@@ -4722,7 +4786,9 @@ end
 			<Script isActive="yes" isFolder="no">
 				<name>GMCP Mapper</name>
 				<packageName></packageName>
-				<script>mudlet = mudlet or {}
+				<script>-- Core GMCP mapping script
+
+mudlet = mudlet or {}
 mudlet.mapper_script = true
 
 -- TODO: Turn off GMCP handler on uninstall
@@ -4768,7 +4834,6 @@ mudlet.mapper_script = true
 
 -- TODO: potentially needed aliases
   -- add portal? might be best done in the editor or automatically
-  -- find room
   -- color tools? Color by zone, environment, room name, user defined, etc.
 
 local Mapper = BlackMUDlet.Mapper
@@ -5012,7 +5077,7 @@ local function updateExits(info)
       end
       
       -- add the exit line if the room exists, or a stub if no exit exists (or if we can't see the room)
-      if roomExists(info.exits[v] and info.exits[v] ~= 0) then
+      if roomExists(info.exits[v]) and info.exits[v] ~= 0 then
         -- add an exit leading to the identified room
         setExit(info.num, info.exits[v], v)
       elseif getRoomExits(info.num)[v] then
@@ -5255,7 +5320,9 @@ end</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Mapper Utils</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Utility functions for the GMCP Mapper, including speedwalk functionality
+
+
 local Mapper = BlackMUDlet.Mapper
 
 Mapper.Utils = Mapper.Utils or {}
@@ -5830,7 +5897,8 @@ end</script>
 			<Script isActive="yes" isFolder="no">
 				<name>Submodule Management</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Functions for managing init/install, uninstall, saving, and loading for the GMCP Mapper
+
 --BlackMUDlet.Mapper = BlackMUDlet.Mapper or {}
 
 local Mapper = BlackMUDlet.Mapper
@@ -5895,7 +5963,9 @@ end
 			<Script isActive="yes" isFolder="no">
 				<name>Help</name>
 				<packageName></packageName>
-				<script>
+				<script>-- Nicely formatted help string for the GMCP Mapper
+-- TODO: This should be a function of the help strings in the config
+
 local Mapper = BlackMUDlet.Mapper
 
 Mapper.Help = Mapper.Help or {}
@@ -5980,7 +6050,7 @@ end
 		<Script isActive="yes" isFolder="no">
 			<name>Package Manager</name>
 			<packageName></packageName>
-			<script>
+			<script>-- Event handlers to manage install, uninstall, saving, and loading of the BlackMUDlet package
 
 -- track status to avoid double init on module install+load
 -- should this be non-local?
@@ -6020,7 +6090,7 @@ function BlackMUDlet.initialize(event, name)
     
     --Check if the generic_mapper package is installed and if so uninstall it
     if table.contains(getPackages(),"generic_mapper") then
-      BlackMUDlet.echo("Uninstalling generic_mapper package to avoid conflicts. Uninstall will not be complete until profile is reloaded.\n")
+      BlackMUDlet.echo("Uninstalling generic_mapper package to avoid conflicts. Uninstall will not be complete until profile is reloaded one or twice.\n")
       uninstallPackage("generic_mapper")
     end
 
@@ -6096,12 +6166,13 @@ function BlackMUDlet.uninstall(event, name)
   end
   
   initialized = false
-  BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI on reinstall
+  BlackMUDlet.Config.GUI.initialized = false -- force a reset of the GUI if reinstalling next
   
   BlackMUDlet.echo("Stopping BlackMUDlet event handlers")
   stopAllNamedEventHandlers("BlackMUDlet")
   
   BlackMUDlet.echo("BlackMUDlet has been uninstalled. If this was not part of an update, please reload your profile to complete the uninstall.")
+  BlackMUDlet.echo("If you do not want BlackMUDlet to be reinstalled by the server, unselect Options -&gt; Preferences -&gt; General -&gt; Miscellaneous -&gt; Allow server to install script packages")
 
 end
 
@@ -6114,7 +6185,9 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.sysUninstall", "sysUninsta
 		<Script isActive="yes" isFolder="no">
 			<name>Updater</name>
 			<packageName></packageName>
-			<script>
+			<script>-- A simple update handler for the BlackMUDlet package
+-- Downloads and checks a version file from GitHub to detect package updates.
+
 --BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.Updater = BlackMUDlet.Updater or {}
@@ -6263,15 +6336,24 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 		<Script isActive="yes" isFolder="no">
 			<name>Changelog</name>
 			<packageName></packageName>
-			<script>
+			<script>-- Simple changelog tracking. 
+-- Will adopt a more flexible approach if needed in the future
+
 BlackMUDlet.changelog = [[
-  - Added a quick hack to suppress duplicate names in GMCP group data
-  - Updated gossip triggers to catch (OOC) gossip
-  - Fixed a bug with group panel not showing absent members/charms
-  - Added support for some missing communication channels
-  - Updated mapper to preserve symbols in rooms while updating
-  - Updated entropy and align short strings to match game
-  - Add skills (e.g., search) to "Spells and Conditions" panel
+  Revision 6 (2024.04.26)
+    - Added a workaround to suppress buggy duplicate names in GMCP group data
+    - Fixed a bug with group panel not showing absent members/charms
+    - Updated gossip triggers to catch (OOC) gossip
+    - Added triggers for some missing communication types
+    - Updated mapper to preserve user placed symbols in rooms when updating
+    - Updated entropy and align short strings to match game definitions
+    - Add skills data (e.g., search) to "Spells and Conditions" panel
+
+  Revision 5 (AoD Launch)
+    - Initial public release for AoD
+  
+  Revision 1-4 (Development and Testing)
+    - Not tracked
 ]]</script>
 			<eventHandlerList />
 		</Script>
