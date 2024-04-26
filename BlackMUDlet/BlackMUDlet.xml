@@ -68,11 +68,11 @@
 				<colorTriggerBgColor>#000000</colorTriggerBgColor>
 				<regexCodeList />
 				<regexCodePropertyList />
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Say Sent</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightBlue:&gt;You say \""..multimatches[2][2].."\"\n")</script>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Ask Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;ansiLightYellow:&gt;"..matches[1].."\n")</script>
 					<triggerType>0</triggerType>
-					<conditonLineDelta>1</conditonLineDelta>
+					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
 					<mCommand></mCommand>
 					<packageName></packageName>
@@ -82,33 +82,17 @@
 					<colorTriggerFgColor>#000000</colorTriggerFgColor>
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
-						<string>^You say in \w+:$</string>
-						<string>^\s+"(.+)"$</string>
+						<string>^(.+) asks you "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
-						<integer>1</integer>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Say Received</name>
-					<script>-- EMCO provides a nicer way to handle this
--- TODO: switch to EMCO
-
-local ignoreList = [[
-"Nice afternoon to go for a walk, good master."
-"Up for a nighttime stroll, good master?"
-"Good evening."
-"May the gods smile upon you."
-"Good health to, m'lord!"
-"Good health to, m'lady!"
-]]
-
---if string.find(ignoreList, multimatches[2][1]) == nil then
-  BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." says \""..multimatches[2][2].."\"\n")
---end</script>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Ask Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
 					<triggerType>0</triggerType>
-					<conditonLineDelta>1</conditonLineDelta>
+					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
 					<mCommand></mCommand>
 					<packageName></packageName>
@@ -118,11 +102,89 @@ local ignoreList = [[
 					<colorTriggerFgColor>#000000</colorTriggerFgColor>
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
-						<string>^(.+) says in \w+:$</string>
-						<string>^\s+"(.+)"$</string>
+						<string>^You ask (.+), "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Gossip Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;ansiYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) gossips(?: \(OOC\)), "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Gossip Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You gossip(?: \(OOC\))?, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Group Tell Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;GreenYellow:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) tells the group, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Group Tell Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You tell your group, "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
@@ -170,6 +232,110 @@ local ignoreList = [[
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Pray All Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) offers this prayer: ".+"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Pray Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You offer this prayer: "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Pray Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) offers you this prayer: ".+"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Say Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." says \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^(.+) says in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Say Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightBlue:&gt;You say \""..multimatches[2][2].."\"\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>1</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You say in \w+:$</string>
+						<string>^\s+"(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>Shout Sent</name>
 					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightBlue:&gt;You shout \""..multimatches[2][2].."\"\n")</script>
@@ -194,15 +360,7 @@ local ignoreList = [[
 				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
 					<name>Shout Received</name>
-					<script>-- TODO: Switch to EMCO
-local ignoreList = [[
-"Guards! Help me! Please!"
-"To me, my fellows! I am in need of thy aid!"
-]]
-
---if string.find(ignoreList, multimatches[2][1]) == nil then
-  BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." shouts \""..multimatches[2][2].."\"\n")
---end</script>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Local", "&lt;LightGrey:&gt;"..multimatches[1][2].." shouts \""..multimatches[2][2].."\"\n")</script>
 					<triggerType>0</triggerType>
 					<conditonLineDelta>1</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
@@ -223,8 +381,11 @@ local ignoreList = [[
 					</regexCodePropertyList>
 				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Group Tell Sent</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<name>System</name>
+					<script>
+--BlackMUDlet.GUI.Communication.emco:cecho("Other", matches[1] .. "\n")
+
+BlackMUDlet.GUI.WorldInfo.handleSysLog(matches[1] .. "\n")</script>
 					<triggerType>0</triggerType>
 					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
@@ -236,15 +397,15 @@ local ignoreList = [[
 					<colorTriggerFgColor>#000000</colorTriggerFgColor>
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
-						<string>^You tell your group, "(.+)"$</string>
+						<string>^::Syslog:: (.+)$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
 				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Group Tell Received</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Group", "&lt;GreenYellow:&gt;"..matches[1].."\n")</script>
+					<name>Tell Received</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;ansiLightYellow:&gt;"..matches[1].."\n")</script>
 					<triggerType>0</triggerType>
 					<conditonLineDelta>0</conditonLineDelta>
 					<mStayOpen>0</mStayOpen>
@@ -256,7 +417,27 @@ local ignoreList = [[
 					<colorTriggerFgColor>#000000</colorTriggerFgColor>
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
-						<string>^(.+) tells the group, "(.+)"$</string>
+						<string>^(.+) tells you,? "(.+)"$</string>
+					</regexCodeList>
+					<regexCodePropertyList>
+						<integer>1</integer>
+					</regexCodePropertyList>
+				</Trigger>
+				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
+					<name>Tell Sent</name>
+					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
+					<triggerType>0</triggerType>
+					<conditonLineDelta>0</conditonLineDelta>
+					<mStayOpen>0</mStayOpen>
+					<mCommand></mCommand>
+					<packageName></packageName>
+					<mFgColor>#ff0000</mFgColor>
+					<mBgColor>#ffff00</mBgColor>
+					<mSoundFile></mSoundFile>
+					<colorTriggerFgColor>#000000</colorTriggerFgColor>
+					<colorTriggerBgColor>#000000</colorTriggerBgColor>
+					<regexCodeList>
+						<string>^You tell (\w+) "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
@@ -297,149 +478,6 @@ local ignoreList = [[
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
 						<string>^(.+) whispers to you, "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Gossip Sent</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^You gossip, "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Gossip Received</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Global", "&lt;ansiYellow:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^(.+) gossips, "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Tell Sent</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^You tell (\w+) "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Tell Received</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Private", "&lt;ansiLightYellow:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^(.+) tells you,? "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Pray Sent</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;LightBlue:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^You offer this prayer: "(.+)"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>Pray Received</name>
-					<script>BlackMUDlet.GUI.Communication.emco:cecho("Other", "&lt;white:&gt;"..matches[1].."\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^(.+) offers this prayer: ".+"$</string>
-					</regexCodeList>
-					<regexCodePropertyList>
-						<integer>1</integer>
-					</regexCodePropertyList>
-				</Trigger>
-				<Trigger isActive="yes" isFolder="no" isTempTrigger="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isSoundTrigger="no" isColorTrigger="no" isColorTriggerFg="no" isColorTriggerBg="no">
-					<name>System</name>
-					<script>
---BlackMUDlet.GUI.Communication.emco:cecho("Other", matches[1] .. "\n")
-
-BlackMUDlet.GUI.WorldInfo.handleSysLog(matches[1] .. "\n")</script>
-					<triggerType>0</triggerType>
-					<conditonLineDelta>0</conditonLineDelta>
-					<mStayOpen>0</mStayOpen>
-					<mCommand></mCommand>
-					<packageName></packageName>
-					<mFgColor>#ff0000</mFgColor>
-					<mBgColor>#ffff00</mBgColor>
-					<mSoundFile></mSoundFile>
-					<colorTriggerFgColor>#000000</colorTriggerFgColor>
-					<colorTriggerBgColor>#000000</colorTriggerBgColor>
-					<regexCodeList>
-						<string>^::Syslog:: (.+)$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
@@ -1389,7 +1427,7 @@ New users to Mudlet may wish to tweak some settings:
       &lt;white&gt;take meat;; eat meat&lt;LightBlue&gt; will include the leading space in the second command
       
   - You can disable the auto-install of the server package:
-      &lt;white&gt; Options -&gt; Preferences -&gt; General &gt; Miscellaneous&lt;LightBlue&gt;
+      &lt;white&gt; Options -&gt; Preferences -&gt; General -&gt; Miscellaneous&lt;LightBlue&gt;
       
 Feel free to ask further questions on the BlackMUD or Mudlet Discord Servers
 
@@ -3798,8 +3836,6 @@ function Group.update()
 
   Group.console:clear()
    
---  Group.console:cechoLink("Your group consists of:", [[send("group",false)]], "", true)
-  
   if gmcp and gmcp.Char and gmcp.Char.Group then
   
     local group = gmcp.Char.Group
@@ -3810,10 +3846,10 @@ function Group.update()
     
     for _, member in ipairs(group) do
     
+      local name = member.name or member.leader
+    
       if member.HP_Per and member.MV_Per then
     
-        local name = member.name or member.leader
-        
         local output
         output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
           name, 
@@ -3832,14 +3868,12 @@ function Group.update()
           true                                                          -- preserve font style
         )
       else
-        Group.console.echo("\n" .. name)
+        Group.console:echo("\n" .. name)
       end
-    
     end
-    
-    Group.console:echo("\n ")
   end
   
+  -- repeat the process for charms, if any
   if gmcp and gmcp.Char and gmcp.Char.Charms then
   
     local charms = gmcp.Char.Charms
@@ -3871,14 +3905,10 @@ function Group.update()
           true                                                          -- preserve font style
         )
       else
-        Group.console.echo("\n" .. charm.charm)
+        Group.console:echo("\n" .. charm.charm)
       end
-    
     end
   end
-  
-  --Group.console:echo("\n ")
-  
 end
 </script>
 						<eventHandlerList />
@@ -6226,6 +6256,9 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 			<packageName></packageName>
 			<script>
 BlackMUDlet.changelog = [[
+  - Updated gossip triggers to catch (OOC) gossip
+  - Fixed a bug with group panel not showing absent members/charms
+  - Added support for some missing communication channels
   - Updated mapper to preserve symbols in rooms while updating
   - Updated entropy and align short strings to match game
   - Add skills (e.g., search) to "Spells and Conditions" panel
