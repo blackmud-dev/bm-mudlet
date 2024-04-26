@@ -3844,32 +3844,41 @@ function Group.update()
       Group.console:cecho("\n None.")
     end
     
+    local oldname = nil -- hack, remove me when duplicate GMCP data is fixed
+    
     for _, member in ipairs(group) do
     
       local name = member.name or member.leader
+      
+      -- hack, remove me when duplicate GMCP data is fixed
+      if name ~= oldname then
     
-      if member.HP_Per and member.MV_Per then
-    
-        local output
-        output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
-          name, 
-          string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
-          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.HP_Per, 100),
-          member.HP_Per,
-          string.rep(' ', 3 - #tostring(member.HP_Per)), -- pad hp to 3 digits for consistent spacing
-          BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.MV_Per, 100),
-          member.MV_Per
-        )
-    
-        Group.console:dechoLink(
-          output,                                                       -- link text
-          [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
-          "",                                                           -- hint text
-          true                                                          -- preserve font style
-        )
-      else
-        Group.console:echo("\n" .. name)
+        if member.HP_Per and member.MV_Per then
+      
+          local output
+          output = string.format("\n%s%s%sHP:%d%%%s %sMV:%d%%", 
+            name, 
+            string.rep(' ', 11 - #name), -- pad name to a constant width (10 + 1 space) for alignment
+            BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.HP_Per, 100),
+            member.HP_Per,
+            string.rep(' ', 3 - #tostring(member.HP_Per)), -- pad hp to 3 digits for consistent spacing
+            BlackMUDlet.GUI.Utils.getBadnessLevel(100 - member.MV_Per, 100),
+            member.MV_Per
+          )
+      
+          Group.console:dechoLink(
+            output,                                                       -- link text
+            [[send("]] .. GUI.Config.groupAction .. " " .. name ..[[")]], -- action on click
+            "",                                                           -- hint text
+            true                                                          -- preserve font style
+          )
+        else
+          Group.console:echo("\n" .. name)
+        end
       end
+
+      oldname = name -- hack, remove me when duplicate GMCP data is fixed
+      
     end
   end
   
@@ -6256,6 +6265,7 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", 
 			<packageName></packageName>
 			<script>
 BlackMUDlet.changelog = [[
+  - Added a quick hack to suppress duplicate names in GMCP group data
   - Updated gossip triggers to catch (OOC) gossip
   - Fixed a bug with group panel not showing absent members/charms
   - Added support for some missing communication channels
