@@ -122,7 +122,7 @@
 					<colorTriggerFgColor>#000000</colorTriggerFgColor>
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
-						<string>^(.+) gossips(?: \(OOC\)), "(.+)"$</string>
+						<string>^(.+) gossips(?: \(OOC\))?, "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
 						<integer>1</integer>
