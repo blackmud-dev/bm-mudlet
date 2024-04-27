@@ -3478,6 +3478,7 @@ function WorldInfo.handleUpdateAvailable()
     true,
     true      
   )
+  WorldInfo.emco:cecho("Update!", "\n\n&lt;LightBlue&gt;Installation will reset your layout, but maps and settings will remain.\n\n")
   WorldInfo.emco:switchTab("Update!")
 
 end
