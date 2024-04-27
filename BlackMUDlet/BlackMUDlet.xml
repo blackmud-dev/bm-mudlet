@@ -909,7 +909,7 @@ BlackMUDlet.Updater.downloadUpdate()</script>
 BlackMUDlet = BlackMUDlet or {}
 
 BlackMUDlet.packageName  = "BlackMUDlet"
-BlackMUDlet.version      = 5
+BlackMUDlet.version      = 6
 
 -- To trigger an update prompt for users:
   -- Update BlackMUDlet.changelog with a summary of changes
@@ -1020,6 +1020,33 @@ function Utils.getBadnessLevel(num, max)
   end
   return "&lt;"..r..","..g..","..b.."&gt;"
 end</script>
+			<eventHandlerList />
+		</Script>
+		<Script isActive="yes" isFolder="no">
+			<name>Changelog</name>
+			<packageName></packageName>
+			<script>-- Simple changelog tracking. 
+-- Will adopt a more flexible approach if needed in the future
+
+-- This needs to appear before GUI in the script list
+
+BlackMUDlet.changelog = [[
+  Revision 6 (2024.04.26)
+    - Disabled EMCO logging as it was causing client lag
+    - Added a workaround to suppress buggy duplicate names in GMCP group data
+    - Fixed a bug with group panel not showing absent members/charms
+    - Updated gossip triggers to catch (OOC) gossip
+    - Added triggers for some missing communication types
+    - Updated mapper to preserve user placed symbols in rooms when updating
+    - Updated entropy and align short strings to match game definitions
+    - Add skills data (e.g., search) to "Spells and Conditions" panel
+
+  Revision 5 (AoD Launch)
+    - Initial public release for AoD
+  
+  Revision 1-4 (Development and Testing)
+    - Not tracked
+]]</script>
 			<eventHandlerList />
 		</Script>
 		<ScriptGroup isActive="yes" isFolder="yes">
@@ -1357,7 +1384,7 @@ BlackMUDlet GUI is installed:
   Type &lt;white&gt;ui help &lt;LightBlue&gt;and &lt;white&gt;ui about &lt;LightBlue&gt;for more information
   Type &lt;white&gt;ui reset &lt;LightBlue&gt;to reset the layout if things look weird
   Type &lt;white&gt;ui hide &lt;LightBlue&gt;to hide the UI (&lt;white&gt;ui show &lt;LightBlue&gt;to bring it back)
-  Visit https://github.com/blackmud-dev/bm-mudlet/wiki for additional information
+  Visit &lt;white&gt;https://github.com/blackmud-dev/bm-mudlet/wiki&lt;LightBlue&gt; for additional information
   
   New to Mudlet? Type &lt;white&gt;ui mudlet&lt;LightBlue&gt; for some basic guidance.
 ********************************************************************************
@@ -6331,30 +6358,6 @@ registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadDone", "
 registerNamedEventHandler("BlackMUDlet", "BlackMUDlet.Updater.onDownloadError", "sysDownloadError", onDownloadError)
 
 </script>
-			<eventHandlerList />
-		</Script>
-		<Script isActive="yes" isFolder="no">
-			<name>Changelog</name>
-			<packageName></packageName>
-			<script>-- Simple changelog tracking. 
--- Will adopt a more flexible approach if needed in the future
-
-BlackMUDlet.changelog = [[
-  Revision 6 (2024.04.26)
-    - Added a workaround to suppress buggy duplicate names in GMCP group data
-    - Fixed a bug with group panel not showing absent members/charms
-    - Updated gossip triggers to catch (OOC) gossip
-    - Added triggers for some missing communication types
-    - Updated mapper to preserve user placed symbols in rooms when updating
-    - Updated entropy and align short strings to match game definitions
-    - Add skills data (e.g., search) to "Spells and Conditions" panel
-
-  Revision 5 (AoD Launch)
-    - Initial public release for AoD
-  
-  Revision 1-4 (Development and Testing)
-    - Not tracked
-]]</script>
 			<eventHandlerList />
 		</Script>
 	</ScriptPackage>
