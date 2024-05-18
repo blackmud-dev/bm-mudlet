@@ -163,8 +163,10 @@
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
 						<string>^(.+) tells the group, "(.+)"$</string>
+						<string>^(.+) says to the group, "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
+						<integer>1</integer>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
@@ -183,8 +185,10 @@
 					<colorTriggerBgColor>#000000</colorTriggerBgColor>
 					<regexCodeList>
 						<string>^You tell your group, "(.+)"$</string>
+						<string>^You say to your group, "(.+)"$</string>
 					</regexCodeList>
 					<regexCodePropertyList>
+						<integer>1</integer>
 						<integer>1</integer>
 					</regexCodePropertyList>
 				</Trigger>
@@ -1031,6 +1035,11 @@ end</script>
 -- This needs to appear before GUI in the script list
 
 BlackMUDlet.changelog = [[
+  
+  In Flight
+    - Fixed a bug in the compact time panel that would prevent refresh
+    - Updated group tell triggers
+
   Revision 6 (2024.04.26)
     - Disabled EMCO logging as it was causing client lag
     - Added a workaround to suppress buggy duplicate names in GMCP group data
@@ -1072,6 +1081,7 @@ GUI.Config = GUI.Config or {}
 -- GUI.Config takes precedence
 -- Below are used at sysLoadEvent to populate any missing values
 -- EMCO tabbed windows use EMCO save/load functionality
+  -- Or they used to... Disabled for now
 GUI.Defaults = {
   initialized     = false,
   statusBarFormat = "compact",
@@ -1496,6 +1506,7 @@ function GUI.showAbout()
   cecho(GUI.Help.about)
 end
 
+
 function GUI.showMudlet()
   cecho(GUI.Help.mudlet)
 end</script>
@@ -1661,7 +1672,7 @@ end
 
 
 -- updateCompact only shows the time of day, not full date
-function Time.updateCompact(event)
+function Time.updateCompact(eventName)
 
   if gmcp and gmcp.General and gmcp.General.Time then
   
@@ -5481,7 +5492,7 @@ function Utils.stepSpeedWalk()
   local next = speedWalkDir[1]
     
   -- gmcp data uses long dir names (north), speedWalkDirs uses short dir names (n)
-  -- TODO: This is probable unreachable unless you can see through doors.
+  -- TODO: This is probably unreachable unless you can see through doors.
   --       Early abort above on vision fail will above. Will revisit later.
   --       Opening a door triggers a GMCP update and the speedwalker doesn't like that.
   if gmcp.Room.Info.doors_closed[long_dir[next]] then
@@ -5537,7 +5548,7 @@ end
 
 -- Mudlet also has global pause and result speedwalk events (and maybe functions?)
 -- The above function also isn't hooked into the stopSpeedWalk event
--- There's no apparent need to use these for now, but a pause/play/stop UI widget is pos
+-- There's no apparent need to use these for now, but a pause/play/stop UI widget is possible
 
 
 --- This function was copied from the "generic_mapper" script with slight modifications
